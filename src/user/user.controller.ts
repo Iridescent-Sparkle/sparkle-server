@@ -12,7 +12,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UserInfo, RequireLogin } from 'src/custom.decorator';
+import { RequireLogin, UserInfo } from './decorators/custom.decorator';
 
 @Controller('user')
 export class UserController {
