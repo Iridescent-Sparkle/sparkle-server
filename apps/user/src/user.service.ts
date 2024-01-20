@@ -61,10 +61,14 @@ export class UserService {
 
     try {
       await this.userRepository.save(newUser);
-      return '注册成功';
+      return {
+        message: '注册成功',
+      };
     } catch (error) {
       this.logger.error(error, UserService);
-      return '注册失败';
+      return {
+        message: '注册失败',
+      };
     }
   }
 

@@ -1,22 +1,13 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Post,
-  Query,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { UserService } from './user.service';
-import { RegisterUserDto } from './dto/register-user.dto';
+import { Controller, Inject, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { GrpcMethod } from '@nestjs/microservices';
+import { RequireLogin } from 'decorators/custom.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
-import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { UserService } from './user.service';
 
-@Controller({
-  path: 'user',
-})
+@Controller()
 export class UserController {
   @Inject(JwtService)
   private jwtService: JwtService;
@@ -26,18 +17,18 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
-  @Post('register')
-  register(@Body() registerUser: RegisterUserDto) {
+  @GrpcMethod('UserService', 'Register')
+  register(registerUser: RegisterUserDto) {
     return this.userService.register(registerUser);
   }
 
-  @Get('init-data')
+  @GrpcMethod('UserService', 'InitData')
   async initData() {
     return await this.userService.initData();
   }
 
-  @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto) {
+  @GrpcMethod('UserService', 'Login')
+  async login(loginUserDto: LoginUserDto) {
     const vo = await this.userService.login(loginUserDto, false);
 
     vo.setAccessToken = this.jwtService.sign(
@@ -65,8 +56,8 @@ export class UserController {
     return vo;
   }
 
-  @Post('admin/login')
-  async adminLogin(@Body() loginUserDto: LoginUserDto) {
+  @GrpcMethod('UserService', 'AdminLogin')
+  async adminLogin(loginUserDto: LoginUserDto) {
     const vo = await this.userService.login(loginUserDto, true);
 
     vo.setAccessToken = this.jwtService.sign(
@@ -94,8 +85,8 @@ export class UserController {
     return vo;
   }
 
-  @Get('refresh')
-  async refresh(@Query('refreshToken') refreshToken: string) {
+  @GrpcMethod('UserService', 'Refresh')
+  async refresh({ refreshToken }: { refreshToken: string }) {
     try {
       const data = this.jwtService.verify(refreshToken);
       const user = await this.userService.findUserById(data.userId, false);
@@ -131,8 +122,8 @@ export class UserController {
     }
   }
 
-  @Get('admin/refresh')
-  async adminRefresh(@Query('refreshToken') refreshToken: string) {
+  @GrpcMethod('UserService', 'AdminRefresh')
+  async adminRefresh({ refreshToken }: { refreshToken: string }) {
     try {
       const data = this.jwtService.verify(refreshToken);
       const user = await this.userService.findUserById(data.userId, true);
@@ -168,9 +159,9 @@ export class UserController {
     }
   }
 
-  @Get('info')
+  @GrpcMethod('UserService', 'Info')
   @RequireLogin()
-  async info(@UserInfo('userId') userId: number) {
+  async info({ userId }: { userId: number }) {
     return await this.userService.findUserDetailById(userId);
   }
 }

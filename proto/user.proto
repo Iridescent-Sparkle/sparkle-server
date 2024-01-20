@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc  Register(RegisterUserDto) returns (RegisterReponse);
+  rpc  InitData(Empty) returns (Empty);
+  rpc  Login(LoginRequest) returns (LoginResponse);
+  rpc  AdminLogin(LoginRequest) returns (LoginResponse);
+  rpc  Refresh(RefreshRequest) returns (RefreshResponse);
+  rpc  AdminRefresh(RefreshRequest) returns (RefreshResponse);
+  rpc  Info(InfoRequest) returns (InfoResponse);
+}
+
+message Empty {}
+
+message RegisterUserDto {
+ string username = 1;
+ string nickName = 2;
+ string password = 3;
+ string email = 4;
+ string captcha = 5;
+}
+
+message RegisterReponse {
+ string message = 1;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message UserInfo {
+  int32 id = 1;
+  string username = 2;
+  string nickName = 3;
+  string email = 4;
+  string headPic = 5;
+  string phoneNumber = 6;
+  bool isFrozen = 7;
+  bool isAdmin = 8;
+  int64 createTime = 9;
+  repeated string roles = 10;
+  repeated string  permissions = 11;
+}
+
+message LoginResponse {
+  UserInfo userInfo = 1;
+  string accessToken = 2;
+  string refreshToken = 3;
+}
+
+message RefreshRequest {
+  string refreshToken = 1;
+}
+
+message RefreshResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
+
+message InfoRequest {
+  int32 userId = 1;
+}
+
+message InfoResponse {
+  int32 id = 1;
+  string username = 2;
+  string nickName = 3;
+  string email = 4;
+  string headPic = 5;
+  string phoneNumber = 6;
+  bool isFrozen = 7;
+  bool isAdmin = 8;
+  int64 createTime = 9;
+  int64 updateTime = 10;
+}

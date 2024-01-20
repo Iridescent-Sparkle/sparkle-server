@@ -1,19 +1,21 @@
 import { NestFactory } from '@nestjs/core';
-import { UserModule } from './user.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { UserModule } from './user.module';
 
 async function bootstrap() {
-  // const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-  //   UserModule,
-  //   {
-  //     transport: Transport.TCP,
-  //     options: {
-  //       port: 8888,
-  //     },
-  //   },
-  // );
-  // app.listen();
-  const app = await NestFactory.create(UserModule);
-  await app.listen(3000);
+  console.log(1);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    UserModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        url: 'localhost:8888',
+        package: 'user',
+        protoPath: './proto/user.proto',
+      },
+    },
+  );
+  console.error(1);
+  app.listen();
 }
 bootstrap();

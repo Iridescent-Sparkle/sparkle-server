@@ -4,18 +4,19 @@
   "generateOptions": {
     "spec": false
   },
-  "sourceRoot": "apps/user/src",
+  "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "watchAssets": true,
     "assets": [
-      "**/*.env"
+      "**/*.env",
+      "**/*.proto"
     ],
     "webpack": true,
-    "tsConfigPath": "apps/user/tsconfig.app.json"
+    "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/user",
+  "root": "apps/gateway",
   "projects": {
     "gateway": {
       "type": "application",
