@@ -17,6 +17,12 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
+  @GrpcMethod('UserService', 'Captcha')
+  async captcha({ address }: { address: string }) {
+    console.log(address);
+    return await this.userService.captcha(address);
+  }
+
   @GrpcMethod('UserService', 'Register')
   register(registerUser: RegisterUserDto) {
     return this.userService.register(registerUser);

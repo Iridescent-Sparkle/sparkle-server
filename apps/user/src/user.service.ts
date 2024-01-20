@@ -15,6 +15,7 @@ import { Role } from './entities/role.entity';
 import { User } from './entities/user.entity';
 import { md5 } from './utils/index';
 import { LoginUserVo } from './vo/login-user.vo';
+import { EmailService } from '@app/email';
 
 @Injectable()
 export class UserService {
@@ -31,6 +32,22 @@ export class UserService {
 
   @Inject(RedisService)
   private redisService: RedisService;
+
+  @Inject(EmailService)
+  private emailService: EmailService;
+
+  async captcha(address: string) {
+    const code = Math.random().toString().slice(2, 8);
+    await this.redisService.set(`captcha_${address}`, code, 5 * 60);
+    await this.emailService.sendMail({
+      to: address,
+      subject: '注册验证码',
+      html: `<p>你的注册验证码是${code}</p>`,
+    });
+    return {
+      message: '发送成功',
+    };
+  }
 
   async register(registerUserDto: RegisterUserDto) {
     const captcha = await this.redisService.get(

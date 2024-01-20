@@ -12,6 +12,7 @@ import { JwtModule } from '@app/jwt';
 import { WinstonModule } from '@app/winston';
 import { format, transports } from 'winston';
 import * as chalk from 'chalk';
+import { EmailModule } from '@app/email';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import * as chalk from 'chalk';
     TypeOrmModule.forFeature([User, Role, Permission]),
     RedisModule,
     JwtModule,
+    EmailModule,
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),

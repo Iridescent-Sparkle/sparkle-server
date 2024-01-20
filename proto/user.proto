@@ -3,6 +3,7 @@ syntax = "proto3";
 package user;
 
 service UserService {
+  rpc  Captcha(CaptchaRequest) returns (CaptchaResponse);
   rpc  Register(RegisterUserDto) returns (RegisterReponse);
   rpc  InitData(Empty) returns (Empty);
   rpc  Login(LoginRequest) returns (LoginResponse);
@@ -13,6 +14,13 @@ service UserService {
 }
 
 message Empty {}
+
+message CaptchaRequest {
+  string address = 1;
+}
+message CaptchaResponse {
+  string message = 1;
+}
 
 message RegisterUserDto {
  string username = 1;

@@ -5,6 +5,7 @@ import { RegisterUserDto } from 'apps/user/src/dto/register-user.dto';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 
 interface UserService {
+  captcha(params: any): any;
   register(params: any): any;
   initData(params: any): any;
   login(params: any): any;
@@ -27,6 +28,10 @@ export class UserController {
     this.userService = this.client.getService('UserService');
   }
 
+  @Get('register-captcha')
+  async captcha(@Query('address') address: string) {
+    return await this.userService.captcha({ address });
+  }
   @Post('register')
   register(@Body() registerUser: RegisterUserDto) {
     return this.userService.register(registerUser);
