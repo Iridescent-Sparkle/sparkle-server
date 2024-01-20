@@ -59,6 +59,12 @@
       ],
       "@app/winston/*": [
         "libs/winston/src/*"
+      ],
+      "@app/rabbitmq": [
+        "libs/rabbitmq/src"
+      ],
+      "@app/rabbitmq/*": [
+        "libs/rabbitmq/src/*"
       ]
     }
   }
