@@ -89,6 +89,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/jwt/tsconfig.lib.json"
       }
+    },
+    "winston": {
+      "type": "library",
+      "root": "libs/winston",
+      "entryFile": "index",
+      "sourceRoot": "libs/winston/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/winston/tsconfig.lib.json"
+      }
     }
   }
 }

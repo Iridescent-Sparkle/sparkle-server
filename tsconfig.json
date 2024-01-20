@@ -47,12 +47,18 @@
       ],
       "@app/etcd/*": [
         "libs/etcd/src/*"
-      ], 
+      ],
       "@app/jwt": [
         "libs/jwt/src"
       ],
       "@app/jwt/*": [
         "libs/jwt/src/*"
+      ],
+      "@app/winston": [
+        "libs/winston/src"
+      ],
+      "@app/winston/*": [
+        "libs/winston/src/*"
       ]
     }
   }
