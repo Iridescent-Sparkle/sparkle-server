@@ -3,6 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user/entities/user.entity';
+import { Role } from './user/entities/role.entity';
+import { Permission } from './user/entities/permission.entity';
 
 @Module({
   imports: [
@@ -22,7 +25,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           database: configService.get('mysql_server_database'),
           synchronize: true,
           logging: true,
-          entities: [],
+          entities: [User, Role, Permission],
           poolSize: 10,
           connectorPackage: 'mysql2',
           extra: { authPlugin: 'sha256_password' },
