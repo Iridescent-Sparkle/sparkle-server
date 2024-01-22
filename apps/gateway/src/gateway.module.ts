@@ -1,6 +1,7 @@
+import { ConfigModule } from '@app/config';
+import { EtcdModule } from '@app/etcd';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule } from '@app/config';
 import { UserController } from './controllers/user.controller';
 
 @Module({
@@ -17,6 +18,13 @@ import { UserController } from './controllers/user.controller';
         },
       },
     ]),
+    EtcdModule.forRoot({
+      hosts: 'http://localhost:2379',
+      auth: {
+        username: 'root',
+        password: '890224',
+      },
+    }),
   ],
   controllers: [UserController],
 })

@@ -21,6 +21,15 @@ export class EtcdService {
     await this.client.delete().key(key);
   }
 
+  /** 监听配置 */
+  async watchConfig(key, callback) {
+    const watcher = await this.client.watch().prefix(key).create();
+    watcher.on('data', async () => {
+      callback && callback();
+    });
+    return watcher;
+  }
+
   /** 服务注册 */
   async registerService(serviceName, instanceId, metadata) {
     const key = `/services/${serviceName}/${instanceId}`;
