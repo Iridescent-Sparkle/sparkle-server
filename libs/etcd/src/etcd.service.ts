@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { INestApplication, Inject, Injectable } from '@nestjs/common';
 import { Etcd3 } from 'etcd3';
 
 @Injectable()
@@ -17,21 +17,36 @@ export class EtcdService {
   }
 
   /** 删除配置 */
-  async deleteConfig(key) {
+  async deleteConfig(key: string) {
     await this.client.delete().key(key);
   }
 
   /** 监听配置 */
-  async watchConfig(key, callback) {
+  async watchConfig(key: string, callback: (params?: any) => any) {
     const watcher = await this.client.watch().prefix(key).create();
     watcher.on('data', async () => {
       callback && callback();
     });
     return watcher;
   }
-
+  /**监听配置并重启服务 */
+  async watchConfigAndRestart(
+    app: INestApplication,
+    callback: (params?: any) => any,
+  ) {
+    const watcher = await this.client.watch().prefix('/config').create();
+    watcher.on('data', async () => {
+      await app.close();
+      await watcher.removeAllListeners();
+      callback && callback();
+    });
+  }
   /** 服务注册 */
-  async registerService(serviceName, instanceId, metadata) {
+  async registerService(
+    serviceName: string,
+    instanceId: string,
+    metadata: Record<string, any>,
+  ) {
     const key = `/services/${serviceName}/${instanceId}`;
     const lease = this.client.lease(10);
     await lease.put(key).value(JSON.stringify(metadata));
@@ -42,7 +57,7 @@ export class EtcdService {
   }
 
   /** 服务发现 */
-  async discoverService(serviceName) {
+  async discoverService(serviceName: string) {
     const instances = await this.client
       .getAll()
       .prefix(`/services/${serviceName}`)
@@ -51,7 +66,7 @@ export class EtcdService {
   }
 
   /** 监听服务变更 */
-  async watchService(serviceName, callback) {
+  async watchService(serviceName: string, callback: (params?: any) => any) {
     const watcher = await this.client
       .watch()
       .prefix(`/services/${serviceName}`)

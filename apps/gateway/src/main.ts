@@ -15,11 +15,7 @@ async function bootstrap() {
 
   const configService: ConfigService = app.get(ConfigService);
   const etcdService: EtcdService = app.get(EtcdService);
-  const watcher = await etcdService.watchConfig('/config', async () => {
-    await app.close();
-    await watcher.removeAllListeners();
-    bootstrap();
-  });
+  await etcdService.watchConfigAndRestart(app, bootstrap);
   const port = configService.get('nest_server_port');
   await app.listen(port);
 }
