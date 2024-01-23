@@ -34,6 +34,7 @@ export class EtcdModule {
       exports: [EtcdService],
     };
   }
+
   public static forRootAsync(options: EtcdModuleAsyncOptions): DynamicModule {
     return {
       module: EtcdModule,

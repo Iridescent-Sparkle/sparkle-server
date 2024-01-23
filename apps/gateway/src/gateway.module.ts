@@ -3,6 +3,7 @@ import { EtcdModule } from '@app/etcd';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserController } from './controllers/user.controller';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -18,11 +19,16 @@ import { UserController } from './controllers/user.controller';
         },
       },
     ]),
-    EtcdModule.forRoot({
-      hosts: 'http://localhost:2379',
-      auth: {
-        username: 'root',
-        password: '890224',
+    EtcdModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory(configService: ConfigService) {
+        return {
+          hosts: configService.get('etcd_hosts'),
+          auth: {
+            username: configService.get('etcd_username'),
+            password: configService.get('etcd_password'),
+          },
+        };
       },
     }),
   ],
