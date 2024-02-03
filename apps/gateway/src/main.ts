@@ -6,10 +6,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { InvokeRecordInterceptor } from 'interceptors/invoke-record.interceptor';
 import { EtcdService } from '../../../libs/etcd/src/etcd.service';
 import { CustomExceptionFilter } from 'filters/custom-exception.filter';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
 
+  app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new FormatResponseInterceptor());
   app.useGlobalInterceptors(new InvokeRecordInterceptor());
