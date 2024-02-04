@@ -7,11 +7,14 @@ import { InvokeRecordInterceptor } from 'interceptors/invoke-record.interceptor'
 import { EtcdService } from '../../../libs/etcd/src/etcd.service';
 import { CustomExceptionFilter } from 'filters/custom-exception.filter';
 import helmet from 'helmet';
+import csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
 
   app.use(helmet());
+  app.use(csurf());
+
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new FormatResponseInterceptor());
   app.useGlobalInterceptors(new InvokeRecordInterceptor());
