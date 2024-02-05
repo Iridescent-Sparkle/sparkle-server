@@ -12,6 +12,9 @@ import csurf from 'csurf';
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
 
+  app.enableCors({
+    origin: [/\.iridescent.icu$/],
+  });
   app.use(helmet());
   app.use(csurf());
 
