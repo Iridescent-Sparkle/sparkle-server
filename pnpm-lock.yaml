@@ -106,6 +106,9 @@ devDependencies:
   '@types/amqplib':
     specifier: ^0.10.4
     version: 0.10.4
+  '@types/csurf':
+    specifier: ^1.11.5
+    version: 1.11.5
   '@types/express':
     specifier: ^4.17.17
     version: 4.17.21
@@ -2579,6 +2582,12 @@ packages:
     resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
     dependencies:
       '@types/node': 20.10.8
+
+  /@types/csurf@1.11.5:
+    resolution: {integrity: sha512-5rw87+5YGixyL2W8wblSUl5DSZi5YOlXE6Awwn2ofLvqKr/1LruKffrQipeJKUX44VaxKj8m5es3vfhltJTOoA==}
+    dependencies:
+      '@types/express-serve-static-core': 4.17.41
+    dev: true
 
   /@types/eslint-scope@3.7.7:
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
