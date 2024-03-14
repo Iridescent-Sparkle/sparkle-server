@@ -8,15 +8,17 @@ import { EtcdService } from '../../../libs/etcd/src/etcd.service';
 import { CustomExceptionFilter } from 'filters/custom-exception.filter';
 import helmet from 'helmet';
 import csurf from 'csurf';
+import rateLimit from 'express-rate-limit';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(GatewayModule);
+  const app = await NestFactory.create<NestExpressApplication>(GatewayModule);
 
-  app.enableCors({
-    origin: [/\.iridescent.icu$/],
-  });
   app.use(helmet());
   app.use(csurf());
+  app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
+  app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
+  app.enableCors({ origin: [/\.iridescent.icu$/] });
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new FormatResponseInterceptor());
