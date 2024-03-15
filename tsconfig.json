@@ -65,6 +65,12 @@
       ],
       "@app/rabbitmq/*": [
         "libs/rabbitmq/src/*"
+      ],
+      "@app/sms": [
+        "libs/sms/src"
+      ],
+      "@app/sms/*": [
+        "libs/sms/src/*"
       ]
     }
   }

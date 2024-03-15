@@ -16,6 +16,7 @@ import { User } from './entities/user.entity';
 import { md5 } from './utils/index';
 import { LoginUserVo } from './vo/login-user.vo';
 import { EmailService } from '@app/email';
+import { SmsService } from '@app/sms';
 
 @Injectable()
 export class UserService {
@@ -36,6 +37,9 @@ export class UserService {
   @Inject(EmailService)
   private emailService: EmailService;
 
+  @Inject(SmsService)
+  private smsService: SmsService;
+
   async captcha(address: string) {
     const code = Math.random().toString().slice(2, 8);
     await this.redisService.set(`captcha_${address}`, code, 5 * 60);
@@ -43,6 +47,18 @@ export class UserService {
       to: address,
       subject: '注册验证码',
       html: `<p>你的注册验证码是${code}</p>`,
+    });
+    return {
+      message: '发送成功',
+    };
+  }
+
+  async smsCode(phone: string) {
+    const code = Math.random().toString().slice(2, 8);
+    await this.redisService.set(`smsCode_${phone}`, code, 5 * 60);
+    await this.smsService.sendSms({
+      phone,
+      code,
     });
     return {
       message: '发送成功',

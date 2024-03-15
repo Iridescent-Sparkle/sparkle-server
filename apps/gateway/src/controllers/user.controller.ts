@@ -6,6 +6,7 @@ import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 
 interface UserService {
   captcha(params: any): any;
+  smsCode(params: any): any;
   register(params: any): any;
   initData(params: any): any;
   login(params: any): any;
@@ -32,6 +33,12 @@ export class UserController {
   async captcha(@Query('address') address: string) {
     return await this.userService.captcha({ address });
   }
+
+  @Get('register-smsCode')
+  async smsCode(@Query('phone') phone: string) {
+    return await this.userService.smsCode({ phone });
+  }
+
   @Post('register')
   register(@Body() registerUser: RegisterUserDto) {
     return this.userService.register(registerUser);

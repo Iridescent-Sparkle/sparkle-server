@@ -48,6 +48,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.19",
+    "unisms": "^0.0.6",
     "winston": "^3.11.0"
   },
   "devDependencies": {
@@ -107,7 +108,8 @@
       "^@app/etcd(|/.*)$": "<rootDir>/libs/etcd/src/$1",
       "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
       "^@app/jwt(|/.*)$": "<rootDir>/libs/jwt/src/$1",
-      "^@app/winston(|/.*)$": "<rootDir>/libs/winston/src/$1"
+      "^@app/winston(|/.*)$": "<rootDir>/libs/winston/src/$1",
+      "^@app/sms(|/.*)$": "<rootDir>/libs/sms/src/$1"
     }
   }
 }

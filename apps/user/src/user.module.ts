@@ -13,6 +13,7 @@ import { WinstonModule } from '@app/winston';
 import { format, transports } from 'winston';
 import * as chalk from 'chalk';
 import { EmailModule } from '@app/email';
+import { SmsModule } from '@app/sms';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { EmailModule } from '@app/email';
     RedisModule,
     JwtModule,
     EmailModule,
+    SmsModule,
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),

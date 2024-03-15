@@ -4,6 +4,7 @@ package user;
 
 service UserService {
   rpc  Captcha(CaptchaRequest) returns (CaptchaResponse);
+  rpc  SmsCode(SmsCodeRequest) returns (SmsCodeResponse);
   rpc  Register(RegisterUserDto) returns (RegisterReponse);
   rpc  InitData(Empty) returns (Empty);
   rpc  Login(LoginRequest) returns (LoginResponse);
@@ -19,6 +20,14 @@ message CaptchaRequest {
   string address = 1;
 }
 message CaptchaResponse {
+  string message = 1;
+}
+
+message SmsCodeRequest {
+  string phone = 1;
+}
+
+message SmsCodeResponse {
   string message = 1;
 }
 

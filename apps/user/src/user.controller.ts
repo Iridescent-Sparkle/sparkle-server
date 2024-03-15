@@ -19,8 +19,12 @@ export class UserController {
 
   @GrpcMethod('UserService', 'Captcha')
   async captcha({ address }: { address: string }) {
-    console.log(address);
     return await this.userService.captcha(address);
+  }
+
+  @GrpcMethod('UserService', 'smsCode')
+  async smsCode({ phone }: { phone: string }) {
+    return await this.userService.smsCode(phone);
   }
 
   @GrpcMethod('UserService', 'Register')
