@@ -9,7 +9,7 @@ interface UserInfo {
 
   headPic: string;
 
-  phoneNumber: string;
+  phone: string;
 
   isFrozen: boolean;
 

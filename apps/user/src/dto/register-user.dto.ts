@@ -7,19 +7,14 @@ export class RegisterUserDto {
   username: string;
 
   @IsNotEmpty({
-    message: '昵称不能为空',
-  })
-  nickName: string;
-
-  @IsNotEmpty({
     message: '密码不能为空',
   })
   password: string;
 
   @IsNotEmpty({
-    message: '邮箱不能为空',
+    message: '手机号不能为空',
   })
-  email: string;
+  phone: string;
 
   @IsNotEmpty({
     message: '验证码不能为空',

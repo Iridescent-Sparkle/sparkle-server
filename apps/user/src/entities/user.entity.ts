@@ -41,6 +41,7 @@ export class User {
 
   @Column({
     length: 50,
+    default: '',
     comment: '邮箱',
   })
   email: string;
@@ -57,7 +58,7 @@ export class User {
     nullable: true,
     comment: '手机号',
   })
-  phoneNumber: string;
+  phone: string;
 
   @Column({
     default: false,

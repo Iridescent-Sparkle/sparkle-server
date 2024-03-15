@@ -20,7 +20,7 @@ message CaptchaRequest {
   string address = 1;
 }
 message CaptchaResponse {
-  string message = 1;
+  string countDown = 1;
 }
 
 message SmsCodeRequest {
@@ -28,15 +28,14 @@ message SmsCodeRequest {
 }
 
 message SmsCodeResponse {
-  string message = 1;
+  string countDown = 1;
 }
 
 message RegisterUserDto {
  string username = 1;
- string nickName = 2;
- string password = 3;
- string email = 4;
- string captcha = 5;
+ string password = 2;
+ string phone = 3;
+ string captcha = 4;
 }
 
 message RegisterReponse {
@@ -54,7 +53,7 @@ message UserInfo {
   string nickName = 3;
   string email = 4;
   string headPic = 5;
-  string phoneNumber = 6;
+  string phone = 6;
   bool isFrozen = 7;
   bool isAdmin = 8;
   int64 createTime = 9;
@@ -87,7 +86,7 @@ message InfoResponse {
   string nickName = 3;
   string email = 4;
   string headPic = 5;
-  string phoneNumber = 6;
+  string phone = 6;
   bool isFrozen = 7;
   bool isAdmin = 8;
   int64 createTime = 9;

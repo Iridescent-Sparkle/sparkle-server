@@ -17,6 +17,7 @@ export class SmsService {
       templateId: this.configService.get('unisms_template_id'),
       templateData: {
         code,
+        ttl: 5,
       },
     });
   }

@@ -17,6 +17,7 @@ import { md5 } from './utils/index';
 import { LoginUserVo } from './vo/login-user.vo';
 import { EmailService } from '@app/email';
 import { SmsService } from '@app/sms';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class UserService {
@@ -41,7 +42,7 @@ export class UserService {
   private smsService: SmsService;
 
   async captcha(address: string) {
-    const code = Math.random().toString().slice(2, 8);
+    const code = Math.random().toString().slice(2, 6);
     await this.redisService.set(`captcha_${address}`, code, 5 * 60);
     await this.emailService.sendMail({
       to: address,
@@ -49,27 +50,28 @@ export class UserService {
       html: `<p>你的注册验证码是${code}</p>`,
     });
     return {
-      message: '发送成功',
+      countDown: 60,
     };
   }
 
   async smsCode(phone: string) {
-    const code = Math.random().toString().slice(2, 8);
+    const code = Math.random().toString().slice(2, 6);
+    console.log(code);
     await this.redisService.set(`smsCode_${phone}`, code, 5 * 60);
-    await this.smsService.sendSms({
-      phone,
-      code,
-    });
+    // await this.smsService.sendSms({
+    //   phone,
+    //   code,
+    // });
     return {
-      message: '发送成功',
+      countDown: 60,
     };
   }
 
   async register(registerUserDto: RegisterUserDto) {
     const captcha = await this.redisService.get(
-      `captcha_${registerUserDto.email}`,
+      `smsCode_${registerUserDto.phone}`,
     );
-
+    console.log(`smsCode_${registerUserDto.phone}`, captcha);
     if (!captcha) {
       throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST);
     }
@@ -89,11 +91,12 @@ export class UserService {
     const newUser = new User();
     newUser.username = registerUserDto.username;
     newUser.password = md5(registerUserDto.password);
-    newUser.email = registerUserDto.email;
-    newUser.nickName = registerUserDto.nickName;
+    newUser.phone = registerUserDto.phone;
+    newUser.nickName = '用户' + Math.random().toString().slice(2, 6);
 
     try {
       await this.userRepository.save(newUser);
+
       return {
         message: '注册成功',
       };
@@ -112,7 +115,7 @@ export class UserService {
     user1.email = 'xxx@xx.com';
     user1.isAdmin = true;
     user1.nickName = '张三';
-    user1.phoneNumber = '13233323333';
+    user1.phone = '13233323333';
 
     const user2 = new User();
     user2.username = 'lisi';
@@ -167,7 +170,7 @@ export class UserService {
       username: foundUser.username,
       nickName: foundUser.nickName,
       email: foundUser.email,
-      phoneNumber: foundUser.phoneNumber,
+      phone: foundUser.phone,
       headPic: foundUser.headPic,
       createTime: foundUser.createTime.getTime(),
       isFrozen: foundUser.isFrozen,
@@ -184,6 +187,26 @@ export class UserService {
     });
 
     return vo;
+  }
+
+  async validateSmsCode(phone: string, code: string) {
+    const captcha = await this.redisService.get(`smsCode_${phone}`);
+
+    if (!captcha) {
+      throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST);
+    }
+
+    if (code !== captcha) {
+      throw new HttpException('验证码不正确', HttpStatus.BAD_REQUEST);
+    }
+
+    return {};
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    return await this.userRepository.update(resetPasswordDto.username, {
+      password: md5(resetPasswordDto.password),
+    });
   }
 
   async findUserById(userId: number, isAdmin: boolean) {
