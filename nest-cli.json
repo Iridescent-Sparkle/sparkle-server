@@ -125,6 +125,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/sms/tsconfig.lib.json"
       }
+    },
+    "genius": {
+      "type": "application",
+      "root": "apps/genius",
+      "entryFile": "main",
+      "sourceRoot": "apps/genius/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/genius/tsconfig.app.json"
+      }
+    },
+    "boss": {
+      "type": "application",
+      "root": "apps/boss",
+      "entryFile": "main",
+      "sourceRoot": "apps/boss/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/boss/tsconfig.app.json"
+      }
     }
   }
 }
