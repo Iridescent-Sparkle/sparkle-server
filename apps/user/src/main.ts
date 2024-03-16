@@ -15,9 +15,7 @@ async function bootstrap() {
       },
     },
   );
-
   app.useLogger(app.get(WINSTON_LOGGER_TOKEN));
-
   app.listen();
 }
 bootstrap();

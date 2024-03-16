@@ -5,6 +5,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { RequireLogin } from 'decorators/custom.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UserService } from './user.service';
 
 @Controller()
@@ -64,6 +65,16 @@ export class UserController {
       },
     );
     return vo;
+  }
+
+  @GrpcMethod('UserService', 'ValidateSmsCode')
+  async validateSmsCode({ phone, code }: { phone: string; code: string }) {
+    return await this.userService.validateSmsCode(phone, code);
+  }
+
+  @GrpcMethod('UserService', 'ResetPassword')
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    return await this.userService.resetPassword(resetPasswordDto);
   }
 
   @GrpcMethod('UserService', 'AdminLogin')

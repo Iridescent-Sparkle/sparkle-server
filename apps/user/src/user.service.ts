@@ -1,11 +1,5 @@
 import { RedisService } from '@app/redis';
-import {
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -18,6 +12,7 @@ import { LoginUserVo } from './vo/login-user.vo';
 import { EmailService } from '@app/email';
 import { SmsService } from '@app/sms';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { FitRpcException } from 'filters/rpc-exception.filter';
 
 @Injectable()
 export class UserService {
@@ -73,11 +68,11 @@ export class UserService {
     );
     console.log(`smsCode_${registerUserDto.phone}`, captcha);
     if (!captcha) {
-      throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST);
+      throw new FitRpcException('验证码已失效', HttpStatus.BAD_REQUEST);
     }
 
     if (registerUserDto.captcha !== captcha) {
-      throw new HttpException('验证码不正确', HttpStatus.BAD_REQUEST);
+      throw new FitRpcException('验证码不正确', HttpStatus.BAD_REQUEST);
     }
 
     const foundUser = await this.userRepository.findOneBy({
@@ -85,7 +80,7 @@ export class UserService {
     });
 
     if (foundUser) {
-      throw new HttpException('用户已存在', HttpStatus.BAD_REQUEST);
+      throw new FitRpcException('用户已存在', HttpStatus.BAD_REQUEST);
     }
 
     const newUser = new User();
@@ -158,11 +153,11 @@ export class UserService {
     });
 
     if (!foundUser) {
-      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+      throw new FitRpcException('用户不存在', HttpStatus.BAD_REQUEST);
     }
 
     if (md5(loginUserDto.password) !== foundUser.password) {
-      throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
+      throw new FitRpcException('密码错误', HttpStatus.BAD_REQUEST);
     }
 
     const vo = new LoginUserVo({
@@ -190,20 +185,40 @@ export class UserService {
   }
 
   async validateSmsCode(phone: string, code: string) {
+    const foundUser = await this.userRepository.findOne({
+      where: {
+        username: phone,
+      },
+    });
+
+    if (!foundUser) {
+      throw new FitRpcException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
     const captcha = await this.redisService.get(`smsCode_${phone}`);
 
     if (!captcha) {
-      throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST);
+      throw new FitRpcException('验证码已失效', HttpStatus.BAD_REQUEST);
     }
-
+    console.log(captcha, code, phone);
     if (code !== captcha) {
-      throw new HttpException('验证码不正确', HttpStatus.BAD_REQUEST);
+      throw new FitRpcException('验证码不正确', HttpStatus.BAD_REQUEST);
     }
 
     return {};
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const foundUser = await this.userRepository.findOne({
+      where: {
+        username: resetPasswordDto.username,
+      },
+    });
+
+    if (!foundUser) {
+      throw new FitRpcException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+
     return await this.userRepository.update(resetPasswordDto.username, {
       password: md5(resetPasswordDto.password),
     });
