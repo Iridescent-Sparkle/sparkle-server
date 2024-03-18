@@ -41,6 +41,12 @@ export class User {
 
   @Column({
     length: 50,
+    comment: '头像',
+  })
+  avatar: string;
+
+  @Column({
+    length: 50,
     default: '',
     comment: '邮箱',
   })
