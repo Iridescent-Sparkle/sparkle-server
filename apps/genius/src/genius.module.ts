@@ -11,12 +11,15 @@ import { format, transports } from 'winston';
 import * as chalk from 'chalk';
 import { EmailModule } from '@app/email';
 import { SmsModule } from '@app/sms';
+import { JobCollect } from './entities/collect.entity';
+import { JobDeliver } from './entities/deliver.entity';
+import { JobDetail } from 'apps/boss/src/entities/job.entity';
 
 @Module({
   imports: [
     ConfigModule,
     DbModule,
-    TypeOrmModule.forFeature([]),
+    TypeOrmModule.forFeature([JobCollect, JobDeliver, JobDetail]),
     RedisModule,
     JwtModule,
     EmailModule,
