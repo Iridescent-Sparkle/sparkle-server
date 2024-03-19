@@ -2,9 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { JobCategory } from './category.entity';
 
 @Entity({
   name: 'job_detail',
@@ -92,10 +96,8 @@ export class JobDetail {
   })
   jobLevel: string;
 
-  @Column({
-    comment: '工作类型',
-  })
-  jobCategory: string;
+  @ManyToOne(() => JobCategory)
+  jobCategory: JobCategory;
 
   @Column({
     comment: '空缺',

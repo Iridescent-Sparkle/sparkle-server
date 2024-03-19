@@ -11,7 +11,9 @@ import {
 import { BossService } from './boss.service';
 import { JobDetail } from './entities/job.entity';
 
-@Controller()
+@Controller({
+  path: 'job',
+})
 export class BossController {
   constructor(private readonly bossService: BossService) {}
 
@@ -20,7 +22,7 @@ export class BossController {
     return this.bossService.create(jobDetail);
   }
 
-  @Get()
+  @Get('all')
   findAll(): Promise<JobDetail[]> {
     return this.bossService.findAll();
   }

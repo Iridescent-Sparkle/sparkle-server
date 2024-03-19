@@ -12,12 +12,13 @@ import { SmsModule } from '@app/sms';
 import { BossController } from './boss.controller';
 import { BossService } from './boss.service';
 import { JobDetail } from './entities/job.entity';
+import { JobCategory } from './entities/category.entity';
 
 @Module({
   imports: [
     ConfigModule,
     DbModule,
-    TypeOrmModule.forFeature([JobDetail]),
+    TypeOrmModule.forFeature([JobDetail, JobCategory]),
     RedisModule,
     JwtModule,
     EmailModule,
