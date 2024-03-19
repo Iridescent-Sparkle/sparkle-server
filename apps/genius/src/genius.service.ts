@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobCollect } from './entities/collect.entity';
 import { JobDetail } from 'apps/boss/src/entities/job.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { JobDeliver } from './entities/deliver.entity';
 
 @Injectable()
@@ -32,7 +32,9 @@ export class GeniusService {
   }
 
   async removeJobFromCollection(jobCollectId: number): Promise<void> {
-    const jobCollect = await this.jobCollectRepository.findOne(jobCollectId);
+    const jobCollect = await this.jobCollectRepository.findOne({
+      where: { id: jobCollectId },
+    });
     if (!jobCollect) {
       throw new Error('Job collect not found');
     }
@@ -43,7 +45,9 @@ export class GeniusService {
     jobCollectId: number,
     newJobId: number,
   ): Promise<JobCollect> {
-    const jobCollect = await this.jobCollectRepository.findOne(jobCollectId);
+    const jobCollect = await this.jobCollectRepository.findOne({
+      where: { id: jobCollectId },
+    });
     if (!jobCollect) {
       throw new Error('Job collect not found');
     }
@@ -57,7 +61,7 @@ export class GeniusService {
     });
     const deliveryJobIds = deliveryStatus.map((delivery) => delivery.jobId);
     return await this.jobDetailRepository.find({
-      where: { id: deliveryJobIds },
+      where: { id: In(deliveryJobIds) },
     });
   }
 
@@ -74,7 +78,11 @@ export class GeniusService {
     deliveryId: number,
     newStatus: number,
   ): Promise<JobDeliver> {
-    const delivery = await this.jobDeliverRepository.findOne(deliveryId);
+    const delivery = await this.jobDeliverRepository.findOne({
+      where: {
+        id: deliveryId,
+      },
+    });
     if (!delivery) {
       throw new Error('Delivery not found');
     }
@@ -83,7 +91,11 @@ export class GeniusService {
   }
 
   async deleteDelivery(deliveryId: number): Promise<void> {
-    const delivery = await this.jobDeliverRepository.findOne(deliveryId);
+    const delivery = await this.jobDeliverRepository.findOne({
+      where: {
+        id: deliveryId,
+      },
+    });
     if (!delivery) {
       throw new Error('Delivery not found');
     }

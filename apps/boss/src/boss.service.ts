@@ -19,12 +19,20 @@ export class BossService {
   }
 
   async findOne(id: number): Promise<JobDetail> {
-    return await this.jobDetailRepository.findOne(id);
+    return await this.jobDetailRepository.findOne({
+      where: {
+        id,
+      },
+    });
   }
 
   async update(id: number, jobDetail: JobDetail): Promise<JobDetail> {
     await this.jobDetailRepository.update(id, jobDetail);
-    return await this.jobDetailRepository.findOne(id);
+    return await this.jobDetailRepository.findOne({
+      where: {
+        id,
+      },
+    });
   }
 
   async remove(id: number): Promise<void> {
