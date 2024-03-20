@@ -19,6 +19,10 @@ export class CategoryService {
   }
 
   async findJobByCategory(id: number): Promise<JobDetail[]> {
+    if (id == 0) {
+      return await this.jobDetailRepository.find();
+    }
+
     return await this.jobDetailRepository.find({
       where: {
         jobCategory: {

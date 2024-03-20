@@ -16,8 +16,9 @@ export class FavoriteController {
     return this.favoriteService.addJobToCollection(jobId, userId);
   }
 
-  @Delete('remove/:jobCollectId')
-  async removeJobFromCollection(@Param('jobCollectId') jobCollectId: number) {
-    return this.favoriteService.removeJobFromCollection(jobCollectId);
+  @Delete('remove')
+  async removeJobFromCollection(@Body() jobData: any) {
+    const { jobId, userId } = jobData;
+    return this.favoriteService.removeJobFromCollection(jobId, userId);
   }
 }

@@ -21,21 +21,18 @@ export class DeliveryController {
   @Post('create')
   async createDelivery(@Body() deliveryData: any) {
     const { jobId, userId, status } = deliveryData;
-    console.log(deliveryData);
     return this.deliveryService.createDelivery(jobId, userId, status);
   }
 
-  @Put('update/:deliveryId')
-  async updateDeliveryStatus(
-    @Param('deliveryId') deliveryId: number,
-    @Body() deliveryData: any,
-  ) {
-    const { status } = deliveryData;
-    return this.deliveryService.updateDeliveryStatus(deliveryId, status);
+  @Put('update')
+  async updateDeliveryStatus(@Body() deliveryData: any) {
+    const { jobId, userId, status } = deliveryData;
+    return this.deliveryService.updateDeliveryStatus(jobId, userId, status);
   }
 
-  @Delete('remove/:deliveryId')
-  async deleteDelivery(@Param('deliveryId') deliveryId: number) {
-    return this.deliveryService.deleteDelivery(deliveryId);
+  @Delete('remove')
+  async deleteDelivery(@Body() deliveryData: any) {
+    const { jobId, userId } = deliveryData;
+    return this.deliveryService.deleteDelivery(jobId, userId);
   }
 }

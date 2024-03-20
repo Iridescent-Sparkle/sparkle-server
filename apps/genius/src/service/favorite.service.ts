@@ -51,9 +51,17 @@ export class FavoriteService {
     return await this.jobCollectRepository.save(newJobCollect);
   }
 
-  async removeJobFromCollection(jobCollectId: number): Promise<void> {
+  async removeJobFromCollection(
+    jobCollectId: number,
+    userId: number,
+  ): Promise<void> {
     const jobCollect = await this.jobCollectRepository.findOne({
-      where: { id: jobCollectId },
+      where: {
+        id: jobCollectId,
+        user: {
+          id: userId,
+        },
+      },
     });
 
     if (!jobCollect) {

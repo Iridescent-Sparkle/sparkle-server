@@ -56,14 +56,19 @@ export class DeliverService {
   }
 
   async updateDeliveryStatus(
-    deliveryId: number,
+    jobId: number,
+    userId: number,
     newStatus: number,
   ): Promise<JobDeliver> {
     const delivery = await this.jobDeliverRepository.findOne({
       where: {
-        id: deliveryId,
+        id: jobId,
+        user: {
+          id: userId,
+        },
       },
     });
+
     if (!delivery) {
       throw new Error('Delivery not found');
     }
@@ -71,10 +76,13 @@ export class DeliverService {
     return await this.jobDeliverRepository.save(delivery);
   }
 
-  async deleteDelivery(deliveryId: number): Promise<void> {
+  async deleteDelivery(deliveryId: number, userId: number): Promise<void> {
     const delivery = await this.jobDeliverRepository.findOne({
       where: {
         id: deliveryId,
+        user: {
+          id: userId,
+        },
       },
     });
     if (!delivery) {
