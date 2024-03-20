@@ -1,3 +1,4 @@
+import { JobCategory } from './entities/category.entity';
 import {
   Body,
   Controller,
@@ -56,5 +57,15 @@ export class BossController {
     @Query('take') take: number,
   ): Promise<JobDetail[]> {
     return this.bossService.paginate(page, take);
+  }
+
+  @Post('jobCategory')
+  findAllJobCategory(): Promise<JobCategory[]> {
+    return this.bossService.findAllJobCategory();
+  }
+
+  @Post('jobByCategory')
+  findJobByCategory(@Body('categoryId') categoryId: number) {
+    return this.bossService.findJobByCategory(categoryId);
   }
 }

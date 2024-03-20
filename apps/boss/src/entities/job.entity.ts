@@ -2,13 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { JobCategory } from './category.entity';
+import { User } from 'apps/user/src/entities/user.entity';
 
 @Entity({
   name: 'job_detail',
@@ -16,6 +15,9 @@ import { JobCategory } from './category.entity';
 export class JobDetail {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => User)
+  user: User;
 
   @Column({
     length: 50,
@@ -119,6 +121,12 @@ export class JobDetail {
     comment: '是否冻结',
   })
   isFrozen: boolean;
+
+  @Column({
+    default: false,
+    comment: '是否删除',
+  })
+  isDelete: boolean;
 
   @CreateDateColumn()
   createTime: Date;

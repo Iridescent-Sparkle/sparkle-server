@@ -67,6 +67,18 @@ export class User {
   phone: string;
 
   @Column({
+    length: 20,
+    comment: '联系ID老板',
+  })
+  contactIdToB: string;
+
+  @Column({
+    length: 20,
+    comment: '联系ID牛人',
+  })
+  contactIdToC: string;
+
+  @Column({
     default: false,
     comment: '是否冻结',
   })

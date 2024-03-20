@@ -13,12 +13,15 @@ import { BossController } from './boss.controller';
 import { BossService } from './boss.service';
 import { JobDetail } from './entities/job.entity';
 import { JobCategory } from './entities/category.entity';
+import { Permission } from 'apps/user/src/entities/permission.entity';
+import { Role } from 'apps/user/src/entities/role.entity';
+import { User } from 'apps/user/src/entities/user.entity';
 
 @Module({
   imports: [
     ConfigModule,
     DbModule,
-    TypeOrmModule.forFeature([JobDetail, JobCategory]),
+    TypeOrmModule.forFeature([User, Role, Permission, JobDetail, JobCategory]),
     RedisModule,
     JwtModule,
     EmailModule,

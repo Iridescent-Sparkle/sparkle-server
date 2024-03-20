@@ -1,25 +1,39 @@
-import { Module } from '@nestjs/common';
-import { GeniusController } from './genius.controller';
-import { GeniusService } from './genius.service';
 import { ConfigModule } from '@app/config';
 import { DbModule } from '@app/db';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { RedisModule } from '@app/redis';
-import { JwtModule } from '@app/jwt';
-import { WinstonModule } from '@app/winston';
-import { format, transports } from 'winston';
-import * as chalk from 'chalk';
 import { EmailModule } from '@app/email';
+import { JwtModule } from '@app/jwt';
+import { RedisModule } from '@app/redis';
 import { SmsModule } from '@app/sms';
+import { WinstonModule } from '@app/winston';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { JobCategory } from 'apps/boss/src/entities/category.entity';
+import { JobDetail } from 'apps/boss/src/entities/job.entity';
+import { Permission } from 'apps/user/src/entities/permission.entity';
+import { Role } from 'apps/user/src/entities/role.entity';
+import { User } from 'apps/user/src/entities/user.entity';
+import * as chalk from 'chalk';
+import { format, transports } from 'winston';
+import { DeliveryController } from './controller/delivery.controller';
 import { JobCollect } from './entities/collect.entity';
 import { JobDeliver } from './entities/deliver.entity';
-import { JobDetail } from 'apps/boss/src/entities/job.entity';
+import { FavoriteController } from './controller/favorite.controller';
+import { DeliverService } from './service/deliver.service';
+import { FavoriteService } from './service/favorite.service';
 
 @Module({
   imports: [
     ConfigModule,
     DbModule,
-    TypeOrmModule.forFeature([JobCollect, JobDeliver, JobDetail]),
+    TypeOrmModule.forFeature([
+      User,
+      Role,
+      Permission,
+      JobCollect,
+      JobDeliver,
+      JobDetail,
+      JobCategory,
+    ]),
     RedisModule,
     JwtModule,
     EmailModule,
@@ -46,7 +60,7 @@ import { JobDetail } from 'apps/boss/src/entities/job.entity';
       ],
     }),
   ],
-  controllers: [GeniusController],
-  providers: [GeniusService],
+  controllers: [DeliveryController, FavoriteController],
+  providers: [DeliverService, FavoriteService],
 })
 export class GeniusModule {}

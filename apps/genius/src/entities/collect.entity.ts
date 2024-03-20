@@ -1,7 +1,12 @@
+import { JobDetail } from 'apps/boss/src/entities/job.entity';
+import { User } from 'apps/user/src/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,15 +18,18 @@ export class JobCollect {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    comment: '职位id',
-  })
-  jobId: number;
+  @OneToOne(() => JobDetail)
+  @JoinColumn()
+  job: JobDetail;
+
+  @ManyToOne(() => User)
+  user: User;
 
   @Column({
-    comment: '用户id',
+    default: false,
+    comment: '是否删除',
   })
-  userId: number;
+  isDelete: boolean;
 
   @CreateDateColumn()
   createTime: Date;
