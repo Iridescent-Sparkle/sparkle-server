@@ -9,13 +9,15 @@ import { format, transports } from 'winston';
 import * as chalk from 'chalk';
 import { EmailModule } from '@app/email';
 import { SmsModule } from '@app/sms';
-import { BossController } from './boss.controller';
-import { BossService } from './boss.service';
+import { JobController } from './controller/job.controller';
+import { JobService } from './service/job.service';
 import { JobDetail } from './entities/job.entity';
 import { JobCategory } from './entities/category.entity';
 import { Permission } from 'apps/user/src/entities/permission.entity';
 import { Role } from 'apps/user/src/entities/role.entity';
 import { User } from 'apps/user/src/entities/user.entity';
+import { CategoryController } from './controller/category.controller';
+import { CategoryService } from './service/category.service';
 
 @Module({
   imports: [
@@ -48,7 +50,7 @@ import { User } from 'apps/user/src/entities/user.entity';
       ],
     }),
   ],
-  controllers: [BossController],
-  providers: [BossService],
+  controllers: [JobController, CategoryController],
+  providers: [JobService, CategoryService],
 })
 export class BossModule {}

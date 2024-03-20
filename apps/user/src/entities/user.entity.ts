@@ -69,12 +69,14 @@ export class User {
   @Column({
     length: 20,
     comment: '联系ID老板',
+    nullable: true,
   })
   contactIdToB: string;
 
   @Column({
     length: 20,
     comment: '联系ID牛人',
+    nullable: true,
   })
   contactIdToC: string;
 

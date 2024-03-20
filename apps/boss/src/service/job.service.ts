@@ -1,20 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JobDetail } from './entities/job.entity';
+import { JobDetail } from '../entities/job.entity';
 import { Repository } from 'typeorm';
-import { JobCategory } from './entities/category.entity';
+import { JobCategory } from '../entities/category.entity';
 import { User } from 'apps/user/src/entities/user.entity';
 
 @Injectable()
-export class BossService {
-  constructor(
-    @InjectRepository(JobDetail)
-    private jobDetailRepository: Repository<JobDetail>,
-  ) {}
+export class JobService {
+  @InjectRepository(JobDetail)
+  private jobDetailRepository: Repository<JobDetail>;
+
   @InjectRepository(JobCategory)
   private jobCategoryRepository: Repository<JobCategory>;
+
   @InjectRepository(User)
   private userRepository: Repository<User>;
+
+  constructor() {}
+
   async initializeJobDetails(): Promise<void> {
     const jobCategory = await this.jobCategoryRepository.findOne({
       where: { id: Math.floor(Math.random() * (5 - 1 + 1)) + 1 },
@@ -101,19 +104,5 @@ export class BossService {
       .skip(skip)
       .take(take)
       .getMany();
-  }
-
-  async findAllJobCategory(): Promise<JobCategory[]> {
-    return await this.jobCategoryRepository.find();
-  }
-
-  async findJobByCategory(id: number): Promise<JobDetail[]> {
-    return await this.jobDetailRepository.find({
-      where: {
-        jobCategory: {
-          id,
-        },
-      },
-    });
   }
 }
