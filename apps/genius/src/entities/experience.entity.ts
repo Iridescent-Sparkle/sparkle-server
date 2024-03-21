@@ -1,0 +1,62 @@
+import { User } from 'apps/user/src/entities/user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+@Entity({
+  name: 'project',
+})
+export class Project {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => User)
+  user: User;
+
+  @Column({
+    comment: '职位',
+  })
+  profession: string;
+
+  @Column({
+    comment: '公司',
+  })
+  companyName: string;
+
+  @Column({
+    comment: '开始时间',
+  })
+  startTime: Date;
+
+  @Column({
+    comment: '结束时间',
+  })
+  endTime: Date;
+
+  @Column({
+    comment: '是否在职',
+  })
+  isWork: boolean;
+
+  @Column({
+    comment: '经历描述',
+  })
+  description: string;
+
+  @Column({
+    default: false,
+    comment: '是否删除',
+  })
+  isDelete: boolean;
+
+  @CreateDateColumn()
+  createTime: Date;
+
+  @UpdateDateColumn()
+  updateTime: Date;
+}

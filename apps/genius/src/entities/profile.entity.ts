@@ -1,29 +1,24 @@
+import { User } from 'apps/user/src/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({
-  name: 'resume',
+  name: 'profile',
 })
-export class Resume {
+export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    length: 50,
-    comment: '昵称',
-  })
-  nickName: string;
-
-  @Column({
-    length: 50,
-    comment: '职业',
-  })
-  occupation: string;
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 
   @Column({
     length: 50,
@@ -32,16 +27,39 @@ export class Resume {
   avatar: string;
 
   @Column({
-    length: 50,
+    comment: '昵称',
+  })
+  nickname: string;
+
+  @Column({
+    comment: '职业',
+  })
+  occupation: string;
+
+  @Column({
+    comment: '地址',
+  })
+  address: string;
+
+  @Column({
     comment: '电话',
   })
   phone: string;
 
   @Column({
-    length: 50,
-    comment: '地址',
+    comment: '邮箱',
   })
-  address: string;
+  email: string;
+
+  @Column({
+    comment: '最小期望薪资',
+  })
+  minSalary: string;
+
+  @Column({
+    comment: '最大期望薪资',
+  })
+  maxSalary: string;
 
   @Column({
     comment: '个人总结',
@@ -49,38 +67,21 @@ export class Resume {
   summary: string;
 
   @Column({
-    length: 50,
-    comment: '邮箱',
-  })
-  email: string;
-
-  @Column({
-    length: 50,
-    comment: '最低薪资',
-  })
-  minSalary: string;
-
-  @Column({
-    length: 50,
-    comment: '最高薪资',
-  })
-  maxSalary: string;
-
-  @Column({
+    type: 'json',
     comment: '技能',
   })
-  skill: string[];
+  skills: string[];
 
   @Column({
-    comment: '简历',
+    comment: '简历pdf',
   })
   resume: string;
 
   @Column({
     default: false,
-    comment: '是否冻结',
+    comment: '是否删除',
   })
-  isFrozen: boolean;
+  isDelete: boolean;
 
   @CreateDateColumn()
   createTime: Date;
