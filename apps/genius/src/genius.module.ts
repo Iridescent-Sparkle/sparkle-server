@@ -20,6 +20,11 @@ import { JobDeliver } from './entities/deliver.entity';
 import { FavoriteController } from './controller/favorite.controller';
 import { DeliverService } from './service/deliver.service';
 import { FavoriteService } from './service/favorite.service';
+import { Education } from './entities/education.entity';
+import { Experience } from './entities/experience.entity';
+import { Profile } from './entities/profile.entity';
+import { Project } from './entities/project.entity';
+import { Volunteer } from './entities/volunteer.entity';
 
 @Module({
   imports: [
@@ -33,6 +38,11 @@ import { FavoriteService } from './service/favorite.service';
       JobDeliver,
       JobDetail,
       JobCategory,
+      Education,
+      Experience,
+      Profile,
+      Project,
+      Volunteer,
     ]),
     RedisModule,
     JwtModule,

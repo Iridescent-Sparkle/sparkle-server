@@ -10,6 +10,7 @@ import {
 
 @Entity({
   name: 'education',
+  comment: '教育经历表',
 })
 export class Education {
   @PrimaryGeneratedColumn()

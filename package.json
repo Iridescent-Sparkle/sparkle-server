@@ -12,6 +12,7 @@
     "start-user:dev": "cross-env NODE_ENV=development nest start user --watch",
     "start-boss:dev": "cross-env NODE_ENV=development nest start boss --watch",
     "start-genius:dev": "cross-env NODE_ENV=development nest start genius --watch",
+    "start-genius-ztf:dev": "cross-env NODE_ENV=development-ztf nest start genius --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/sparkle-server/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

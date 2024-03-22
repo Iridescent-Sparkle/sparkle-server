@@ -9,9 +9,10 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'project',
+  name: 'experience',
+  comment: '工作经历表',
 })
-export class Project {
+export class Experience {
   @PrimaryGeneratedColumn()
   id: number;
 

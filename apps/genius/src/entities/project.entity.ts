@@ -10,6 +10,7 @@ import {
 
 @Entity({
   name: 'project',
+  comment: '项目经历表',
 })
 export class Project {
   @PrimaryGeneratedColumn()

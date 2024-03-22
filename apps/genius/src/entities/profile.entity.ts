@@ -11,6 +11,7 @@ import {
 
 @Entity({
   name: 'profile',
+  comment: '个人信息表',
 })
 export class Profile {
   @PrimaryGeneratedColumn()
