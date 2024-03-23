@@ -40,3 +40,7 @@ lerna-debug.log*
 
 # compodoc files
 /documentation/**
+
+/mysql
+
+/redis

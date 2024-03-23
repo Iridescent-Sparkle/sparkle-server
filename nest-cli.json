@@ -7,11 +7,6 @@
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "watchAssets": true,
-    "assets": [
-      "**/*.env",
-      "**/*.proto"
-    ],
     "webpack": true,
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },

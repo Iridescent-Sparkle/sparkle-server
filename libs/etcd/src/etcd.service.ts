@@ -29,6 +29,7 @@ export class EtcdService {
     });
     return watcher;
   }
+
   /**监听配置并重启服务 */
   async watchConfigAndRestart(
     app: INestApplication,

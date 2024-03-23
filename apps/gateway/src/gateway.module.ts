@@ -4,20 +4,63 @@ import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserController } from './controllers/user.controller';
 import { ConfigService } from '@nestjs/config';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule,
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'user',
-        transport: Transport.GRPC,
-        options: {
-          url: 'localhost:8888',
-          package: 'user',
-          protoPath: './proto/user.proto',
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          return {
+            transport: Transport.GRPC,
+            options: {
+              url: configService.get('user_server_host'),
+              package: 'user',
+              protoPath:
+                process.env.NODE_ENV === 'production'
+                  ? join(__dirname, './proto/user.proto')
+                  : './proto/user.proto',
+            },
+          };
         },
       },
+      // {
+      //   name: 'boss',
+      //   inject: [ConfigService],
+      //   useFactory(configService: ConfigService) {
+      //     return {
+      //       transport: Transport.GRPC,
+      //       options: {
+      //         url: configService.get('boss_server_host'),
+      //         package: 'boss',
+      //         protoPath:
+      //           process.env.NODE_ENV === 'production'
+      //             ? join(__dirname, './proto/boss.proto')
+      //             : './proto/boss.proto',
+      //       },
+      //     };
+      //   },
+      // },
+      // {
+      //   name: 'genius',
+      //   inject: [ConfigService],
+      //   useFactory(configService: ConfigService) {
+      //     return {
+      //       transport: Transport.GRPC,
+      //       options: {
+      //         url: configService.get('genius_server_host'),
+      //         package: 'genius',
+      //         protoPath:
+      //           process.env.NODE_ENV === 'production'
+      //             ? join(__dirname, './proto/genius.proto')
+      //             : './proto/genius.proto',
+      //       },
+      //     };
+      //   },
+      // },
     ]),
     EtcdModule.forRootAsync({
       inject: [ConfigService],

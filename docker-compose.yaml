@@ -1,0 +1,99 @@
+version: '3.8'
+services:
+  nest-gateway:
+    build:
+      context: ./
+      dockerfile: ./apps/gateway/Dockerfile
+    environment:
+     NODE_ENV: production
+    depends_on:
+      - mysql-container
+      - redis-container
+      - rabititmq-container
+      - etcd-container
+    ports:
+      - 3000:3000
+    networks:
+      - common-network
+  nest-user:
+    build:
+      context: ./
+      dockerfile: ./apps/user/Dockerfile
+    depends_on:
+       - mysql-container
+       - redis-container
+       - rabititmq-container
+       - etcd-container
+    environment:
+       NODE_ENV: production
+    ports:
+      - "3001:3001"    
+    networks:
+      - common-network
+  nest-boss:
+    build:
+       context: ./
+       dockerfile: ./apps/boss/Dockerfile
+    depends_on:
+      - mysql-container
+      - redis-container
+      - rabititmq-container
+      - etcd-container
+    environment:
+       NODE_ENV: production
+    ports:
+      - "3002:3002"
+    networks:
+      - common-network
+  nest-genius:
+    build:
+      context: ./
+      dockerfile: ./apps/genius/Dockerfile
+    environment:
+     NODE_ENV: production
+    depends_on:
+       - mysql-container
+       - redis-container
+       - rabititmq-container
+       - etcd-container
+    ports:
+      - "3003:3003"
+    networks:
+      - common-network
+  mysql-container:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: sparkle_server
+      MYSQL_ROOT_PASSWORD: 890224
+    networks:
+      - common-network
+  redis-container:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
+    networks:
+      - common-network
+  rabititmq-container:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+    networks:
+      - common-network
+  etcd-container:
+    image: bitnami/etcd:latest
+    ports:
+      - "2379:2379"
+    environment:
+      ETCD_ROOT_PASSWORD: 890224
+    networks:
+      - common-network
+networks:
+  common-network:
+    driver: bridge

@@ -2,6 +2,7 @@ import { WINSTON_LOGGER_TOKEN } from '@app/winston';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { UserModule } from './user.module';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -9,9 +10,12 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: 'localhost:8888',
+        url: 'localhost:3001',
         package: 'user',
-        protoPath: './proto/user.proto',
+        protoPath:
+          process.env.NODE_ENV === 'production'
+            ? join(__dirname, './proto/user.proto')
+            : './proto/user.proto',
       },
     },
   );
