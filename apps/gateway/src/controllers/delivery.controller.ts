@@ -1,29 +1,48 @@
-import { Body, Controller, Param } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
-import { DeliveryService } from '../service/deliver.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+  UseFilters,
+} from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
+import { DeliveryService } from 'apps/genius/src/service/deliver.service';
+import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
 
 @Controller('deliveries')
+@UseFilters(GrpcExceptionFilter)
 export class DeliveryController {
-  constructor(private readonly deliveryService: DeliveryService) {}
+  @Inject('category')
+  private client: ClientGrpc;
 
-  @GrpcMethod('DeliveryService', 'FindDeliveryStatusByUserId')
+  private deliveryService: DeliveryService;
+
+  onModuleInit() {
+    this.deliveryService = this.client.getService('DeliveryService');
+  }
+
+  @Get('user/:userId')
   async findDeliveryStatusByUserId(@Param('userId') userId: number) {
     return this.deliveryService.findDeliveryStatusByUserId(userId);
   }
 
-  @GrpcMethod('DeliveryService', 'CreateDelivery')
+  @Post('create')
   async createDelivery(@Body() deliveryData: any) {
     const { jobId, userId, status } = deliveryData;
     return this.deliveryService.createDelivery(jobId, userId, status);
   }
 
-  @GrpcMethod('DeliveryService', 'UpdateDeliveryStatus')
+  @Put('update')
   async updateDeliveryStatus(@Body() deliveryData: any) {
     const { jobId, userId, status } = deliveryData;
     return this.deliveryService.updateDeliveryStatus(jobId, userId, status);
   }
 
-  @GrpcMethod('DeliveryService', 'DeleteDelivery')
+  @Delete('remove')
   async deleteDelivery(@Body() deliveryData: any) {
     const { jobId, userId } = deliveryData;
     return this.deliveryService.deleteDelivery(jobId, userId);

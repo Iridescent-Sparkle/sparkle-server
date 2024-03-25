@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package genius;
+
+service DeliveryService {
+  rpc  FindDeliveryStatusByUserId(FindDeliveryStatusByUserIdRequest) returns (FindDeliveryStatusByUserIdResponse);
+  rpc  CreateDelivery(CreateDeliveryRequest) returns (CreateDeliveryResponse);
+  rpc  UpdateDeliveryStatus(UpdateDeliveryStatusRequest) returns (UpdateDeliveryStatusResponse);
+  rpc  DeleteDelivery(DeleteDeliveryRequest) returns (DeleteDeliveryResponse);
+}
+
+message Empty {}
+
+message FindDeliveryStatusByUserIdRequest {
+
+}
+
+message FindDeliveryStatusByUserIdResponse {
+  string categoryId = 1;
+}
+
+message CreateDeliveryRequest {
+
+}
+
+message CreateDeliveryResponse {
+
+}
+
+message UpdateDeliveryStatusRequest {
+
+}
+
+
+message UpdateDeliveryStatusResponse {
+
+}
+
+message DeleteDeliveryRequest {
+
+}
+
+message DeleteDeliveryResponse {
+
+}
