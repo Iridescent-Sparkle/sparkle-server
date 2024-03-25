@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package boss;
+
+service BossService {
+  rpc  Create(CreateRequest) returns (CreateResponse);
+  rpc  FindAll(FindAllRequest) returns (FindAllResponse);
+  rpc  FindOne(FindOneRequest) returns (FindOneReponse);
+  rpc  Remove(RemoveRequest) returns (RemoveReponse);
+  rpc  Search(SearchRequest) returns (SearchResponse);
+  rpc  Paginate(PaginateRequest) returns (PaginateResponse);
+}
+
+message Empty {}
+
+message CreateRequest {
+  string address = 1;
+}
+message CreateResponse {
+  string countDown = 1;
+}
+
+message FindAllRequest {
+  string phone = 1;
+}
+
+message FindAllResponse {
+  string countDown = 1;
+}
+
+message FindOneRequest {
+ string username = 1;
+ string password = 2;
+ string phone = 3;
+ string captcha = 4;
+}
+
+message FindOneReponse {
+ string message = 1;
+}
+
+message RemoveRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RemoveReponse {
+  int32 id = 1;
+  string username = 2;
+  string nickName = 3;
+  string email = 4;
+  string headPic = 5;
+  string phone = 6;
+  bool isFrozen = 7;
+  bool isAdmin = 8;
+  int64 createTime = 9;
+  repeated string roles = 10;
+  repeated string  permissions = 11;
+}
+
+message SearchRequest {
+  UserInfo userInfo = 1;
+  string accessToken = 2;
+  string refreshToken = 3;
+}
+
+message SearchResponse {
+  string refreshToken = 1;
+}
+
+message PaginateRequest {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
+
+message PaginateResponse {
+  int32 userId = 1;
+}
+

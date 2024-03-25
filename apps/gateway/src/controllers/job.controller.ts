@@ -1,30 +1,50 @@
-import { Body, Controller, Param, Query } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
-import { JobDetail } from '../entities/job.entity';
-import { JobService } from '../service/job.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseFilters,
+} from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
+import { JobDetail } from 'apps/boss/src/entities/job.entity';
+import { JobService } from 'apps/boss/src/service/job.service';
+import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
 
 @Controller({
   path: 'job',
 })
+@UseFilters(GrpcExceptionFilter)
 export class JobController {
-  constructor(private readonly jobService: JobService) {}
+  @Inject('category')
+  private client: ClientGrpc;
 
-  @GrpcMethod('JobService', 'Create')
+  private jobService: JobService;
+
+  onModuleInit() {
+    this.jobService = this.client.getService('JobService');
+  }
+
+  @Post()
   create(@Body() jobDetail: JobDetail): Promise<JobDetail> {
     return this.jobService.create(jobDetail);
   }
 
-  @GrpcMethod('JobService', 'FindAll')
+  @Get('all')
   findAll(): Promise<JobDetail[]> {
     return this.jobService.findAll();
   }
 
-  @GrpcMethod('JobService', 'FindOne')
+  @Get(':id')
   findOne(@Param('id') id: string): Promise<JobDetail> {
     return this.jobService.findOne(+id);
   }
 
-  @GrpcMethod('JobService', 'Update')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() jobDetail: JobDetail,
@@ -32,17 +52,17 @@ export class JobController {
     return this.jobService.update(+id, jobDetail);
   }
 
-  @GrpcMethod('JobService', 'Remove')
+  @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
     return this.jobService.remove(+id);
   }
 
-  @GrpcMethod('JobService', 'Search')
+  @Get('search')
   search(@Query('keyword') keyword: string): Promise<JobDetail[]> {
     return this.jobService.search(keyword);
   }
 
-  @GrpcMethod('JobService', 'Paginate')
+  @Get('paginate')
   paginate(
     @Query('page') page: number,
     @Query('take') take: number,

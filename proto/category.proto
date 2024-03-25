@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package category;
+package boss;
 
 service CategoryService {
   rpc  FindAllJobCategory(Empty) returns (FindAllJobCategoryResponse);

@@ -12,10 +12,14 @@ async function bootstrap() {
       options: {
         url: '0.0.0.0:3002',
         package: 'boss',
-        protoPath:
+        protoPath: [
           process.env.NODE_ENV === 'production'
-            ? join(__dirname, './proto/boss.proto')
-            : '/proto/boss.proto',
+            ? join(__dirname, './proto/category.proto')
+            : '/proto/category.proto',
+          process.env.NODE_ENV === 'production'
+            ? join(__dirname, './proto/job.proto')
+            : '/proto/job.proto',
+        ],
       },
     },
   );

@@ -40,10 +40,14 @@ import { join } from 'path';
             options: {
               url: configService.get('boss_server_host'),
               package: 'boss',
-              protoPath:
+              protoPath: [
                 process.env.NODE_ENV === 'production'
-                  ? join(__dirname, './proto/boss.proto')
-                  : '/proto/boss.proto',
+                  ? join(__dirname, './proto/category.proto')
+                  : '/proto/category.proto',
+                process.env.NODE_ENV === 'production'
+                  ? join(__dirname, './proto/job.proto')
+                  : '/proto/job.proto',
+              ],
             },
           };
         },
