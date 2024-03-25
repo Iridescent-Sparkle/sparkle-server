@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   nest-gateway:
+    image: registry.cn-chengdu.aliyuncs.com/sparkle_server/gateway:latest
     build:
       context: ./
       dockerfile: ./apps/gateway/Dockerfile
@@ -16,6 +17,7 @@ services:
     networks:
       - common-network
   nest-user:
+    image: registry.cn-chengdu.aliyuncs.com/sparkle_server/user:latest
     build:
       context: ./
       dockerfile: ./apps/user/Dockerfile
@@ -31,6 +33,7 @@ services:
     networks:
       - common-network
   nest-boss:
+    image: registry.cn-chengdu.aliyuncs.com/sparkle_server/boss:latest
     build:
        context: ./
        dockerfile: ./apps/boss/Dockerfile
@@ -46,6 +49,7 @@ services:
     networks:
       - common-network
   nest-genius:
+    image: registry.cn-chengdu.aliyuncs.com/sparkle_server/genius:latest
     build:
       context: ./
       dockerfile: ./apps/genius/Dockerfile

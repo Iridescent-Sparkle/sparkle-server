@@ -1,12 +1,14 @@
 name: Deploy
-run-name: sparkle manage develop-website is running deploy stage 🚀
+run-name: sparkle server deploy running deploy stage 🚀
 on:
   push:
     branches:
       - develop
+      - master 
   pull_request:
     branches:
       - develop
+      - master 
 jobs:
   Run-Project_Deploy:
     runs-on: ubuntu-latest
@@ -14,11 +16,11 @@ jobs:
       - name: checkout git repository
         uses: actions/checkout@v4
       - name: build the docker image
-        run: docker build --tag ${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }} .
+        run: docker-compose -f ./docker-compose.yaml build
       - name: login to aliyun docker repository
         run: docker login --username=${{ secrets.ALIYUN_USERNAME }} --password=${{ secrets.ALIYUN_PASSWORD }} ${{ secrets.ALIYUN_REGISTRY }}
       - name: push image to aliyun docker repository
-        run: docker push ${{ secrets.IMAGE_NAME }}:${{ secrets.IMAGE_TAG }}
+        run: docker-compose -f ./docker-compose.yaml push
       - name: update docker image and restart remote server
         uses: appleboy/ssh-action@master
         with:
@@ -28,4 +30,5 @@ jobs:
           port: 22
           script: |
             cd /opt/docker/config
-            ./update-sparkle-manage.sh
+            docker-compose -f ./docker-compose-sparkle-server.yml down
+            docker-compose -f ./docker-compose-sparkle-server.yml up -d
