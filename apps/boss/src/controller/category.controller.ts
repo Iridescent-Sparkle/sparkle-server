@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { JobCategory } from '../entities/category.entity';
-import { CategoryService } from '../service/category.service';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
+import { JobCategory } from 'apps/boss/src/entities/category.entity';
+import { CategoryService } from 'apps/boss/src/service/category.service';
 
 @Controller({
   path: 'category',
@@ -8,13 +9,13 @@ import { CategoryService } from '../service/category.service';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get('all')
+  @GrpcMethod('CategoryService', 'FindAllJobCategory')
   findAllJobCategory(): Promise<JobCategory[]> {
     return this.categoryService.findAllJobCategory();
   }
 
-  @Get('job/:id')
-  findJobByCategory(@Param('categoryId') categoryId: number) {
-    return this.categoryService.findJobByCategory(categoryId);
+  @GrpcMethod('CategoryService', 'FindJobByCategory')
+  findJobByCategory({ categoryId }: { categoryId: number }) {
+    return this.categoryService.findJobByCategory({ categoryId });
   }
 }

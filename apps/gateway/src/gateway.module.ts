@@ -27,40 +27,40 @@ import { join } from 'path';
           };
         },
       },
-      // {
-      //   name: 'boss',
-      //   inject: [ConfigService],
-      //   useFactory(configService: ConfigService) {
-      //     return {
-      //       transport: Transport.GRPC,
-      //       options: {
-      //         url: configService.get('boss_server_host'),
-      //         package: 'boss',
-      //         protoPath:
-      //           process.env.NODE_ENV === 'production'
-      //             ? join(__dirname, './proto/boss.proto')
-      //             : './proto/boss.proto',
-      //       },
-      //     };
-      //   },
-      // },
-      // {
-      //   name: 'genius',
-      //   inject: [ConfigService],
-      //   useFactory(configService: ConfigService) {
-      //     return {
-      //       transport: Transport.GRPC,
-      //       options: {
-      //         url: configService.get('genius_server_host'),
-      //         package: 'genius',
-      //         protoPath:
-      //           process.env.NODE_ENV === 'production'
-      //             ? join(__dirname, './proto/genius.proto')
-      //             : './proto/genius.proto',
-      //       },
-      //     };
-      //   },
-      // },
+      {
+        name: 'boss',
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          return {
+            transport: Transport.GRPC,
+            options: {
+              url: configService.get('boss_server_host'),
+              package: 'boss',
+              protoPath:
+                process.env.NODE_ENV === 'production'
+                  ? join(__dirname, './proto/boss.proto')
+                  : './proto/boss.proto',
+            },
+          };
+        },
+      },
+      {
+        name: 'genius',
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          return {
+            transport: Transport.GRPC,
+            options: {
+              url: configService.get('genius_server_host'),
+              package: 'genius',
+              protoPath:
+                process.env.NODE_ENV === 'production'
+                  ? join(__dirname, './proto/genius.proto')
+                  : './proto/genius.proto',
+            },
+          };
+        },
+      },
     ]),
     EtcdModule.forRootAsync({
       inject: [ConfigService],

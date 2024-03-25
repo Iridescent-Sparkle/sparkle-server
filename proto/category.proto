@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package category;
+
+service CategoryService {
+  rpc  FindAllJobCategory(Empty) returns (FindAllJobCategoryResponse);
+  rpc  FindJobByCategory(FindJobByCategoryeRequest) returns (FindJobByCategoryResponse);
+}
+
+message Empty {}
+
+message FindAllJobCategoryResponse {
+
+}
+
+message FindJobByCategoryeRequest {
+  string categoryId = 1;
+}
+
+message FindJobByCategoryResponse {
+
+}
