@@ -10,12 +10,12 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: 'localhost:3003',
+        url: '0.0.0.0:3003',
         package: 'genius',
         protoPath:
           process.env.NODE_ENV === 'production'
             ? join(__dirname, './proto/genius.proto')
-            : './proto/genius.proto',
+            : '/proto/genius.proto',
       },
     },
   );

@@ -14,6 +14,10 @@ import { join } from 'path';
         name: 'user',
         inject: [ConfigService],
         useFactory(configService: ConfigService) {
+          console.log(
+            configService.get('user_server_host'),
+            join(__dirname, './proto/user.proto'),
+          );
           return {
             transport: Transport.GRPC,
             options: {
@@ -22,7 +26,7 @@ import { join } from 'path';
               protoPath:
                 process.env.NODE_ENV === 'production'
                   ? join(__dirname, './proto/user.proto')
-                  : './proto/user.proto',
+                  : '/proto/user.proto',
             },
           };
         },
@@ -39,7 +43,7 @@ import { join } from 'path';
               protoPath:
                 process.env.NODE_ENV === 'production'
                   ? join(__dirname, './proto/boss.proto')
-                  : './proto/boss.proto',
+                  : '/proto/boss.proto',
             },
           };
         },
@@ -56,7 +60,7 @@ import { join } from 'path';
               protoPath:
                 process.env.NODE_ENV === 'production'
                   ? join(__dirname, './proto/genius.proto')
-                  : './proto/genius.proto',
+                  : '/proto/genius.proto',
             },
           };
         },

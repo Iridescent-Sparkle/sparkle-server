@@ -10,12 +10,12 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: 'localhost:3002',
+        url: '0.0.0.0:3002',
         package: 'boss',
         protoPath:
           process.env.NODE_ENV === 'production'
             ? join(__dirname, './proto/boss.proto')
-            : './proto/boss.proto',
+            : '/proto/boss.proto',
       },
     },
   );
