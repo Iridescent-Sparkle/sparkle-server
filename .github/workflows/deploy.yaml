@@ -31,4 +31,5 @@ jobs:
           script: |
             cd /opt/docker/config
             docker-compose -f ./docker-compose-sparkle-server.yml down
+            docker-compose -f ./docker-compose-sparkle-server.yml pull 
             docker-compose -f ./docker-compose-sparkle-server.yml up -d

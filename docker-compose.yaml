@@ -2,6 +2,8 @@ version: '3.8'
 services:
   nest-gateway:
     image: registry.cn-chengdu.aliyuncs.com/sparkle_server/gateway:latest
+    secrets:
+      - my_auth
     build:
       context: ./
       dockerfile: ./apps/gateway/Dockerfile
@@ -18,6 +20,8 @@ services:
       - common-network
   nest-user:
     image: registry.cn-chengdu.aliyuncs.com/sparkle_server/user:latest
+    secrets:
+      - my_auth
     build:
       context: ./
       dockerfile: ./apps/user/Dockerfile
@@ -34,6 +38,8 @@ services:
       - common-network
   nest-boss:
     image: registry.cn-chengdu.aliyuncs.com/sparkle_server/boss:latest
+    secrets:
+      - my_auth
     build:
        context: ./
        dockerfile: ./apps/boss/Dockerfile
@@ -50,6 +56,8 @@ services:
       - common-network
   nest-genius:
     image: registry.cn-chengdu.aliyuncs.com/sparkle_server/genius:latest
+    secrets:
+      - my_auth
     build:
       context: ./
       dockerfile: ./apps/genius/Dockerfile
@@ -101,3 +109,6 @@ services:
 networks:
   common-network:
     driver: bridge
+secrets:
+  my_auth:
+    file: ./auth.txt
