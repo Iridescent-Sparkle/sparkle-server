@@ -3,77 +3,90 @@ syntax = "proto3";
 package boss;
 
 service BossService {
-  rpc  Create(CreateRequest) returns (CreateResponse);
-  rpc  FindAll(FindAllRequest) returns (FindAllResponse);
-  rpc  FindOne(FindOneRequest) returns (FindOneReponse);
-  rpc  Remove(RemoveRequest) returns (RemoveReponse);
-  rpc  Search(SearchRequest) returns (SearchResponse);
-  rpc  Paginate(PaginateRequest) returns (PaginateResponse);
+  rpc  Create(JobDetail) returns (JobDetail);
+  rpc  FindAll(Empty) returns (JobDetailArray);
+  rpc  FindOne(JobIdRequest) returns (JobDetail);
+  rpc  Update(JobIdRequest) returns (JobDetail);
+  rpc  Remove(JobIdRequest) returns (JobDetail);
+  rpc  Search(SearchRequest) returns (JobDetailArray);
+  rpc  Paginate(PaginateRequest) returns (JobDetailArray);
 }
 
 message Empty {}
 
-message CreateRequest {
-  string address = 1;
-}
-message CreateResponse {
-  string countDown = 1;
-}
-
-message FindAllRequest {
-  string phone = 1;
-}
-
-message FindAllResponse {
-  string countDown = 1;
-}
-
-message FindOneRequest {
- string username = 1;
- string password = 2;
- string phone = 3;
- string captcha = 4;
-}
-
-message FindOneReponse {
- string message = 1;
-}
-
-message RemoveRequest {
-  string username = 1;
-  string password = 2;
+message JobDetail {
+  int32 id = 1;
+  User user = 2;
+  string jobName = 3;
+  string companyName = 4;
+  string companyAvatar = 5;
+  string address = 6;
+  string minSalary = 7;
+  string maxSalary = 8;
+  bool isFullTime = 9;
+  bool isOnsite = 10;
+  repeated string jobDescription = 11;
+  repeated string jobRequirements = 12;
+  repeated string jobBonus = 13;
+  string workExperience = 14;
+  string educationRequirement = 15;
+  string jobLevel = 16;
+  JobCategory jobCategory = 17;
+  int32 headCount = 18;
+  string website = 19;
+  string companyDescription = 20;
+  bool isFrozen = 21;
+  bool isDelete = 22;
+  google.protobuf.Timestamp createTime = 23;
+  google.protobuf.Timestamp updateTime = 24;
 }
 
-message RemoveReponse {
+message JobCategory {
+  int32 id = 1;
+  string categoryName = 2;
+  string categoryDescription = 3;
+  bool isDelete = 4;
+  google.protobuf.Timestamp createTime = 5;
+  google.protobuf.Timestamp updateTime = 6;
+}
+
+message User {
   int32 id = 1;
   string username = 2;
-  string nickName = 3;
-  string email = 4;
-  string headPic = 5;
-  string phone = 6;
-  bool isFrozen = 7;
-  bool isAdmin = 8;
-  int64 createTime = 9;
-  repeated string roles = 10;
-  repeated string  permissions = 11;
+  string password = 3;
+  string nickName = 4;
+  string avatar = 5;
+  string email = 6;
+  string headPic = 7;
+  string phone = 8;
+  string contactIdToB = 9;
+  string contactIdToC = 10;
+  bool isFrozen = 11;
+  bool isAdmin = 12;
+  google.protobuf.Timestamp createTime = 13;
+  google.protobuf.Timestamp updateTime = 14;
+}
+
+message JobDetailArray {
+  repeated JobDetail jobDetail = 1;
+}
+
+message JobIdRequest {
+ string jobId = 1;
+}
+
+message UpdateRequest {
+  string jobId = 1;
+  JobDetail jobDetail = 2; 
 }
 
 message SearchRequest {
-  UserInfo userInfo = 1;
-  string accessToken = 2;
-  string refreshToken = 3;
-}
-
-message SearchResponse {
-  string refreshToken = 1;
+  string keyword = 1;
 }
 
 message PaginateRequest {
-  string accessToken = 1;
-  string refreshToken = 2;
+  string page = 1;
+  string take = 2;
 }
 
-message PaginateResponse {
-  int32 userId = 1;
-}
 

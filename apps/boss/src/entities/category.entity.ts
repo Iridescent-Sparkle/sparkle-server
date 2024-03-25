@@ -19,6 +19,18 @@ export class JobCategory {
   })
   categoryName: string;
 
+  @Column({
+    length: 50,
+    comment: '职位描述',
+  })
+  categoryDescription: string;
+
+  @Column({
+    default: false,
+    comment: '是否删除',
+  })
+  isDelete: boolean;
+
   @CreateDateColumn()
   createTime: Date;
 

@@ -58,7 +58,7 @@ export class JobService {
     console.log('Job details initialized successfully.');
   }
 
-  async create(jobDetail: JobDetail): Promise<JobDetail> {
+  async create({ jobDetail }: { jobDetail: JobDetail }): Promise<JobDetail> {
     return await this.jobDetailRepository.save(jobDetail);
   }
 
@@ -68,35 +68,47 @@ export class JobService {
     });
   }
 
-  async findOne(id: number): Promise<JobDetail> {
+  async findOne({ jobId }: { jobId: number }): Promise<JobDetail> {
     return await this.jobDetailRepository.findOne({
       where: {
-        id,
+        id: jobId,
       },
     });
   }
 
-  async update(id: number, jobDetail: JobDetail): Promise<JobDetail> {
-    await this.jobDetailRepository.update(id, jobDetail);
+  async update({
+    jobId,
+    jobDetail,
+  }: {
+    jobId: number;
+    jobDetail: JobDetail;
+  }): Promise<JobDetail> {
+    await this.jobDetailRepository.update(jobId, jobDetail);
     return await this.jobDetailRepository.findOne({
       where: {
-        id,
+        id: jobId,
       },
     });
   }
 
-  async remove(id: number): Promise<void> {
-    await this.jobDetailRepository.delete(id);
+  async remove({ jobId }: { jobId: number }): Promise<void> {
+    await this.jobDetailRepository.delete(jobId);
   }
 
-  async search(keyword: string): Promise<JobDetail[]> {
+  async search({ keyword }: { keyword: string }): Promise<JobDetail[]> {
     return await this.jobDetailRepository
       .createQueryBuilder('jobDetail')
       .where('jobDetail.jobName LIKE :keyword', { keyword: `%${keyword}%` })
       .getMany();
   }
 
-  async paginate(page: number, take: number): Promise<JobDetail[]> {
+  async paginate({
+    page,
+    take,
+  }: {
+    page: number;
+    take: number;
+  }): Promise<JobDetail[]> {
     const skip = (page - 1) * take;
     return await this.jobDetailRepository
       .createQueryBuilder('jobDetail')

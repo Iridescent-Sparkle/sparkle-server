@@ -31,7 +31,9 @@ export class JobController {
 
   @Post()
   create(@Body() jobDetail: JobDetail): Promise<JobDetail> {
-    return this.jobService.create(jobDetail);
+    return this.jobService.create({
+      jobDetail,
+    });
   }
 
   @Get('all')
@@ -40,26 +42,35 @@ export class JobController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<JobDetail> {
-    return this.jobService.findOne(+id);
+  findOne(@Param('id') jobId: string): Promise<JobDetail> {
+    return this.jobService.findOne({
+      jobId: +jobId,
+    });
   }
 
   @Put(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') jobId: string,
     @Body() jobDetail: JobDetail,
   ): Promise<JobDetail> {
-    return this.jobService.update(+id, jobDetail);
+    return this.jobService.update({
+      jobId: +jobId,
+      jobDetail,
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.jobService.remove(+id);
+  remove(@Param('id') jobId: string): Promise<void> {
+    return this.jobService.remove({
+      jobId: +jobId,
+    });
   }
 
   @Get('search')
   search(@Query('keyword') keyword: string): Promise<JobDetail[]> {
-    return this.jobService.search(keyword);
+    return this.jobService.search({
+      keyword,
+    });
   }
 
   @Get('paginate')
@@ -67,6 +78,9 @@ export class JobController {
     @Query('page') page: number,
     @Query('take') take: number,
   ): Promise<JobDetail[]> {
-    return this.jobService.paginate(page, take);
+    return this.jobService.paginate({
+      page,
+      take,
+    });
   }
 }

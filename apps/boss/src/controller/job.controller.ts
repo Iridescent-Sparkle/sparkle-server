@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Query } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { JobDetail } from '../entities/job.entity';
 import { JobService } from '../service/job.service';
@@ -10,8 +10,10 @@ export class JobController {
   constructor(private readonly jobService: JobService) {}
 
   @GrpcMethod('JobService', 'Create')
-  create(@Body() jobDetail: JobDetail): Promise<JobDetail> {
-    return this.jobService.create(jobDetail);
+  create({ jobDetail }: { jobDetail: JobDetail }): Promise<JobDetail> {
+    return this.jobService.create({
+      jobDetail,
+    });
   }
 
   @GrpcMethod('JobService', 'FindAll')
@@ -20,33 +22,51 @@ export class JobController {
   }
 
   @GrpcMethod('JobService', 'FindOne')
-  findOne(@Param('id') id: string): Promise<JobDetail> {
-    return this.jobService.findOne(+id);
+  findOne({ jobId }: { jobId: number }): Promise<JobDetail> {
+    return this.jobService.findOne({
+      jobId,
+    });
   }
 
   @GrpcMethod('JobService', 'Update')
-  update(
-    @Param('id') id: string,
-    @Body() jobDetail: JobDetail,
-  ): Promise<JobDetail> {
-    return this.jobService.update(+id, jobDetail);
+  update({
+    jobId,
+    jobDetail,
+  }: {
+    jobId: number;
+    jobDetail: JobDetail;
+  }): Promise<JobDetail> {
+    return this.jobService.update({
+      jobId,
+      jobDetail,
+    });
   }
 
   @GrpcMethod('JobService', 'Remove')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.jobService.remove(+id);
+  remove({ jobId }: { jobId: number }): Promise<void> {
+    return this.jobService.remove({
+      jobId,
+    });
   }
 
   @GrpcMethod('JobService', 'Search')
-  search(@Query('keyword') keyword: string): Promise<JobDetail[]> {
-    return this.jobService.search(keyword);
+  search({ keyword }: { keyword: string }): Promise<JobDetail[]> {
+    return this.jobService.search({
+      keyword,
+    });
   }
 
   @GrpcMethod('JobService', 'Paginate')
-  paginate(
-    @Query('page') page: number,
-    @Query('take') take: number,
-  ): Promise<JobDetail[]> {
-    return this.jobService.paginate(page, take);
+  paginate({
+    page,
+    take,
+  }: {
+    page: number;
+    take: number;
+  }): Promise<JobDetail[]> {
+    return this.jobService.paginate({
+      page,
+      take,
+    });
   }
 }

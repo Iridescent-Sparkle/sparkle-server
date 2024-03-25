@@ -18,26 +18,31 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
-  @GrpcMethod('UserService', 'Captcha')
-  async captcha({ address }: { address: string }) {
-    return await this.userService.captcha(address);
-  }
-
-  @GrpcMethod('UserService', 'smsCode')
-  async smsCode({ phone }: { phone: string }) {
-    return await this.userService.smsCode(phone);
-  }
-
-  @GrpcMethod('UserService', 'Register')
-  register(registerUser: RegisterUserDto) {
-    return this.userService.register(registerUser);
-  }
-
+  /**初始化用户数据 */
   @GrpcMethod('UserService', 'InitData')
   async initData() {
     return await this.userService.initData();
   }
 
+  /** 获取邮箱验证码 */
+  @GrpcMethod('UserService', 'Captcha')
+  async captcha({ address }: { address: string }) {
+    return await this.userService.captcha(address);
+  }
+
+  /** 获取短信验证码 */
+  @GrpcMethod('UserService', 'smsCode')
+  async smsCode({ phone }: { phone: string }) {
+    return await this.userService.smsCode(phone);
+  }
+
+  /** 注册 */
+  @GrpcMethod('UserService', 'Register')
+  register(registerUser: RegisterUserDto) {
+    return this.userService.register(registerUser);
+  }
+
+  /** 登录 */
   @GrpcMethod('UserService', 'Login')
   async login(loginUserDto: LoginUserDto) {
     const vo = await this.userService.login(loginUserDto, false);
@@ -67,16 +72,19 @@ export class UserController {
     return vo;
   }
 
+  /** 验证短信验证码 */
   @GrpcMethod('UserService', 'ValidateSmsCode')
   async validateSmsCode({ phone, code }: { phone: string; code: string }) {
     return await this.userService.validateSmsCode(phone, code);
   }
 
+  /** 重置密码 */
   @GrpcMethod('UserService', 'ResetPassword')
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
     return await this.userService.resetPassword(resetPasswordDto);
   }
 
+  /** 管理员登录 */
   @GrpcMethod('UserService', 'AdminLogin')
   async adminLogin(loginUserDto: LoginUserDto) {
     const vo = await this.userService.login(loginUserDto, true);
@@ -106,6 +114,7 @@ export class UserController {
     return vo;
   }
 
+  /** 刷新token */
   @GrpcMethod('UserService', 'Refresh')
   async refresh({ refreshToken }: { refreshToken: string }) {
     try {
@@ -143,6 +152,7 @@ export class UserController {
     }
   }
 
+  /** 管理员刷新token */
   @GrpcMethod('UserService', 'AdminRefresh')
   async adminRefresh({ refreshToken }: { refreshToken: string }) {
     try {
@@ -180,6 +190,7 @@ export class UserController {
     }
   }
 
+  /** 获取用户信息 */
   @GrpcMethod('UserService', 'Info')
   @RequireLogin()
   async info({ userId }: { userId: number }) {
