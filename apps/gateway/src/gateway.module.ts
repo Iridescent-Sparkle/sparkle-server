@@ -63,8 +63,8 @@ import { join } from 'path';
               package: 'genius',
               protoPath:
                 process.env.NODE_ENV === 'production'
-                  ? join(__dirname, './proto/genius.proto')
-                  : '/proto/genius.proto',
+                  ? join(__dirname, './proto/deliver.proto')
+                  : '/proto/deliver.proto',
             },
           };
         },
