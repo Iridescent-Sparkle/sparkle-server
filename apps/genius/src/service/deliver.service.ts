@@ -18,7 +18,7 @@ export class DeliveryService {
 
   constructor() {}
 
-  async findDeliveryStatusByUserId(userId: number): Promise<JobDetail[]> {
+  async findDeliveryStatusByUserId({ userId }: { userId: number }) {
     const deliveryStatus = await this.jobDeliverRepository.find({
       where: {
         user: {
@@ -30,14 +30,16 @@ export class DeliveryService {
         job: true,
       },
     });
-    return deliveryStatus.map((delivery) => delivery.job);
+    return deliveryStatus.map((delivery) => delivery);
   }
 
-  async createDelivery(
-    jobId: number,
-    userId: number,
-    status: number,
-  ): Promise<JobDeliver> {
+  async createDelivery(deliveryData: {
+    jobId: number;
+    userId: number;
+    status: number;
+  }): Promise<JobDeliver> {
+    const { jobId, userId, status } = deliveryData;
+
     const job = await this.jobDetailRepository.findOne({
       where: { id: jobId },
     });
@@ -55,17 +57,14 @@ export class DeliveryService {
     return await this.jobDeliverRepository.save(newDelivery);
   }
 
-  async updateDeliveryStatus(
-    jobId: number,
-    userId: number,
-    newStatus: number,
-  ): Promise<JobDeliver> {
+  async updateDeliveryStatus(deliveryData: {
+    deliverId: number;
+    status: number;
+  }): Promise<JobDeliver> {
+    const { deliverId, status: newStatus } = deliveryData;
     const delivery = await this.jobDeliverRepository.findOne({
       where: {
-        id: jobId,
-        user: {
-          id: userId,
-        },
+        id: deliverId,
       },
     });
 
@@ -76,19 +75,19 @@ export class DeliveryService {
     return await this.jobDeliverRepository.save(delivery);
   }
 
-  async deleteDelivery(deliveryId: number, userId: number): Promise<void> {
+  async deleteDelivery(deliveryData: { deliverId: number }): Promise<void> {
+    const { deliverId } = deliveryData;
+
     const delivery = await this.jobDeliverRepository.findOne({
       where: {
-        id: deliveryId,
-        user: {
-          id: userId,
-        },
+        id: deliverId,
       },
     });
+
     if (!delivery) {
       throw new Error('Delivery not found');
     }
-    await this.jobDeliverRepository.update(deliveryId, {
+    await this.jobDeliverRepository.update(deliverId, {
       isDelete: true,
     });
   }
