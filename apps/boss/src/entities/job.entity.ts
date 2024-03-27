@@ -28,18 +28,21 @@ export class JobDetail {
   @Column({
     length: 50,
     comment: '公司名称',
+    nullable: true,
   })
   companyName: string;
 
   @Column({
     length: 50,
     comment: '公司头像',
+    nullable: true,
   })
   companyAvatar: string;
 
   @Column({
     length: 50,
     comment: '地址',
+    nullable: true,
   })
   address: string;
 
@@ -84,6 +87,12 @@ export class JobDetail {
   jobBonus: string[];
 
   @Column({
+    type: 'json',
+    comment: '所需技能',
+  })
+  requireSkills: string[];
+
+  @Column({
     comment: '工作经验',
   })
   workExperience: string;
@@ -112,7 +121,7 @@ export class JobDetail {
   website: string;
 
   @Column({
-    comment: '网站',
+    comment: '关于',
   })
   companyDescription: string;
 
