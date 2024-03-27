@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { MessagePattern } from '@nestjs/microservices';
 import { JobCategory } from 'apps/boss/src/entities/category.entity';
 import { CategoryService } from 'apps/boss/src/service/category.service';
 
@@ -9,12 +9,12 @@ import { CategoryService } from 'apps/boss/src/service/category.service';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @GrpcMethod('CategoryService', 'FindAllJobCategory')
+  @MessagePattern('findAllJobCategory')
   findAllJobCategory(): Promise<JobCategory[]> {
     return this.categoryService.findAllJobCategory();
   }
 
-  @GrpcMethod('CategoryService', 'FindJobByCategory')
+  @MessagePattern('findJobByCategory')
   findJobByCategory({ categoryId }: { categoryId: number }) {
     return this.categoryService.findJobByCategory({ categoryId });
   }

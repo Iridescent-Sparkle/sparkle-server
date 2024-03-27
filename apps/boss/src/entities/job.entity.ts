@@ -22,6 +22,7 @@ export class JobDetail {
   @Column({
     length: 50,
     comment: '职位名称',
+    nullable: true,
   })
   jobName: string;
 
@@ -49,61 +50,72 @@ export class JobDetail {
   @Column({
     length: 50,
     comment: '最低薪资',
+    nullable: true,
   })
   minSalary: string;
 
   @Column({
     length: 50,
     comment: '最高薪资',
+    nullable: true,
   })
   maxSalary: string;
 
   @Column({
     comment: '是否全职',
+    nullable: true,
   })
   isFullTime: boolean;
 
   @Column({
     comment: '是否线上工作',
+    nullable: true,
   })
   isOnsite: boolean;
 
   @Column({
     type: 'json',
     comment: '工作描述',
+    nullable: true,
   })
   jobDescription: string[];
 
   @Column({
     type: 'json',
     comment: '工作要求',
+    nullable: true,
   })
   jobRequirements: string[];
 
   @Column({
     type: 'json',
     comment: '福利',
+    nullable: true,
   })
   jobBonus: string[];
 
   @Column({
     type: 'json',
     comment: '所需技能',
+    nullable: true,
   })
   requireSkills: string[];
 
   @Column({
     comment: '工作经验',
+    nullable: true,
   })
   workExperience: string;
 
   @Column({
     comment: '学历要求',
+    nullable: true,
   })
   educationRequirement: string;
 
   @Column({
     comment: '职级',
+    nullable: true,
   })
   jobLevel: string;
 
@@ -112,16 +124,19 @@ export class JobDetail {
 
   @Column({
     comment: '空缺',
+    nullable: true,
   })
   headCount: number;
 
   @Column({
     comment: '网站',
+    nullable: true,
   })
   website: string;
 
   @Column({
     comment: '关于',
+    nullable: true,
   })
   companyDescription: string;
 

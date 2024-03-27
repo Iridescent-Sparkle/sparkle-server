@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { MessagePattern } from '@nestjs/microservices';
 import { JobDetail } from '../entities/job.entity';
 import { JobService } from '../service/job.service';
 
@@ -7,26 +7,27 @@ import { JobService } from '../service/job.service';
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
-  @GrpcMethod('JobService', 'Create')
+  @MessagePattern('create')
   create({ jobDetail }: { jobDetail: JobDetail }): Promise<JobDetail> {
+    console.log(jobDetail);
     return this.jobService.create({
       jobDetail,
     });
   }
 
-  @GrpcMethod('JobService', 'FindAll')
+  @MessagePattern('findAll')
   findAll({}: object): Promise<{ jobDetail: JobDetail[] }> {
     return this.jobService.findAll({});
   }
 
-  @GrpcMethod('JobService', 'FindOne')
+  @MessagePattern('findOne')
   findOne({ jobId }: { jobId: number }): Promise<JobDetail> {
     return this.jobService.findOne({
       jobId,
     });
   }
 
-  @GrpcMethod('JobService', 'Update')
+  @MessagePattern('update')
   update({
     jobId,
     jobDetail,
@@ -40,21 +41,21 @@ export class JobController {
     });
   }
 
-  @GrpcMethod('JobService', 'Remove')
+  @MessagePattern('remove')
   remove({ jobId }: { jobId: number }): Promise<void> {
     return this.jobService.remove({
       jobId,
     });
   }
 
-  @GrpcMethod('JobService', 'Search')
+  @MessagePattern('search')
   search({ keyword }: { keyword: string }): Promise<JobDetail[]> {
     return this.jobService.search({
       keyword,
     });
   }
 
-  @GrpcMethod('JobService', 'Paginate')
+  @MessagePattern('paginate')
   paginate({
     page,
     take,

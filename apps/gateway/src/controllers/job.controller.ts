@@ -10,9 +10,8 @@ import {
   Query,
   UseFilters,
 } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 import { JobDetail } from 'apps/boss/src/entities/job.entity';
-import { JobService } from 'apps/boss/src/service/job.service';
 import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
 
 @Controller({
@@ -20,32 +19,22 @@ import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
 })
 @UseFilters(GrpcExceptionFilter)
 export class JobController {
-  @Inject('boss')
-  private client: ClientGrpc;
-
-  private jobService: JobService;
-
-  onModuleInit() {
-    this.jobService = this.client.getService('JobService');
-  }
+  @Inject('BOSS_SERVICE')
+  private BossClient: ClientProxy;
 
   @Post()
   create(@Body() jobDetail: JobDetail): Promise<JobDetail> {
-    return this.jobService.create({
-      jobDetail,
-    });
+    return this.BossClient.send('create', { jobDetail }).toPromise();
   }
 
   @Get('all')
   async findAll(): Promise<{ jobDetail: JobDetail[] }> {
-    return await this.jobService.findAll({});
+    return await this.BossClient.send('findAll', {}).toPromise();
   }
 
   @Get(':id')
   findOne(@Param('id') jobId: string): Promise<JobDetail> {
-    return this.jobService.findOne({
-      jobId: +jobId,
-    });
+    return this.BossClient.send('findOne', { jobId: +jobId }).toPromise();
   }
 
   @Put(':id')
@@ -53,24 +42,20 @@ export class JobController {
     @Param('id') jobId: string,
     @Body() jobDetail: JobDetail,
   ): Promise<JobDetail> {
-    return this.jobService.update({
+    return this.BossClient.send('update', {
       jobId: +jobId,
       jobDetail,
-    });
+    }).toPromise();
   }
 
   @Delete(':id')
   remove(@Param('id') jobId: string): Promise<void> {
-    return this.jobService.remove({
-      jobId: +jobId,
-    });
+    return this.BossClient.send('remove', { jobId: +jobId }).toPromise();
   }
 
   @Get('search')
   search(@Query('keyword') keyword: string): Promise<JobDetail[]> {
-    return this.jobService.search({
-      keyword,
-    });
+    return this.BossClient.send('search', { keyword }).toPromise();
   }
 
   @Get('paginate')
@@ -78,9 +63,6 @@ export class JobController {
     @Query('page') page: number,
     @Query('take') take: number,
   ): Promise<JobDetail[]> {
-    return this.jobService.paginate({
-      page,
-      take,
-    });
+    return this.BossClient.send('paginate', { page, take }).toPromise();
   }
 }

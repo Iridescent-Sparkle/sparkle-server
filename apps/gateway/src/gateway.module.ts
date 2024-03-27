@@ -11,6 +11,16 @@ import { UserController } from './controllers/user.controller';
 @Module({
   imports: [
     ConfigModule,
+    ClientsModule.register([
+      {
+        name: 'BOSS_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+          port: 3002,
+        },
+      },
+    ]),
     ClientsModule.registerAsync([
       {
         name: 'user',
@@ -38,36 +48,7 @@ import { UserController } from './controllers/user.controller';
           };
         },
       },
-      {
-        name: 'boss',
-        inject: [ConfigService],
-        useFactory(configService: ConfigService) {
-          return {
-            transport: Transport.GRPC,
-            options: {
-              url: configService.get('boss_server_host'),
-              package: 'boss',
-              protoPath: [
-                process.env.NODE_ENV === 'production'
-                  ? join(__dirname, './proto/category.proto')
-                  : './proto/category.proto',
-                process.env.NODE_ENV === 'production'
-                  ? join(__dirname, './proto/job.proto')
-                  : './proto/job.proto',
-              ],
-              loader: {
-                defaults: true,
-                json: true,
-                oneofs: true,
-                objects: true,
-                arrays: true,
-                longs: String,
-                enums: String,
-              },
-            },
-          };
-        },
-      },
+
       {
         name: 'genius',
         inject: [ConfigService],
