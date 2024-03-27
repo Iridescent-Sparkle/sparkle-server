@@ -9,7 +9,6 @@ import { Response } from 'express';
 @Catch(HttpException)
 export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
-    console.log(exception);
     const httpResponse = host.switchToHttp().getResponse<Response>();
     httpResponse.statusCode = exception.getStatus();
 

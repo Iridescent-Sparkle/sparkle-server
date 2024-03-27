@@ -20,7 +20,7 @@ import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
 })
 @UseFilters(GrpcExceptionFilter)
 export class JobController {
-  @Inject('category')
+  @Inject('boss')
   private client: ClientGrpc;
 
   private jobService: JobService;
@@ -37,8 +37,8 @@ export class JobController {
   }
 
   @Get('all')
-  findAll(): Promise<JobDetail[]> {
-    return this.jobService.findAll();
+  async findAll(): Promise<{ jobDetail: JobDetail[] }> {
+    return await this.jobService.findAll({});
   }
 
   @Get(':id')

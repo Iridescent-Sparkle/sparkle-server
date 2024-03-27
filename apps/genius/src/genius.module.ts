@@ -14,11 +14,11 @@ import { Role } from 'apps/user/src/entities/role.entity';
 import { User } from 'apps/user/src/entities/user.entity';
 import * as chalk from 'chalk';
 import { format, transports } from 'winston';
-import { DeliveryController } from './controller/delivery.controller';
+import { DeliverController } from './controller/deliver.controller';
 import { JobCollect } from './entities/collect.entity';
 import { JobDeliver } from './entities/deliver.entity';
 import { FavoriteController } from './controller/favorite.controller';
-import { DeliveryService } from './service/deliver.service';
+import { DeliverService } from './service/deliver.service';
 import { FavoriteService } from './service/favorite.service';
 import { Education } from './entities/education.entity';
 import { Experience } from './entities/experience.entity';
@@ -70,7 +70,7 @@ import { Volunteer } from './entities/volunteer.entity';
       ],
     }),
   ],
-  controllers: [DeliveryController, FavoriteController],
-  providers: [DeliveryService, FavoriteService],
+  controllers: [DeliverController, FavoriteController],
+  providers: [DeliverService, FavoriteService],
 })
 export class GeniusModule {}

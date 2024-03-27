@@ -7,7 +7,7 @@ service CategoryService {
   rpc  FindJobByCategory(FindJobByCategoryeRequest) returns (FindJobByCategoryResponse);
 }
 
-message Empty {}
+
 
 message FindAllJobCategoryResponse {
 

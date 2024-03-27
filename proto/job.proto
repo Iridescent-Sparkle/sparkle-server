@@ -1,8 +1,9 @@
 syntax = "proto3";
-
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 package boss;
 
-service BossService {
+service JobService {
   rpc  Create(JobDetail) returns (JobDetail);
   rpc  FindAll(Empty) returns (JobDetailArray);
   rpc  FindOne(JobIdRequest) returns (JobDetail);
@@ -13,6 +14,34 @@ service BossService {
 }
 
 message Empty {}
+message User {
+  int32 id = 1;
+  string username = 2;
+  string password = 3;
+  string nick_name = 4;
+  string avatar = 5;
+  string email = 6;
+  string head_pic = 7;
+  string phone = 8;
+  string contact_id_to_b = 9;
+  string contact_id_to_c = 10;
+  bool is_frozen = 11;
+  bool is_admin = 12;
+  google.protobuf.Timestamp create_time = 13;
+  google.protobuf.Timestamp update_time = 14;
+  repeated Role roles = 15;
+}
+message Role {
+  int32 id = 1;
+  string name = 2;
+  repeated Permission permissions = 3;
+}
+
+message Permission {
+  int32 id = 1;
+  string code = 2;
+  string description = 3;
+}
 
 message JobDetail {
   int32 id = 1;
@@ -50,25 +79,9 @@ message JobCategory {
   google.protobuf.Timestamp updateTime = 6;
 }
 
-message User {
-  int32 id = 1;
-  string username = 2;
-  string password = 3;
-  string nickName = 4;
-  string avatar = 5;
-  string email = 6;
-  string headPic = 7;
-  string phone = 8;
-  string contactIdToB = 9;
-  string contactIdToC = 10;
-  bool isFrozen = 11;
-  bool isAdmin = 12;
-  google.protobuf.Timestamp createTime = 13;
-  google.protobuf.Timestamp updateTime = 14;
-}
 
 message JobDetailArray {
-  repeated JobDetail jobDetail = 1;
+   repeated JobDetail jobDetail = 1 ;
 }
 
 message JobIdRequest {

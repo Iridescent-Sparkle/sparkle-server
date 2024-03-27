@@ -10,16 +10,25 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: '0.0.0.0:3003',
+        url:
+          process.env.NODE_ENV === 'production'
+            ? '0.0.0.0:3003'
+            : 'localhost:3003',
         package: 'genius',
         protoPath: [
           process.env.NODE_ENV === 'production'
             ? join(__dirname, './proto/deliver.proto')
-            : '/proto/deliver.proto',
-          process.env.NODE_ENV === 'production'
-            ? join(__dirname, './proto/genius.proto')
-            : '/proto/genius.proto',
+            : './proto/deliver.proto',
         ],
+        loader: {
+          defaults: true,
+          json: true,
+          oneofs: true,
+          objects: true,
+          arrays: true,
+          longs: String,
+          enums: String,
+        },
       },
     },
   );

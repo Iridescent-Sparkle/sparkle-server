@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { JobDeliver } from '../entities/deliver.entity';
 
 @Injectable()
-export class DeliveryService {
+export class DeliverService {
   @InjectRepository(JobDetail)
   private jobDetailRepository: Repository<JobDetail>;
 
@@ -18,8 +18,8 @@ export class DeliveryService {
 
   constructor() {}
 
-  async findDeliveryStatusByUserId({ userId }: { userId: number }) {
-    const deliveryStatus = await this.jobDeliverRepository.find({
+  async findDeliverStatusByUserId({ userId }: { userId: number }) {
+    const deliverStatus = await this.jobDeliverRepository.find({
       where: {
         user: {
           id: userId,
@@ -30,15 +30,15 @@ export class DeliveryService {
         job: true,
       },
     });
-    return deliveryStatus.map((delivery) => delivery);
+    return deliverStatus.map((deliver) => deliver);
   }
 
-  async createDelivery(deliveryData: {
+  async createDeliver(deliverData: {
     jobId: number;
     userId: number;
     status: number;
   }): Promise<JobDeliver> {
-    const { jobId, userId, status } = deliveryData;
+    const { jobId, userId, status } = deliverData;
 
     const job = await this.jobDetailRepository.findOne({
       where: { id: jobId },
@@ -48,44 +48,44 @@ export class DeliveryService {
       where: { id: userId },
     });
 
-    const newDelivery = this.jobDeliverRepository.create({
+    const newDeliver = this.jobDeliverRepository.create({
       job,
       user,
       status,
     });
 
-    return await this.jobDeliverRepository.save(newDelivery);
+    return await this.jobDeliverRepository.save(newDeliver);
   }
 
-  async updateDeliveryStatus(deliveryData: {
+  async updateDeliverStatus(deliverData: {
     deliverId: number;
     status: number;
   }): Promise<JobDeliver> {
-    const { deliverId, status: newStatus } = deliveryData;
-    const delivery = await this.jobDeliverRepository.findOne({
+    const { deliverId, status: newStatus } = deliverData;
+    const deliver = await this.jobDeliverRepository.findOne({
       where: {
         id: deliverId,
       },
     });
 
-    if (!delivery) {
-      throw new Error('Delivery not found');
+    if (!deliver) {
+      throw new Error('Deliver not found');
     }
-    delivery.status = newStatus;
-    return await this.jobDeliverRepository.save(delivery);
+    deliver.status = newStatus;
+    return await this.jobDeliverRepository.save(deliver);
   }
 
-  async deleteDelivery(deliveryData: { deliverId: number }): Promise<void> {
-    const { deliverId } = deliveryData;
+  async deleteDeliver(deliverData: { deliverId: number }): Promise<void> {
+    const { deliverId } = deliverData;
 
-    const delivery = await this.jobDeliverRepository.findOne({
+    const deliver = await this.jobDeliverRepository.findOne({
       where: {
         id: deliverId,
       },
     });
 
-    if (!delivery) {
-      throw new Error('Delivery not found');
+    if (!deliver) {
+      throw new Error('Deliver not found');
     }
     await this.jobDeliverRepository.update(deliverId, {
       isDelete: true,

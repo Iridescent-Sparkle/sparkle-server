@@ -10,16 +10,28 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        url: '0.0.0.0:3002',
+        url:
+          process.env.NODE_ENV === 'production'
+            ? '0.0.0.0:3002'
+            : 'localhost:3002',
         package: 'boss',
         protoPath: [
           process.env.NODE_ENV === 'production'
             ? join(__dirname, './proto/category.proto')
-            : '/proto/category.proto',
+            : './proto/category.proto',
           process.env.NODE_ENV === 'production'
             ? join(__dirname, './proto/job.proto')
-            : '/proto/job.proto',
+            : './proto/job.proto',
         ],
+        loader: {
+          defaults: true,
+          json: true,
+          oneofs: true,
+          objects: true,
+          arrays: true,
+          longs: String,
+          enums: String,
+        },
       },
     },
   );

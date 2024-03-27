@@ -54,18 +54,20 @@ export class JobService {
       const jobDetail = this.jobDetailRepository.create(data);
       await this.jobDetailRepository.save(jobDetail);
     }
-
-    console.log('Job details initialized successfully.');
   }
 
   async create({ jobDetail }: { jobDetail: JobDetail }): Promise<JobDetail> {
     return await this.jobDetailRepository.save(jobDetail);
   }
 
-  async findAll(): Promise<JobDetail[]> {
-    return await this.jobDetailRepository.find({
+  async findAll({}: object): Promise<{ jobDetail: JobDetail[] }> {
+    const jobDetail = await this.jobDetailRepository.find({
       relations: ['jobCategory'],
     });
+
+    return {
+      jobDetail,
+    };
   }
 
   async findOne({ jobId }: { jobId: number }): Promise<JobDetail> {

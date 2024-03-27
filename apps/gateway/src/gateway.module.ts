@@ -1,10 +1,12 @@
 import { ConfigModule } from '@app/config';
 import { EtcdModule } from '@app/etcd';
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { UserController } from './controllers/user.controller';
 import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { DeliverController } from './controllers/deliver.controller';
+import { JobController } from './controllers/job.controller';
+import { UserController } from './controllers/user.controller';
 
 @Module({
   imports: [
@@ -14,10 +16,6 @@ import { join } from 'path';
         name: 'user',
         inject: [ConfigService],
         useFactory(configService: ConfigService) {
-          console.log(
-            configService.get('user_server_host'),
-            join(__dirname, './proto/user.proto'),
-          );
           return {
             transport: Transport.GRPC,
             options: {
@@ -26,7 +24,16 @@ import { join } from 'path';
               protoPath:
                 process.env.NODE_ENV === 'production'
                   ? join(__dirname, './proto/user.proto')
-                  : '/proto/user.proto',
+                  : './proto/user.proto',
+              loader: {
+                defaults: true,
+                json: true,
+                oneofs: true,
+                objects: true,
+                arrays: true,
+                longs: String,
+                enums: String,
+              },
             },
           };
         },
@@ -43,11 +50,20 @@ import { join } from 'path';
               protoPath: [
                 process.env.NODE_ENV === 'production'
                   ? join(__dirname, './proto/category.proto')
-                  : '/proto/category.proto',
+                  : './proto/category.proto',
                 process.env.NODE_ENV === 'production'
                   ? join(__dirname, './proto/job.proto')
-                  : '/proto/job.proto',
+                  : './proto/job.proto',
               ],
+              loader: {
+                defaults: true,
+                json: true,
+                oneofs: true,
+                objects: true,
+                arrays: true,
+                longs: String,
+                enums: String,
+              },
             },
           };
         },
@@ -64,7 +80,16 @@ import { join } from 'path';
               protoPath:
                 process.env.NODE_ENV === 'production'
                   ? join(__dirname, './proto/deliver.proto')
-                  : '/proto/deliver.proto',
+                  : './proto/deliver.proto',
+              loader: {
+                defaults: true,
+                json: true,
+                oneofs: true,
+                objects: true,
+                arrays: true,
+                longs: String,
+                enums: String,
+              },
             },
           };
         },
@@ -83,6 +108,11 @@ import { join } from 'path';
       },
     }),
   ],
-  controllers: [UserController],
+  controllers: [
+    UserController,
+    // CategoryController,
+    JobController,
+    DeliverController,
+  ],
 })
 export class GatewayModule {}

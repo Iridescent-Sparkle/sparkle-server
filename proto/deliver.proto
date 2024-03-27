@@ -1,18 +1,85 @@
 syntax = "proto3";
+import "google/protobuf/timestamp.proto";
 
 package genius;
 
-service DeliveryService {
-  rpc  FindDeliveryStatusByUserId(FindDeliveryStatusByUserIdRequest) returns (JobDeliverArray);
-  rpc  CreateDelivery(CreateDeliveryRequest) returns (JobDeliver);
-  rpc  UpdateDeliveryStatus(UpdateDeliveryStatusRequest) returns (JobDeliver);
-  rpc  DeleteDelivery(DeleteDeliveryRequest) returns (Empty);
+
+service DeliverService {
+  rpc  FindDeliverStatusByUserId(FindDeliverStatusByUserIdRequest) returns (JobDeliverArray);
+  rpc  CreateDeliver(CreateDeliverRequest) returns (JobDeliver);
+  rpc  UpdateDeliverStatus(UpdateDeliverStatusRequest) returns (JobDeliver);
+  rpc  DeleteDeliver(DeleteDeliverRequest) returns (Empty);
 }
 
 message Empty {}
 
+message User {
+  int32 id = 1;
+  string username = 2;
+  string password = 3;
+  string nick_name = 4;
+  string avatar = 5;
+  string email = 6;
+  string head_pic = 7;
+  string phone = 8;
+  string contact_id_to_b = 9;
+  string contact_id_to_c = 10;
+  bool is_frozen = 11;
+  bool is_admin = 12;
+  google.protobuf.Timestamp create_time = 13;
+  google.protobuf.Timestamp update_time = 14;
+  repeated Role roles = 15;
+}
+
+message Role {
+  int32 id = 1;
+  string name = 2;
+  repeated Permission permissions = 3;
+}
+
+message Permission {
+  int32 id = 1;
+  string code = 2;
+  string description = 3;
+}
+message JobDetail {
+  int32 id = 1;
+  User user = 2;
+  string jobName = 3;
+  string companyName = 4;
+  string companyAvatar = 5;
+  string address = 6;
+  string minSalary = 7;
+  string maxSalary = 8;
+  bool isFullTime = 9;
+  bool isOnsite = 10;
+  repeated string jobDescription = 11;
+  repeated string jobRequirements = 12;
+  repeated string jobBonus = 13;
+  string workExperience = 14;
+  string educationRequirement = 15;
+  string jobLevel = 16;
+  JobCategory jobCategory = 17;
+  int32 headCount = 18;
+  string website = 19;
+  string companyDescription = 20;
+  bool isFrozen = 21;
+  bool isDelete = 22;
+  google.protobuf.Timestamp createTime = 23;
+  google.protobuf.Timestamp updateTime = 24;
+}
+
+message JobCategory {
+  int32 id = 1;
+  string category_name = 2;
+  string category_description = 3;
+  bool is_delete = 4;
+  google.protobuf.Timestamp create_time = 5;
+  google.protobuf.Timestamp update_time = 6;
+}
+
 message JobDeliverArray {
-  repeated JobDetail JobDeliver = 1;
+  repeated JobDeliver JobDeliver = 1;
 }
 
 message JobDeliver {
@@ -25,23 +92,23 @@ message JobDeliver {
   google.protobuf.Timestamp update_time = 7;
 }
 
-message FindDeliveryStatusByUserIdRequest {
+message FindDeliverStatusByUserIdRequest {
   int32 userId =1;
 }
 
-message CreateDeliveryRequest {
+message CreateDeliverRequest {
   int32 jobId =1;
   int32 userId = 2;
   int32 status = 3;
 }
 
-message UpdateDeliveryStatusRequest {
+message UpdateDeliverStatusRequest {
   int32 deliverId =1;
   int32 status = 2;
 }
 
 
-message DeleteDeliveryRequest {
+message DeleteDeliverRequest {
   int32 deliverId =1;
 }
 

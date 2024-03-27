@@ -3,9 +3,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { JobDetail } from '../entities/job.entity';
 import { JobService } from '../service/job.service';
 
-@Controller({
-  path: 'job',
-})
+@Controller()
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
@@ -17,8 +15,8 @@ export class JobController {
   }
 
   @GrpcMethod('JobService', 'FindAll')
-  findAll(): Promise<JobDetail[]> {
-    return this.jobService.findAll();
+  findAll({}: object): Promise<{ jobDetail: JobDetail[] }> {
+    return this.jobService.findAll({});
   }
 
   @GrpcMethod('JobService', 'FindOne')
