@@ -54,18 +54,25 @@ export class User {
   email: string;
 
   @Column({
-    length: 20,
+    length: 50,
     comment: '联系ID老板',
     nullable: true,
   })
   contactIdToB: string;
 
   @Column({
-    length: 20,
+    length: 50,
     comment: '联系ID牛人',
     nullable: true,
   })
   contactIdToC: string;
+
+  @Column({
+    length: 50,
+    comment: '联系密码',
+    nullable: true,
+  })
+  contactPassword: string;
 
   @Column({
     default: false,

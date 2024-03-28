@@ -36,7 +36,7 @@ lerna-debug.log*
 
 
 # ENV Files
-*.local.env
+/env
 
 # compodoc files
 /documentation/**

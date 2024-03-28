@@ -1,20 +1,20 @@
+import { EmailService } from '@app/email';
+import { ImService } from '@app/im';
 import { RedisService } from '@app/redis';
+import { SmsService } from '@app/sms';
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FitRpcException } from 'filters/rpc-exception.filter';
 import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Permission } from './entities/permission.entity';
 import { Role } from './entities/role.entity';
 import { User } from './entities/user.entity';
 import { md5 } from './utils/index';
-import { LoginUserVo } from './vo/login-user.vo';
-import { EmailService } from '@app/email';
-import { SmsService } from '@app/sms';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { FitRpcException } from 'filters/rpc-exception.filter';
-import { HttpService } from '@nestjs/axios';
-import { ImService } from '@app/im';
 
 @Injectable()
 export class UserService {
@@ -38,11 +38,14 @@ export class UserService {
   @Inject(SmsService)
   private smsService: SmsService;
 
-  @Inject(HttpService)
-  private httpService: HttpService;
-
   @Inject(ImService)
   private imService: ImService;
+
+  @Inject(JwtService)
+  private jwtService: JwtService;
+
+  @Inject(ConfigService)
+  private configService: ConfigService;
 
   async captcha(address: string) {
     const code = Math.random().toString().slice(2, 6);
@@ -102,6 +105,8 @@ export class UserService {
       newUser.password = md5(registerUserDto.password);
       newUser.username = registerUserDto.username;
       newUser.nickName = '用户' + Math.random().toString().slice(2, 6);
+      newUser.contactPassword = registerUserDto.username + '_password';
+      newUser.contactIdToB = registerUserDto.username + '_sparkle' + `_C`;
 
       await this.userRepository.save(newUser);
 
@@ -133,26 +138,38 @@ export class UserService {
       throw new FitRpcException('密码错误', HttpStatus.BAD_REQUEST);
     }
 
-    const vo = new LoginUserVo({
-      id: foundUser.id,
-      username: foundUser.username,
-      nickName: foundUser.nickName,
-      email: foundUser.email,
-      createTime: foundUser.createTime.getTime(),
-      isFrozen: foundUser.isFrozen,
-      isAdmin: foundUser.isAdmin,
-      roles: foundUser.roles.map((item) => item.name),
-      permissions: foundUser.roles.reduce((arr, item) => {
-        item.permissions.forEach((permission) => {
-          if (arr.indexOf(permission) === -1) {
-            arr.push(permission);
-          }
-        });
-        return arr;
-      }, []),
-    });
+    const token = {
+      accessToken: this.jwtService.sign(
+        {
+          userId: foundUser.id,
+          username: foundUser.username,
+          roles: foundUser.roles.map((item) => item.name),
+          permissions: foundUser.roles.reduce((arr, item) => {
+            item.permissions.forEach((permission) => {
+              if (arr.indexOf(permission) === -1) {
+                arr.push(permission);
+              }
+            });
+            return arr;
+          }, []),
+        },
+        {
+          expiresIn:
+            this.configService.get('jwt_access_token_expires_time') || '30m',
+        },
+      ),
+      refreshToken: this.jwtService.sign(
+        {
+          userId: foundUser.id,
+        },
+        {
+          expiresIn:
+            this.configService.get('jwt_refresh_token_expres_time') || '7d',
+        },
+      ),
+    };
 
-    return vo;
+    return token;
   }
 
   async validateSmsCode(username: string, code: string) {
@@ -207,6 +224,15 @@ export class UserService {
     return {
       id: foundUser.id,
       username: foundUser.username,
+      nickName: foundUser.nickName,
+      updateTime: foundUser.updateTime.getTime(),
+      avatar: foundUser.avatar,
+      contactIdToB: foundUser.contactIdToB,
+      contactIdToC: foundUser.contactIdToC,
+      contactPassword: foundUser.contactPassword,
+      email: foundUser.email,
+      createTime: foundUser.createTime.getTime(),
+      isFrozen: foundUser.isFrozen,
       isAdmin: foundUser.isAdmin,
       roles: foundUser.roles.map((item) => item.name),
       permissions: foundUser.roles.reduce((arr, item) => {
@@ -218,11 +244,5 @@ export class UserService {
         return arr;
       }, []),
     };
-  }
-
-  async findUserDetailById(userId: number) {
-    return await this.userRepository.findOneBy({
-      id: userId,
-    });
   }
 }

@@ -1,4 +1,4 @@
-import { UserController as UserService } from './../../../user/src/user.controller';
+import { UserController as UserService } from '../../../../user/src/user.controller';
 import {
   Body,
   Controller,

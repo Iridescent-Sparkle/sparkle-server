@@ -27,22 +27,29 @@ export class ImService {
     username: string;
     roleType: 'B' | 'C';
   }) {
-    const data = await firstValueFrom(
-      this.httpService.post(
-        `https://${this.configService.get('im_host')}/${this.configService.get(
-          'im_org_name',
-        )}/${this.configService.get('im_app_name')}/users`,
-        {
-          username: username + '_sparkle' + `_${roleType}`,
-          password: username + '_password',
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.imClient.access_token}`,
+    try {
+      const data = await firstValueFrom(
+        this.httpService.post(
+          `https://${this.configService.get(
+            'im_host',
+          )}/${this.configService.get('im_org_name')}/${this.configService.get(
+            'im_app_name',
+          )}/users`,
+          {
+            username: username + '_sparkle' + `_${roleType}`,
+            password: username + '_password',
           },
-        },
-      ),
-    );
-    this.logger.log(data);
+          {
+            headers: {
+              Authorization: `Bearer ${this.imClient.access_token}`,
+            },
+          },
+        ),
+      );
+      this.logger.log(data);
+    } catch (error) {
+      this.logger.error(error);
+      return Promise.reject(error);
+    }
   }
 }

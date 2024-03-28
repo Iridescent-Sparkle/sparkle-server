@@ -2,7 +2,6 @@ import { Controller, Inject, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { GrpcMethod } from '@nestjs/microservices';
-import { RequireLogin } from 'decorators/custom.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -39,31 +38,7 @@ export class UserController {
   /** 登录 */
   @GrpcMethod('UserService', 'Login')
   async login(loginUserDto: LoginUserDto) {
-    const vo = await this.userService.login(loginUserDto, false);
-
-    vo.setAccessToken = this.jwtService.sign(
-      {
-        userId: vo.getUserInfo.id,
-        username: vo.getUserInfo.username,
-        roles: vo.getUserInfo.roles,
-        permissions: vo.getUserInfo.permissions,
-      },
-      {
-        expiresIn:
-          this.configService.get('jwt_access_token_expires_time') || '30m',
-      },
-    );
-
-    vo.setRefreshToken = this.jwtService.sign(
-      {
-        userId: vo.getUserInfo.id,
-      },
-      {
-        expiresIn:
-          this.configService.get('jwt_refresh_token_expres_time') || '7d',
-      },
-    );
-    return vo;
+    return await this.userService.login(loginUserDto, false);
   }
 
   /** 验证短信验证码 */
@@ -81,31 +56,7 @@ export class UserController {
   /** 管理员登录 */
   @GrpcMethod('UserService', 'AdminLogin')
   async adminLogin(loginUserDto: LoginUserDto) {
-    const vo = await this.userService.login(loginUserDto, true);
-
-    vo.setAccessToken = this.jwtService.sign(
-      {
-        userId: vo.getUserInfo.id,
-        username: vo.getUserInfo.username,
-        roles: vo.getUserInfo.roles,
-        permissions: vo.getUserInfo.permissions,
-      },
-      {
-        expiresIn:
-          this.configService.get('jwt_access_token_expires_time') || '30m',
-      },
-    );
-
-    vo.setRefreshToken = this.jwtService.sign(
-      {
-        userId: vo.getUserInfo.id,
-      },
-      {
-        expiresIn:
-          this.configService.get('jwt_refresh_token_expres_time') || '7d',
-      },
-    );
-    return vo;
+    return await this.userService.login(loginUserDto, true);
   }
 
   /** 刷新token */
@@ -186,8 +137,7 @@ export class UserController {
 
   /** 获取用户信息 */
   @GrpcMethod('UserService', 'Info')
-  @RequireLogin()
   async info({ userId }: { userId: number }) {
-    return await this.userService.findUserDetailById(userId);
+    return await this.userService.findUserById(userId, false);
   }
 }

@@ -3,11 +3,14 @@ import { MessagePattern } from '@nestjs/microservices';
 import { JobCategory } from 'apps/boss/src/entities/category.entity';
 import { CategoryService } from 'apps/boss/src/service/category.service';
 
-@Controller({
-  path: 'category',
-})
+@Controller({})
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
+
+  @MessagePattern('initJobCategory')
+  initJobCategory() {
+    return this.categoryService.initJobCategory();
+  }
 
   @MessagePattern('findAllJobCategory')
   findAllJobCategory(): Promise<JobCategory[]> {

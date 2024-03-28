@@ -7,24 +7,24 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'job_category',
+  name: 'job_level',
 })
-export class JobCategory {
+export class JobLevel {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     length: 50,
-    comment: '职位名称',
+    comment: '职级名称',
   })
-  categoryName: string;
+  levelName: string;
 
   @Column({
     length: 50,
-    comment: '职位描述',
+    comment: '职级描述',
     default: '',
   })
-  categoryDescription: string;
+  levelDescription: string;
 
   @Column({
     default: false,

@@ -7,24 +7,24 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'job_category',
+  name: 'job_bonus',
 })
-export class JobCategory {
+export class JobBonus {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     length: 50,
-    comment: '职位名称',
+    comment: '福利名称',
   })
-  categoryName: string;
+  bonusName: string;
 
   @Column({
     length: 50,
-    comment: '职位描述',
+    comment: '福利描述',
     default: '',
   })
-  categoryDescription: string;
+  bonusDescription: string;
 
   @Column({
     default: false,

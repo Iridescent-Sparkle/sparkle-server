@@ -1,13 +1,20 @@
+import { User } from 'apps/user/src/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { JobBonus } from './bonus.entity';
 import { JobCategory } from './category.entity';
-import { User } from 'apps/user/src/entities/user.entity';
+import { JobEducation } from './education.entity';
+import { JobExperience } from './experience.entity';
+import { JobLevel } from './level.entity';
 
 @Entity({
   name: 'job_detail',
@@ -18,6 +25,10 @@ export class JobDetail {
 
   @ManyToOne(() => User)
   user: User;
+
+  @RelationId((jobDetail: JobDetail) => jobDetail.user)
+  @Column({})
+  userId: number;
 
   @Column({
     length: 50,
@@ -74,53 +85,50 @@ export class JobDetail {
   isOnsite: boolean;
 
   @Column({
-    type: 'json',
     comment: '工作描述',
     nullable: true,
   })
-  jobDescription: string[];
+  jobDescription: string;
 
   @Column({
-    type: 'json',
     comment: '工作要求',
     nullable: true,
   })
-  jobRequirements: string[];
+  jobRequirements: string;
 
-  @Column({
-    type: 'json',
-    comment: '福利',
-    nullable: true,
+  @ManyToMany(() => JobBonus)
+  @JoinTable({
+    name: 'job_detail_bonus',
   })
-  jobBonus: string[];
+  jobBonus: JobBonus[];
 
-  @Column({
-    type: 'json',
-    comment: '所需技能',
-    nullable: true,
-  })
-  requireSkills: string[];
+  @ManyToOne(() => JobExperience)
+  jobExperience: JobExperience;
 
-  @Column({
-    comment: '工作经验',
-    nullable: true,
-  })
-  workExperience: string;
+  @RelationId((jobDeatil: JobDetail) => jobDeatil.jobExperience)
+  @Column()
+  jobExperienceId: number;
 
-  @Column({
-    comment: '学历要求',
-    nullable: true,
-  })
-  educationRequirement: string;
+  @ManyToOne(() => JobEducation)
+  jobEducation: JobEducation;
 
-  @Column({
-    comment: '职级',
-    nullable: true,
-  })
-  jobLevel: string;
+  @RelationId((jobDeatil: JobDetail) => jobDeatil.jobEducation)
+  @Column()
+  jobEducationId: number;
+
+  @ManyToOne(() => JobLevel)
+  jobLevel: JobLevel;
+
+  @RelationId((jobDeatil: JobDetail) => jobDeatil.jobLevel)
+  @Column()
+  jobLevelId: number;
 
   @ManyToOne(() => JobCategory)
   jobCategory: JobCategory;
+
+  @RelationId((jobDeatil: JobDetail) => jobDeatil.jobCategory)
+  @Column()
+  jobCategoryId: number;
 
   @Column({
     comment: '空缺',

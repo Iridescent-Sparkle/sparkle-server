@@ -1,12 +1,20 @@
 import { ConfigModule } from '@app/config';
 import { EtcdModule } from '@app/etcd';
+import { JwtModule } from '@app/jwt';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { LoginGuard } from 'guards/login.guard';
+import { PermissionGuard } from 'guards/permission.guard';
 import { join } from 'path';
-import { DeliverController } from './controllers/deliver.controller';
-import { JobController } from './controllers/job.controller';
-import { UserController } from './controllers/user.controller';
+import { CategoryController } from './controllers/boss/category.controller';
+import { JobController } from './controllers/boss/job.controller';
+import { UserController } from './controllers/user/user.controller';
+import { BonusController } from './controllers/boss/bonus.controller';
+import { ExperienceController } from './controllers/boss/experience.controller';
+import { LevelController } from './controllers/boss/level.controller';
+import { EducationController } from './controllers/boss/education.controller';
 
 @Module({
   imports: [
@@ -49,32 +57,32 @@ import { UserController } from './controllers/user.controller';
         },
       },
 
-      {
-        name: 'genius',
-        inject: [ConfigService],
-        useFactory(configService: ConfigService) {
-          return {
-            transport: Transport.GRPC,
-            options: {
-              url: configService.get('genius_server_host'),
-              package: 'genius',
-              protoPath:
-                process.env.NODE_ENV === 'production'
-                  ? join(__dirname, './proto/deliver.proto')
-                  : './proto/deliver.proto',
-              loader: {
-                defaults: true,
-                json: true,
-                oneofs: true,
-                objects: true,
-                arrays: true,
-                longs: String,
-                enums: String,
-              },
-            },
-          };
-        },
-      },
+      // {
+      //   name: 'genius',
+      //   inject: [ConfigService],
+      //   useFactory(configService: ConfigService) {
+      //     return {
+      //       transport: Transport.GRPC,
+      //       options: {
+      //         url: configService.get('genius_server_host'),
+      //         package: 'genius',
+      //         protoPath:
+      //           process.env.NODE_ENV === 'production'
+      //             ? join(__dirname, './proto/deliver.proto')
+      //             : './proto/deliver.proto',
+      //         loader: {
+      //           defaults: true,
+      //           json: true,
+      //           oneofs: true,
+      //           objects: true,
+      //           arrays: true,
+      //           longs: String,
+      //           enums: String,
+      //         },
+      //       },
+      //     };
+      //   },
+      // },
     ]),
     EtcdModule.forRootAsync({
       inject: [ConfigService],
@@ -88,12 +96,28 @@ import { UserController } from './controllers/user.controller';
         };
       },
     }),
+    JwtModule,
   ],
   controllers: [
     UserController,
-    // CategoryController,
     JobController,
-    DeliverController,
+    BonusController,
+    CategoryController,
+    ExperienceController,
+    LevelController,
+    EducationController,
+    // CategoryController,
+    // DeliverController,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: LoginGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
   ],
 })
 export class GatewayModule {}

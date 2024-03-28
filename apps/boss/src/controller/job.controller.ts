@@ -8,16 +8,22 @@ export class JobController {
   constructor(private readonly jobService: JobService) {}
 
   @MessagePattern('create')
-  create({ jobDetail }: { jobDetail: JobDetail }): Promise<JobDetail> {
-    console.log(jobDetail);
+  create({
+    userId,
+    jobDetail,
+  }: {
+    userId: number;
+    jobDetail: JobDetail;
+  }): Promise<JobDetail> {
     return this.jobService.create({
+      userId,
       jobDetail,
     });
   }
 
   @MessagePattern('findAll')
-  findAll({}: object): Promise<{ jobDetail: JobDetail[] }> {
-    return this.jobService.findAll({});
+  findAll(): Promise<JobDetail[]> {
+    return this.jobService.findAll();
   }
 
   @MessagePattern('findOne')

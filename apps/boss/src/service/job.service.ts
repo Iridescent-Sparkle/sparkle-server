@@ -1,7 +1,8 @@
+import { JobBonus } from './../entities/bonus.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobDetail } from '../entities/job.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { JobCategory } from '../entities/category.entity';
 import { User } from 'apps/user/src/entities/user.entity';
 
@@ -13,61 +14,37 @@ export class JobService {
   @InjectRepository(JobCategory)
   private jobCategoryRepository: Repository<JobCategory>;
 
-  @InjectRepository(User)
-  private userRepository: Repository<User>;
+  @InjectRepository(JobBonus)
+  private jobBonusRepository: Repository<JobBonus>;
 
   constructor() {}
 
-  async initializeJobDetails(): Promise<void> {
-    const jobCategory = await this.jobCategoryRepository.findOne({
-      where: { id: Math.floor(Math.random() * (5 - 1 + 1)) + 1 },
-    });
-    const user = await this.userRepository.findOne({
-      where: { id: 1 },
-    });
-    const jobDetailsData = [
-      {
-        jobName: 'Software Engineer',
-        companyName: 'ABC Tech',
-        companyAvatar: 'avatar.jpg',
-        address: '123 Street, City',
-        minSalary: '5000',
-        maxSalary: '8000',
-        isFullTime: true,
-        isOnsite: false,
-        jobDescription: ['Description 1', 'Description 2'],
-        jobRequirements: ['Requirement 1', 'Requirement 2'],
-        jobBonus: ['Bonus 1', 'Bonus 2'],
-        workExperience: '2 years',
-        educationRequirement: 'Bachelor',
-        jobLevel: 'Senior',
-        jobCategory: jobCategory,
-        headCount: 5,
-        website: 'www.abctech.com',
-        companyDescription: 'ABC Tech is a leading tech company.',
-        isFrozen: false,
-        user: user,
-      },
-    ];
+  async create({
+    userId,
+    jobDetail,
+  }: {
+    userId: number;
+    jobDetail: JobDetail;
+  }): Promise<JobDetail> {
+    jobDetail.userId = userId;
 
-    for (const data of jobDetailsData) {
-      const jobDetail = this.jobDetailRepository.create(data);
-      await this.jobDetailRepository.save(jobDetail);
-    }
-  }
-
-  async create({ jobDetail }: { jobDetail: JobDetail }): Promise<JobDetail> {
+    jobDetail.jobBonus = await this.jobBonusRepository.findBy({
+      id: In(jobDetail.jobBonus),
+    });
+    console.log(jobDetail.jobBonus);
     return await this.jobDetailRepository.save(jobDetail);
   }
 
-  async findAll({}: object): Promise<{ jobDetail: JobDetail[] }> {
-    const jobDetail = await this.jobDetailRepository.find({
-      relations: ['jobCategory'],
+  async findAll(): Promise<JobDetail[]> {
+    return await this.jobDetailRepository.find({
+      relations: [
+        'jobCategory',
+        'jobBonus',
+        'jobExperience',
+        'jobEducation',
+        'jobLevel',
+      ],
     });
-
-    return {
-      jobDetail,
-    };
   }
 
   async findOne({ jobId }: { jobId: number }): Promise<JobDetail> {
