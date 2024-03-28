@@ -42,6 +42,7 @@ export class User {
   @Column({
     length: 50,
     comment: '头像',
+    nullable: true,
   })
   avatar: string;
 
@@ -51,20 +52,6 @@ export class User {
     comment: '邮箱',
   })
   email: string;
-
-  @Column({
-    length: 100,
-    nullable: true,
-    comment: '头像',
-  })
-  headPic: string;
-
-  @Column({
-    length: 20,
-    nullable: true,
-    comment: '手机号',
-  })
-  phone: string;
 
   @Column({
     length: 20,

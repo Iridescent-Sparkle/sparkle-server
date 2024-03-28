@@ -138,6 +138,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/boss/tsconfig.app.json"
       }
+    },
+    "im": {
+      "type": "library",
+      "root": "libs/im",
+      "entryFile": "index",
+      "sourceRoot": "libs/im/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/im/tsconfig.lib.json"
+      }
     }
   }
 }

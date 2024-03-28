@@ -7,10 +7,6 @@ interface UserInfo {
 
   email: string;
 
-  headPic: string;
-
-  phone: string;
-
   isFrozen: boolean;
 
   isAdmin: boolean;

@@ -14,10 +14,14 @@ import { format, transports } from 'winston';
 import * as chalk from 'chalk';
 import { EmailModule } from '@app/email';
 import { SmsModule } from '@app/sms';
+import { HttpModule } from '@nestjs/axios';
+import { ImModule } from '@app/im';
 
 @Module({
   imports: [
+    HttpModule,
     ConfigModule,
+    ImModule,
     DbModule,
     TypeOrmModule.forFeature([User, Role, Permission]),
     RedisModule,

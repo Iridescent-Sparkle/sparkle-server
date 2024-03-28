@@ -71,6 +71,12 @@
       ],
       "@app/sms/*": [
         "libs/sms/src/*"
+      ],
+      "@app/im": [
+        "libs/im/src"
+      ],
+      "@app/im/*": [
+        "libs/im/src/*"
       ]
     }
   }

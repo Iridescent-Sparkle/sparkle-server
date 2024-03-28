@@ -12,11 +12,6 @@ export class RegisterUserDto {
   password: string;
 
   @IsNotEmpty({
-    message: '手机号不能为空',
-  })
-  phone: string;
-
-  @IsNotEmpty({
     message: '验证码不能为空',
   })
   captcha: string;

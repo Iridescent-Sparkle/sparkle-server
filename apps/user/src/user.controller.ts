@@ -18,12 +18,6 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
-  /**初始化用户数据 */
-  @GrpcMethod('UserService', 'InitData')
-  async initData() {
-    return await this.userService.initData();
-  }
-
   /** 获取邮箱验证码 */
   @GrpcMethod('UserService', 'Captcha')
   async captcha({ address }: { address: string }) {
