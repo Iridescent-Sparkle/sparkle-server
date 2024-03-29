@@ -1,14 +1,13 @@
-import { Controller, Get, Inject, Param, UseFilters } from '@nestjs/common';
+import { Controller, Get, Inject, Param } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobCategory } from 'apps/boss/src/entities/category.entity';
 import { RequireLogin } from 'decorators/custom.decorator';
-import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
+
 import { firstValueFrom } from 'rxjs';
 
 @Controller({
   path: 'boss/category',
 })
-@UseFilters(GrpcExceptionFilter)
 export class CategoryController {
   @Inject('BOSS_SERVICE')
   private BossClient: ClientProxy;

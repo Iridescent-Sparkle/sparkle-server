@@ -8,18 +8,15 @@ import {
   Post,
   Put,
   Query,
-  UseFilters,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobDetail } from 'apps/boss/src/entities/job.entity';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
-import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
 import { firstValueFrom } from 'rxjs';
 
 @Controller({
   path: 'boss/job',
 })
-@UseFilters(GrpcExceptionFilter)
 export class JobController {
   @Inject('BOSS_SERVICE')
   private BossClient: ClientProxy;
@@ -41,8 +38,18 @@ export class JobController {
   }
 
   @Get(':id')
-  findOne(@Param('id') jobId: string): Promise<JobDetail> {
-    return firstValueFrom(this.BossClient.send('findOne', { jobId: +jobId }));
+  @RequireLogin()
+  findOne(
+    @UserInfo('userId') userId: number,
+    @Param('id') jobId: string,
+  ): Promise<
+    JobDetail & {
+      isCollected: boolean;
+    }
+  > {
+    return firstValueFrom(
+      this.BossClient.send('findOne', { userId, jobId: +jobId }),
+    );
   }
 
   @Put(':id')

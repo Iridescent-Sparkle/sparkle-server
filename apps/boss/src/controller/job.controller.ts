@@ -27,9 +27,14 @@ export class JobController {
   }
 
   @MessagePattern('findOne')
-  findOne({ jobId }: { jobId: number }): Promise<JobDetail> {
+  findOne({ userId, jobId }: { userId: number; jobId: number }): Promise<
+    JobDetail & {
+      isCollected: boolean;
+    }
+  > {
     return this.jobService.findOne({
       jobId,
+      userId,
     });
   }
 

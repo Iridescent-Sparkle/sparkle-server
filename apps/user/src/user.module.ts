@@ -23,11 +23,11 @@ import { ImModule } from '@app/im';
     ConfigModule,
     ImModule,
     DbModule,
-    TypeOrmModule.forFeature([User, Role, Permission]),
     RedisModule,
     JwtModule,
     EmailModule,
     SmsModule,
+    TypeOrmModule.forFeature([User, Role, Permission]),
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),

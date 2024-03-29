@@ -7,14 +7,11 @@ import {
   Param,
   Post,
   Put,
-  UseFilters,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
 import { firstValueFrom } from 'rxjs';
 
 @Controller('genius/deliveries')
-@UseFilters(GrpcExceptionFilter)
 export class DeliverController {
   @Inject('GENIUS_SERVICE')
   private GeniusClient: ClientProxy;

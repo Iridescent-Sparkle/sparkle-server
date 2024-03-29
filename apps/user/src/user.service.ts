@@ -2,11 +2,11 @@ import { EmailService } from '@app/email';
 import { ImService } from '@app/im';
 import { RedisService } from '@app/redis';
 import { SmsService } from '@app/sms';
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FitRpcException } from 'filters/rpc-exception.filter';
 import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -80,11 +80,11 @@ export class UserService {
       );
 
       if (!captcha) {
-        throw new FitRpcException('验证码已失效', HttpStatus.BAD_REQUEST);
+        throw new RpcException('验证码已失效');
       }
 
       if (registerUserDto.captcha !== captcha) {
-        throw new FitRpcException('验证码不正确', HttpStatus.BAD_REQUEST);
+        throw new RpcException('验证码不正确');
       }
 
       const foundUser = await this.userRepository.findOneBy({
@@ -92,7 +92,7 @@ export class UserService {
       });
 
       if (foundUser) {
-        throw new FitRpcException('用户已存在', HttpStatus.BAD_REQUEST);
+        throw new RpcException('用户已存在');
       }
 
       await this.imService.register({
@@ -131,11 +131,11 @@ export class UserService {
     });
 
     if (!foundUser) {
-      throw new FitRpcException('用户不存在', HttpStatus.BAD_REQUEST);
+      throw new RpcException('用户不存在');
     }
 
     if (md5(loginUserDto.password) !== foundUser.password) {
-      throw new FitRpcException('密码错误', HttpStatus.BAD_REQUEST);
+      throw new RpcException('密码错误');
     }
 
     const token = {
@@ -180,17 +180,17 @@ export class UserService {
     });
 
     if (!foundUser) {
-      throw new FitRpcException('用户不存在', HttpStatus.BAD_REQUEST);
+      throw new RpcException('用户不存在');
     }
 
     const captcha = await this.redisService.get(`smsCode_${username}`);
 
     if (!captcha) {
-      throw new FitRpcException('验证码已失效', HttpStatus.BAD_REQUEST);
+      throw new RpcException('验证码已失效');
     }
     console.log(captcha, code, username);
     if (code !== captcha) {
-      throw new FitRpcException('验证码不正确', HttpStatus.BAD_REQUEST);
+      throw new RpcException('验证码不正确');
     }
 
     return {};
@@ -204,7 +204,7 @@ export class UserService {
     });
 
     if (!foundUser) {
-      throw new FitRpcException('用户不存在', HttpStatus.BAD_REQUEST);
+      throw new RpcException('用户不存在');
     }
 
     return await this.userRepository.update(resetPasswordDto.username, {

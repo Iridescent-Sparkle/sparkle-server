@@ -45,6 +45,10 @@ import { EducationController } from './controller/education.controller';
   imports: [
     ConfigModule,
     DbModule,
+    RedisModule,
+    JwtModule,
+    EmailModule,
+    SmsModule,
     TypeOrmModule.forFeature([
       User,
       Role,
@@ -63,10 +67,6 @@ import { EducationController } from './controller/education.controller';
       JobLevel,
       JobEducation,
     ]),
-    RedisModule,
-    JwtModule,
-    EmailModule,
-    SmsModule,
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),

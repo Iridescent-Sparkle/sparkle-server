@@ -4,10 +4,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -18,12 +17,19 @@ export class JobCollect {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => JobDetail)
-  @JoinColumn()
+  @ManyToOne(() => JobDetail)
   job: JobDetail;
+
+  @RelationId((jobCollect: JobCollect) => jobCollect.job)
+  @Column()
+  jobId: number;
 
   @ManyToOne(() => User)
   user: User;
+
+  @RelationId((jobCollect: JobCollect) => jobCollect.user)
+  @Column()
+  userId: number;
 
   @Column({
     default: false,

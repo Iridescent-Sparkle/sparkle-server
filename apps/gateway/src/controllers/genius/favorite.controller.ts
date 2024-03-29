@@ -1,13 +1,6 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Inject,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
 
 @Controller('genius/favorite')
@@ -15,24 +8,35 @@ export class FavoriteController {
   @Inject('GENIUS_SERVICE')
   private GeniusClient: ClientProxy;
 
-  @Get('user/:userId')
-  async findFavoritesByUserId(@Param('userId') userId: number) {
+  @Get('user')
+  @RequireLogin()
+  async findFavoritesByUserId(@UserInfo('userId') userId: number) {
     return firstValueFrom(
       this.GeniusClient.send('findFavoritesByUserId', userId),
     );
   }
 
   @Post('create')
-  async addJobToCollection(@Body() jobData: any) {
+  @RequireLogin()
+  async addJobToCollection(
+    @UserInfo('userId') userId: number,
+    @Body() jobData: { jobId: number },
+  ) {
     return firstValueFrom(
-      this.GeniusClient.send('addJobToCollection', jobData),
+      this.GeniusClient.send('addJobToCollection', {
+        userId,
+        jobId: jobData.jobId,
+      }),
     );
   }
 
   @Delete('remove')
-  async removeJobFromCollection(@Body() jobData: any) {
+  @RequireLogin()
+  async removeJobFromCollection(@Body() jobData: { favoriteId: number }) {
     return firstValueFrom(
-      this.GeniusClient.send('removeJobFromCollection', jobData),
+      this.GeniusClient.send('removeJobFromCollection', {
+        favoriteId: jobData.favoriteId,
+      }),
     );
   }
 }

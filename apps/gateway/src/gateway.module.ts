@@ -24,6 +24,7 @@ import { VolunteerController } from './controllers/genius/volunteer.controller';
 @Module({
   imports: [
     ConfigModule,
+    JwtModule,
     ClientsModule.register([
       {
         name: 'BOSS_SERVICE',
@@ -82,7 +83,6 @@ import { VolunteerController } from './controllers/genius/volunteer.controller';
         };
       },
     }),
-    JwtModule,
   ],
   controllers: [
     UserController,

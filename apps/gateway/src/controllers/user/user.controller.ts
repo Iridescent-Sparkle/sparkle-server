@@ -1,24 +1,14 @@
-import { UserController as UserService } from '../../../../user/src/user.controller';
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Post,
-  Query,
-  UseFilters,
-} from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { LoginUserDto } from 'apps/user/src/dto/login-user.dto';
 import { RegisterUserDto } from 'apps/user/src/dto/register-user.dto';
 import { ResetPasswordDto } from 'apps/user/src/dto/reset-password.dto';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
-import { GrpcExceptionFilter } from 'filters/rpc-exception.filter';
+import { UserController as UserService } from '../../../../user/src/user.controller';
 
 @Controller({
   path: 'user',
 })
-@UseFilters(GrpcExceptionFilter)
 export class UserController {
   @Inject('user')
   private client: ClientGrpc;

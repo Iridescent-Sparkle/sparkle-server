@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JobCollect } from 'apps/genius/src/entities/collect.entity';
 import { In, Repository } from 'typeorm';
-import { JobCategory } from '../entities/category.entity';
 import { JobDetail } from '../entities/job.entity';
 import { JobBonus } from './../entities/bonus.entity';
 
@@ -10,8 +10,8 @@ export class JobService {
   @InjectRepository(JobDetail)
   private jobDetailRepository: Repository<JobDetail>;
 
-  @InjectRepository(JobCategory)
-  private jobCategoryRepository: Repository<JobCategory>;
+  @InjectRepository(JobCollect)
+  private jobCollectRepository: Repository<JobCollect>;
 
   @InjectRepository(JobBonus)
   private jobBonusRepository: Repository<JobBonus>;
@@ -30,7 +30,7 @@ export class JobService {
     jobDetail.jobBonus = await this.jobBonusRepository.findBy({
       id: In(jobDetail.jobBonus),
     });
-    console.log(jobDetail.jobBonus);
+
     return await this.jobDetailRepository.save(jobDetail);
   }
 
@@ -46,13 +46,33 @@ export class JobService {
     });
   }
 
-  async findOne({ jobId }: { jobId: number }): Promise<JobDetail> {
-    return await this.jobDetailRepository.findOne({
+  async findOne({ userId, jobId }: { userId: number; jobId: number }): Promise<
+    JobDetail & {
+      isCollected: boolean;
+    }
+  > {
+    const jobDetail = (await this.jobDetailRepository.findOne({
       where: {
         id: jobId,
       },
       relations: ['jobBonus'],
+    })) as JobDetail & {
+      isCollected: boolean;
+    };
+
+    const foundJobDeliver = await this.jobCollectRepository.findOne({
+      where: {
+        jobId: jobId,
+        userId: userId,
+      },
     });
+
+    if (foundJobDeliver) {
+      jobDetail.isCollected = true;
+    } else {
+      jobDetail.isCollected = false;
+    }
+    return jobDetail;
   }
 
   async update({

@@ -1,8 +1,8 @@
 import { WINSTON_LOGGER_TOKEN } from '@app/winston';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { UserModule } from './user.module';
 import { join } from 'path';
+import { UserModule } from './user.module';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(

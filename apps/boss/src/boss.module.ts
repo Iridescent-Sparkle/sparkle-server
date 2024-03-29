@@ -30,11 +30,16 @@ import { ExperienceService } from './service/experience.service';
 import { JobService } from './service/job.service';
 import { LevelService } from './service/level.service';
 import { EducationController } from './controller/education.controller';
+import { JobCollect } from 'apps/genius/src/entities/collect.entity';
 
 @Module({
   imports: [
     ConfigModule,
     DbModule,
+    RedisModule,
+    JwtModule,
+    EmailModule,
+    SmsModule,
     TypeOrmModule.forFeature([
       User,
       Role,
@@ -45,11 +50,8 @@ import { EducationController } from './controller/education.controller';
       JobEducation,
       JobLevel,
       JobExperience,
+      JobCollect,
     ]),
-    RedisModule,
-    JwtModule,
-    EmailModule,
-    SmsModule,
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),

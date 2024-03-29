@@ -1,25 +1,18 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JobDetail } from 'apps/boss/src/entities/job.entity';
-import { User } from 'apps/user/src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JobCollect } from '../entities/collect.entity';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class FavoriteService {
   @InjectRepository(JobCollect)
   private jobCollectRepository: Repository<JobCollect>;
 
-  @InjectRepository(JobDetail)
-  private jobDetailRepository: Repository<JobDetail>;
-
-  @InjectRepository(User)
-  private userRepository: Repository<User>;
-
   constructor() {}
 
-  async findFavoritesByUserId(userId: number): Promise<JobDetail[]> {
-    const favoriteJobs = await this.jobCollectRepository.find({
+  async findFavoritesByUserId(userId: number): Promise<JobCollect[]> {
+    return await this.jobCollectRepository.find({
       where: {
         user: {
           id: userId,
@@ -30,37 +23,38 @@ export class FavoriteService {
         job: true,
       },
     });
-
-    return favoriteJobs.map((item) => item.job);
   }
 
-  async addJobToCollection(jobId: number, userId: number): Promise<JobCollect> {
-    const jobDetail = await this.jobDetailRepository.findOne({
-      where: { id: jobId },
+  async addJobToCollection(jobData: {
+    userId: number;
+    jobId: number;
+  }): Promise<JobCollect> {
+    const { userId, jobId } = jobData;
+    const foundJobCollect = await this.jobCollectRepository.findOne({
+      where: {
+        userId,
+        jobId,
+      },
     });
 
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
+    if (foundJobCollect) {
+      throw new RpcException({
+        message: '已经收藏该职位',
+        code: HttpStatus.BAD_REQUEST,
+      });
+    }
+    const jobCollect = new JobCollect();
 
-    const newJobCollect = this.jobCollectRepository.create({
-      job: jobDetail,
-      user: user,
-    });
+    jobCollect.userId = jobData.userId;
+    jobCollect.jobId = jobData.jobId;
 
-    return await this.jobCollectRepository.save(newJobCollect);
+    return await this.jobCollectRepository.save(jobCollect);
   }
 
-  async removeJobFromCollection(
-    jobCollectId: number,
-    userId: number,
-  ): Promise<void> {
+  async removeJobFromCollection(jobData: { favoriteId: number }) {
     const jobCollect = await this.jobCollectRepository.findOne({
       where: {
-        id: jobCollectId,
-        user: {
-          id: userId,
-        },
+        id: jobData.favoriteId,
       },
     });
 
@@ -68,6 +62,12 @@ export class FavoriteService {
       throw new BadRequestException('Job collect not found');
     }
 
-    await this.jobCollectRepository.update(jobCollectId, { isDelete: true });
+    await this.jobCollectRepository.update(jobData.favoriteId, {
+      isDelete: true,
+    });
+
+    return {
+      message: 'Remove job collect success',
+    };
   }
 }
