@@ -1,17 +1,17 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { MessagePattern } from '@nestjs/microservices';
 import { DeliverService } from '../service/deliver.service';
 
 @Controller('deliveries')
 export class DeliverController {
   constructor(private readonly deliverService: DeliverService) {}
 
-  @GrpcMethod('DeliverService', 'FindDeliverStatusByUserId')
+  @MessagePattern('FindDeliverStatusByUserId')
   async findDeliverStatusByUserId({ userId }: { userId: number }) {
     return this.deliverService.findDeliverStatusByUserId({ userId });
   }
 
-  @GrpcMethod('DeliverService', 'CreateDeliver')
+  @MessagePattern('CreateDeliver')
   async createDeliver(deliverData: {
     jobId: number;
     userId: number;
@@ -20,7 +20,7 @@ export class DeliverController {
     return this.deliverService.createDeliver(deliverData);
   }
 
-  @GrpcMethod('DeliverService', 'UpdateDeliverStatus')
+  @MessagePattern('UpdateDeliverStatus')
   async updateDeliverStatus(deliverData: {
     deliverId: number;
     status: number;
@@ -28,7 +28,7 @@ export class DeliverController {
     return this.deliverService.updateDeliverStatus(deliverData);
   }
 
-  @GrpcMethod('DeliverService', 'DeleteDeliver')
+  @MessagePattern('DeleteDeliver')
   async deleteDeliver(deliverData: { deliverId: number }) {
     return this.deliverService.deleteDeliver(deliverData);
   }

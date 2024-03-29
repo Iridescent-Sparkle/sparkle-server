@@ -26,6 +26,21 @@ import { Profile } from './entities/profile.entity';
 import { Project } from './entities/project.entity';
 import { Volunteer } from './entities/volunteer.entity';
 
+import { ExperienceController } from './controller/experience.controller';
+import { ProfileController } from './controller/profile.controller';
+import { ProjectController } from './controller/project.controller';
+import { VolunteerController } from './controller/volunteer.controller';
+import { EducationService } from './service/education.service';
+import { ExperienceService } from './service/experience.service';
+import { ProfileService } from './service/profile.service';
+import { ProjectService } from './service/project.service';
+import { VolunteerService } from './service/volunteer.service';
+import { JobBonus } from 'apps/boss/src/entities/bonus.entity';
+import { JobExperience } from 'apps/boss/src/entities/experience.entity';
+import { JobLevel } from 'apps/boss/src/entities/level.entity';
+import { JobEducation } from 'apps/boss/src/entities/education.entity';
+import { EducationController } from './controller/education.controller';
+
 @Module({
   imports: [
     ConfigModule,
@@ -43,6 +58,10 @@ import { Volunteer } from './entities/volunteer.entity';
       Profile,
       Project,
       Volunteer,
+      JobBonus,
+      JobExperience,
+      JobLevel,
+      JobEducation,
     ]),
     RedisModule,
     JwtModule,
@@ -70,7 +89,23 @@ import { Volunteer } from './entities/volunteer.entity';
       ],
     }),
   ],
-  controllers: [DeliverController, FavoriteController],
-  providers: [DeliverService, FavoriteService],
+  controllers: [
+    DeliverController,
+    FavoriteController,
+    EducationController,
+    ExperienceController,
+    ProfileController,
+    ProjectController,
+    VolunteerController,
+  ],
+  providers: [
+    DeliverService,
+    FavoriteService,
+    EducationService,
+    ExperienceService,
+    ProfileService,
+    ProjectService,
+    VolunteerService,
+  ],
 })
 export class GeniusModule {}

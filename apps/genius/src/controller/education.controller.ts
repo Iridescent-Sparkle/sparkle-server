@@ -1,35 +1,28 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { EducationService } from '../service/education.service';
+import { Body, Controller, Param } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { Education } from '../entities/education.entity';
+import { EducationService } from '../service/education.service';
 
 @Controller('education')
 export class EducationController {
   constructor(private readonly educationService: EducationService) {}
 
-  @Get('user/:userId')
+  @MessagePattern('findEducationByUserId')
   async findEducationByUserId(@Param('userId') userId: number) {
     return this.educationService.findEducationByUserId(userId);
   }
 
-  @Post('create')
+  @MessagePattern('createEducation')
   async createEducation(@Body() education: Education) {
     return this.educationService.createEducation(education);
   }
 
-  @Put('update')
+  @MessagePattern('updateEducation')
   async updateEducation(@Body() education: Education) {
     return this.educationService.updateEducation(education);
   }
 
-  @Delete('remove')
+  @MessagePattern('deleteEducation')
   async deleteEducation(@Body() education: Education) {
     return this.educationService.deleteEducation(education.id);
   }

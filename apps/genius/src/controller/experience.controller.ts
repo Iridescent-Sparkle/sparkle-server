@@ -1,35 +1,28 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { ExperienceService } from '../service/experience.service';
+import { Body, Controller, Param } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { Experience } from '../entities/experience.entity';
+import { ExperienceService } from '../service/experience.service';
 
 @Controller('experience')
 export class ExperienceController {
   constructor(private readonly experienceService: ExperienceService) {}
 
-  @Get('user/:userId')
+  @MessagePattern('findExperienceByUserId')
   async findExperienceByUserId(@Param('userId') userId: number) {
     return this.experienceService.findExperienceByUserId(userId);
   }
 
-  @Post('create')
+  @MessagePattern('createExperience')
   async createExperience(@Body() experience: Experience) {
     return this.experienceService.createExperience(experience);
   }
 
-  @Put('update')
+  @MessagePattern('updateExperienceStatus')
   async updateExperienceStatus(@Body() experience: Experience) {
     return this.experienceService.createExperience(experience);
   }
 
-  @Delete('remove')
+  @MessagePattern('deleteExperience')
   async deleteExperience(@Body() experience: Experience) {
     return this.experienceService.deleteExperience(experience.id);
   }

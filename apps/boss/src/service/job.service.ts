@@ -1,10 +1,9 @@
-import { JobBonus } from './../entities/bonus.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JobDetail } from '../entities/job.entity';
 import { In, Repository } from 'typeorm';
 import { JobCategory } from '../entities/category.entity';
-import { User } from 'apps/user/src/entities/user.entity';
+import { JobDetail } from '../entities/job.entity';
+import { JobBonus } from './../entities/bonus.entity';
 
 @Injectable()
 export class JobService {

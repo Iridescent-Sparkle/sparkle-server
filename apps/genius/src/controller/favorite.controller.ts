@@ -1,22 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { FavoriteService } from '../service/favorite.service';
 
 @Controller('favorite')
 export class FavoriteController {
   constructor(private readonly favoriteService: FavoriteService) {}
 
-  @Get('user/:userId')
+  @MessagePattern('findFavoritesByUserId')
   async findFavoritesByUserId(@Param('userId') userId: number) {
     return this.favoriteService.findFavoritesByUserId(userId);
   }
 
-  @Post('create')
+  @MessagePattern('addJobToCollection')
   async addJobToCollection(@Body() jobData: any) {
     const { jobId, userId } = jobData;
     return this.favoriteService.addJobToCollection(jobId, userId);
   }
 
-  @Delete('remove')
+  @MessagePattern('removeJobFromCollection')
   async removeJobFromCollection(@Body() jobData: any) {
     const { jobId, userId } = jobData;
     return this.favoriteService.removeJobFromCollection(jobId, userId);

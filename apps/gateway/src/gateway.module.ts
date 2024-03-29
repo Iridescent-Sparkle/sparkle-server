@@ -15,6 +15,11 @@ import { BonusController } from './controllers/boss/bonus.controller';
 import { ExperienceController } from './controllers/boss/experience.controller';
 import { LevelController } from './controllers/boss/level.controller';
 import { EducationController } from './controllers/boss/education.controller';
+import { DeliverController } from './controllers/genius/deliver.controller';
+import { FavoriteController } from './controllers/genius/favorite.controller';
+import { ProfileController } from './controllers/genius/profile.controller';
+import { ProjectController } from './controllers/genius/project.controller';
+import { VolunteerController } from './controllers/genius/volunteer.controller';
 
 @Module({
   imports: [
@@ -26,6 +31,14 @@ import { EducationController } from './controllers/boss/education.controller';
         options: {
           host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
           port: 3002,
+        },
+      },
+      {
+        name: 'GENIUS_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+          port: 3003,
         },
       },
     ]),
@@ -56,33 +69,6 @@ import { EducationController } from './controllers/boss/education.controller';
           };
         },
       },
-
-      // {
-      //   name: 'genius',
-      //   inject: [ConfigService],
-      //   useFactory(configService: ConfigService) {
-      //     return {
-      //       transport: Transport.GRPC,
-      //       options: {
-      //         url: configService.get('genius_server_host'),
-      //         package: 'genius',
-      //         protoPath:
-      //           process.env.NODE_ENV === 'production'
-      //             ? join(__dirname, './proto/deliver.proto')
-      //             : './proto/deliver.proto',
-      //         loader: {
-      //           defaults: true,
-      //           json: true,
-      //           oneofs: true,
-      //           objects: true,
-      //           arrays: true,
-      //           longs: String,
-      //           enums: String,
-      //         },
-      //       },
-      //     };
-      //   },
-      // },
     ]),
     EtcdModule.forRootAsync({
       inject: [ConfigService],
@@ -106,8 +92,12 @@ import { EducationController } from './controllers/boss/education.controller';
     ExperienceController,
     LevelController,
     EducationController,
-    // CategoryController,
-    // DeliverController,
+    DeliverController,
+    ExperienceController,
+    FavoriteController,
+    ProfileController,
+    ProjectController,
+    VolunteerController,
   ],
   providers: [
     {

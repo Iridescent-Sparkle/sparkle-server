@@ -1,35 +1,28 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { ProfileService } from '../service/profile.service';
+import { Body, Controller, Param } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { Profile } from '../entities/profile.entity';
+import { ProfileService } from '../service/profile.service';
 
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
-  @Get('user/:userId')
+  @MessagePattern('findProfile')
   async findProfile(@Param('userId') userId: number) {
     return this.profileService.findProfile(userId);
   }
 
-  @Post('create')
+  @MessagePattern('createProfile')
   async createProfile(@Body() profile: Profile) {
     return this.profileService.createProfile(profile);
   }
 
-  @Put('update')
+  @MessagePattern('updateProfile')
   async updateProfile(@Body() profile: Profile) {
     return this.profileService.updateProfile(profile);
   }
 
-  @Delete('remove')
+  @MessagePattern('deleteProfile')
   async deleteProfile(@Body() profile: Profile) {
     return this.profileService.deleteProfile(profile.id);
   }

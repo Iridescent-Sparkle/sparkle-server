@@ -1,12 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Param } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { Project } from '../entities/project.entity';
 import { ProjectService } from '../service/project.service';
 
@@ -14,22 +7,22 @@ import { ProjectService } from '../service/project.service';
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Get('user/:userId')
+  @MessagePattern('findProject')
   async findProject(@Param('userId') userId: number) {
     return this.projectService.findProject(userId);
   }
 
-  @Post('create')
+  @MessagePattern('createProject')
   async createProject(@Body() project: Project) {
     return this.projectService.createProject(project);
   }
 
-  @Put('update')
+  @MessagePattern('updateProject')
   async updateProject(@Body() project: Project) {
     return this.projectService.updateProject(project);
   }
 
-  @Delete('remove')
+  @MessagePattern('deleteProject')
   async deleteProject(@Body() project: Project) {
     return this.projectService.deleteProject(project.id);
   }
