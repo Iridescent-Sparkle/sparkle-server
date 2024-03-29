@@ -6,6 +6,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   RelationId,
   UpdateDateColumn,
@@ -15,6 +16,8 @@ import { JobCategory } from './category.entity';
 import { JobEducation } from './education.entity';
 import { JobExperience } from './experience.entity';
 import { JobLevel } from './level.entity';
+import { JobCollect } from 'apps/genius/src/entities/collect.entity';
+import { JobDeliver } from '../../../genius/src/entities/deliver.entity';
 
 @Entity({
   name: 'job_detail',
@@ -128,6 +131,12 @@ export class JobDetail {
   @RelationId((jobDeatil: JobDetail) => jobDeatil.jobCategory)
   @Column()
   jobCategoryId: number;
+
+  @OneToMany(() => JobCollect, (jobCollect) => jobCollect.job)
+  jobCollect: JobCollect[];
+
+  @OneToMany(() => JobDeliver, (jobDeliver) => jobDeliver.job)
+  jobDeliver: JobDeliver[];
 
   @Column({
     comment: '空缺',

@@ -5,10 +5,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -19,12 +18,19 @@ export class JobDeliver {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => JobDetail)
-  @JoinColumn()
+  @ManyToOne(() => JobDetail)
   job: JobDetail;
+
+  @RelationId((jobDeliver: JobDeliver) => jobDeliver.job)
+  @Column()
+  jobId: number;
 
   @ManyToOne(() => User)
   user: User;
+
+  @RelationId((jobDeliver: JobDeliver) => jobDeliver.user)
+  @Column()
+  userId: number;
 
   @Column({
     comment: '投递状态',

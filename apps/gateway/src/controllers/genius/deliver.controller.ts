@@ -1,14 +1,6 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Inject,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
 
 @Controller('genius/deliveries')
@@ -16,21 +8,30 @@ export class DeliverController {
   @Inject('GENIUS_SERVICE')
   private GeniusClient: ClientProxy;
 
-  @Get('user/:userId')
-  async findDeliverStatusByUserId(@Param('userId') userId: number) {
+  @Get('user')
+  @RequireLogin()
+  async findDeliverStatusByUserId(@UserInfo('userId') userId: number) {
     return firstValueFrom(
       this.GeniusClient.send('findDeliverStatusByUserId', { userId }),
     );
   }
 
   @Post('create')
+  @RequireLogin()
   async createDeliver(
-    @Body() deliverData: { jobId: number; userId: number; status: number },
+    @UserInfo('userId') userId: number,
+    @Body() deliverData: { jobId: number },
   ) {
-    return firstValueFrom(this.GeniusClient.send('createDeliver', deliverData));
+    return firstValueFrom(
+      this.GeniusClient.send('createDeliver', {
+        ...deliverData,
+        userId,
+      }),
+    );
   }
 
-  @Put('update')
+  @Post('update')
+  @RequireLogin()
   async updateDeliverStatus(
     @Body() deliverData: { deliverId: number; status: number },
   ) {
@@ -39,7 +40,7 @@ export class DeliverController {
     );
   }
 
-  @Delete('remove')
+  @Post('remove')
   async deleteDeliver(@Body() deliverData: { deliverId: number }) {
     return firstValueFrom(this.GeniusClient.send('deleteDeliver', deliverData));
   }

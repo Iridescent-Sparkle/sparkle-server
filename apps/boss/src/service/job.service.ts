@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobCollect } from 'apps/genius/src/entities/collect.entity';
+import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
 import { In, Repository } from 'typeorm';
 import { JobDetail } from '../entities/job.entity';
 import { JobBonus } from './../entities/bonus.entity';
@@ -13,6 +14,9 @@ export class JobService {
   @InjectRepository(JobCollect)
   private jobCollectRepository: Repository<JobCollect>;
 
+  @InjectRepository(JobDeliver)
+  private jobDelivertRepository: Repository<JobDeliver>;
+
   @InjectRepository(JobBonus)
   private jobBonusRepository: Repository<JobBonus>;
 
@@ -24,7 +28,7 @@ export class JobService {
   }: {
     userId: number;
     jobDetail: JobDetail;
-  }): Promise<JobDetail> {
+  }) {
     jobDetail.userId = userId;
 
     jobDetail.jobBonus = await this.jobBonusRepository.findBy({
@@ -34,7 +38,7 @@ export class JobService {
     return await this.jobDetailRepository.save(jobDetail);
   }
 
-  async findAll(): Promise<JobDetail[]> {
+  async findAll() {
     return await this.jobDetailRepository.find({
       relations: [
         'jobCategory',
@@ -46,20 +50,19 @@ export class JobService {
     });
   }
 
-  async findOne({ userId, jobId }: { userId: number; jobId: number }): Promise<
-    JobDetail & {
-      isCollected: boolean;
-      jobCollectId: number;
-    }
-  > {
+  async findOne({ userId, jobId }: { userId: number; jobId: number }) {
     const jobDetail = (await this.jobDetailRepository.findOne({
       where: {
         id: jobId,
       },
-      relations: ['jobBonus'],
+      relations: {
+        jobBonus: true,
+      },
     })) as JobDetail & {
       isCollected: boolean;
       jobCollectId: number;
+      jobDeliverStatus: number;
+      jobDeliverId: number;
     };
 
     const foundJobCollect = await this.jobCollectRepository.findOne({
@@ -76,16 +79,25 @@ export class JobService {
     } else {
       jobDetail.isCollected = false;
     }
+
+    const foundJobDeliver = await this.jobDelivertRepository.findOne({
+      where: {
+        jobId: jobId,
+        userId: userId,
+        isDelete: false,
+      },
+    });
+
+    if (foundJobDeliver) {
+      jobDetail.jobDeliverStatus = foundJobDeliver.status;
+      jobDetail.jobDeliverId = foundJobDeliver.id;
+    } else {
+      jobDetail.jobDeliverStatus = 0;
+    }
     return jobDetail;
   }
 
-  async update({
-    jobId,
-    jobDetail,
-  }: {
-    jobId: number;
-    jobDetail: JobDetail;
-  }): Promise<JobDetail> {
+  async update({ jobId, jobDetail }: { jobId: number; jobDetail: JobDetail }) {
     await this.jobDetailRepository.update(jobId, jobDetail);
     return await this.jobDetailRepository.findOne({
       where: {
@@ -94,24 +106,22 @@ export class JobService {
     });
   }
 
-  async remove({ jobId }: { jobId: number }): Promise<void> {
+  async remove({ jobId }: { jobId: number }) {
     await this.jobDetailRepository.delete(jobId);
+
+    return {
+      message: '删除成功',
+    };
   }
 
-  async search({ keyword }: { keyword: string }): Promise<JobDetail[]> {
+  async search({ keyword }: { keyword: string }) {
     return await this.jobDetailRepository
       .createQueryBuilder('jobDetail')
       .where('jobDetail.jobName LIKE :keyword', { keyword: `%${keyword}%` })
       .getMany();
   }
 
-  async paginate({
-    page,
-    take,
-  }: {
-    page: number;
-    take: number;
-  }): Promise<JobDetail[]> {
+  async paginate({ page, take }: { page: number; take: number }) {
     const skip = (page - 1) * take;
     return await this.jobDetailRepository
       .createQueryBuilder('jobDetail')

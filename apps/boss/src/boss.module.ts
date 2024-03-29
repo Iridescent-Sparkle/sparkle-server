@@ -31,6 +31,7 @@ import { JobService } from './service/job.service';
 import { LevelService } from './service/level.service';
 import { EducationController } from './controller/education.controller';
 import { JobCollect } from 'apps/genius/src/entities/collect.entity';
+import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { JobCollect } from 'apps/genius/src/entities/collect.entity';
       JobLevel,
       JobExperience,
       JobCollect,
+      JobDeliver,
     ]),
     WinstonModule.forRoot({
       level: 'debug',

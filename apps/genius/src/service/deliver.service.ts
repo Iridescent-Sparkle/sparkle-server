@@ -1,25 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JobDetail } from 'apps/boss/src/entities/job.entity';
-import { User } from 'apps/user/src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JobDeliver } from '../entities/deliver.entity';
 
 @Injectable()
 export class DeliverService {
-  @InjectRepository(JobDetail)
-  private jobDetailRepository: Repository<JobDetail>;
-
   @InjectRepository(JobDeliver)
   private jobDeliverRepository: Repository<JobDeliver>;
-
-  @InjectRepository(User)
-  private userRepository: Repository<User>;
 
   constructor() {}
 
   async findDeliverStatusByUserId({ userId }: { userId: number }) {
-    const deliverStatus = await this.jobDeliverRepository.find({
+    const jobDeliver = await this.jobDeliverRepository.find({
       where: {
         user: {
           id: userId,
@@ -30,28 +23,35 @@ export class DeliverService {
         job: true,
       },
     });
-    return deliverStatus.map((deliver) => deliver);
+    // status:0 未投递 1 已投递 2 已查看 3 已通过 4 已拒绝
+    return jobDeliver.map((deliver) => ({
+      ...deliver.job,
+      jobDeliverId: deliver.id,
+      jobDeliverStatus: deliver.status,
+    }));
   }
 
-  async createDeliver(deliverData: {
-    jobId: number;
-    userId: number;
-    status: number;
-  }): Promise<JobDeliver> {
-    const { jobId, userId, status } = deliverData;
+  async createDeliver(deliverData: { jobId: number; userId: number }) {
+    const { jobId, userId } = deliverData;
 
-    const job = await this.jobDetailRepository.findOne({
-      where: { id: jobId },
+    const foundJobCollect = await this.jobDeliverRepository.findOne({
+      where: {
+        userId,
+        jobId,
+        isDelete: false,
+      },
     });
 
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
-
+    if (foundJobCollect) {
+      throw new RpcException({
+        message: '已经投递该职位',
+        code: HttpStatus.BAD_REQUEST,
+      });
+    }
     const newDeliver = this.jobDeliverRepository.create({
-      job,
-      user,
-      status,
+      jobId,
+      userId,
+      status: 0,
     });
 
     return await this.jobDeliverRepository.save(newDeliver);
@@ -60,7 +60,7 @@ export class DeliverService {
   async updateDeliverStatus(deliverData: {
     deliverId: number;
     status: number;
-  }): Promise<JobDeliver> {
+  }) {
     const { deliverId, status: newStatus } = deliverData;
     const deliver = await this.jobDeliverRepository.findOne({
       where: {
@@ -69,13 +69,16 @@ export class DeliverService {
     });
 
     if (!deliver) {
-      throw new Error('Deliver not found');
+      throw new RpcException({
+        message: '未找到该投递信息',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
     deliver.status = newStatus;
     return await this.jobDeliverRepository.save(deliver);
   }
 
-  async deleteDeliver(deliverData: { deliverId: number }): Promise<void> {
+  async deleteDeliver(deliverData: { deliverId: number }) {
     const { deliverId } = deliverData;
 
     const deliver = await this.jobDeliverRepository.findOne({
@@ -85,10 +88,17 @@ export class DeliverService {
     });
 
     if (!deliver) {
-      throw new Error('Deliver not found');
+      throw new RpcException({
+        message: '未找到该投递信息',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
     await this.jobDeliverRepository.update(deliverId, {
       isDelete: true,
     });
+
+    return {
+      message: '删除成功',
+    };
   }
 }

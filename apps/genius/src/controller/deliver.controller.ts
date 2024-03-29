@@ -6,21 +6,17 @@ import { DeliverService } from '../service/deliver.service';
 export class DeliverController {
   constructor(private readonly deliverService: DeliverService) {}
 
-  @MessagePattern('FindDeliverStatusByUserId')
+  @MessagePattern('findDeliverStatusByUserId')
   async findDeliverStatusByUserId({ userId }: { userId: number }) {
     return this.deliverService.findDeliverStatusByUserId({ userId });
   }
 
-  @MessagePattern('CreateDeliver')
-  async createDeliver(deliverData: {
-    jobId: number;
-    userId: number;
-    status: number;
-  }) {
+  @MessagePattern('createDeliver')
+  async createDeliver(deliverData: { jobId: number; userId: number }) {
     return this.deliverService.createDeliver(deliverData);
   }
 
-  @MessagePattern('UpdateDeliverStatus')
+  @MessagePattern('updateDeliverStatus')
   async updateDeliverStatus(deliverData: {
     deliverId: number;
     status: number;
@@ -28,7 +24,7 @@ export class DeliverController {
     return this.deliverService.updateDeliverStatus(deliverData);
   }
 
-  @MessagePattern('DeleteDeliver')
+  @MessagePattern('deleteDeliver')
   async deleteDeliver(deliverData: { deliverId: number }) {
     return this.deliverService.deleteDeliver(deliverData);
   }

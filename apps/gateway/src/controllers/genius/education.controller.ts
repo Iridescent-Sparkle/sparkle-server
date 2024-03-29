@@ -1,15 +1,7 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Inject,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Education } from 'apps/genius/src/entities/education.entity';
+import { UserInfo } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
 
 @Controller('genius/education')
@@ -17,8 +9,8 @@ export class EducationController {
   @Inject('GENIUS_SERVICE')
   private GeniusClient: ClientProxy;
 
-  @Get('user/:userId')
-  async findEducationByUserId(@Param('userId') userId: number) {
+  @Get('user')
+  async findEducationByUserId(@UserInfo('userId') userId: number) {
     return firstValueFrom(
       this.GeniusClient.send('findEducationByUserId', userId),
     );
@@ -29,7 +21,7 @@ export class EducationController {
     return firstValueFrom(this.GeniusClient.send('createEducation', education));
   }
 
-  @Put('update')
+  @Post('update')
   async updateEducation(@Body() education: Education) {
     return firstValueFrom(this.GeniusClient.send('updateEducation', education));
   }
