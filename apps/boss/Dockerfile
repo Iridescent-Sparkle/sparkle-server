@@ -18,8 +18,6 @@ COPY --from=build-stage /app/package.json /app/package.json
 
 COPY --from=build-stage /app/env/.production.env /app/apps/boss/.production.env
 
-COPY --from=build-stage /app/proto /app/apps/boss/proto
-
 WORKDIR /app
 
 RUN npm config set registry https://registry.npmmirror.com/

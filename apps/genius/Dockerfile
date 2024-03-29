@@ -18,8 +18,6 @@ COPY --from=build-stage /app/package.json /app/package.json
 
 COPY --from=build-stage /app/env/.production.env /app/apps/genius/.production.env
 
-COPY --from=build-stage /app/proto /app/apps/genius/proto
-
 WORKDIR /app
 
 RUN npm config set registry https://registry.npmmirror.com/
