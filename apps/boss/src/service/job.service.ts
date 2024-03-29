@@ -52,6 +52,7 @@ export class JobService {
       where: {
         id: jobId,
       },
+      relations: ['jobBonus'],
     });
   }
 

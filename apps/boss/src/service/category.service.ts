@@ -124,6 +124,7 @@ export class CategoryService {
     }
     return {};
   }
+
   async findAllJobCategory(): Promise<JobCategory[]> {
     return await this.jobCategoryRepository.find();
   }
@@ -133,7 +134,7 @@ export class CategoryService {
   }: {
     categoryId: number;
   }): Promise<JobDetail[]> {
-    if (categoryId == 0) {
+    if (categoryId == 1) {
       return await this.jobDetailRepository.find();
     }
 

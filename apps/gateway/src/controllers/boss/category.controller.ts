@@ -25,7 +25,7 @@ export class CategoryController {
 
   @Get('job/:id')
   @RequireLogin()
-  findJobByCategory(@Param('categoryId') categoryId: number) {
+  findJobByCategory(@Param('id') categoryId: number) {
     return firstValueFrom(
       this.BossClient.send('findJobByCategory', { categoryId }),
     );

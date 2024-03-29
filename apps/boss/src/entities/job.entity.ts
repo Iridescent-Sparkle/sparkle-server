@@ -53,8 +53,7 @@ export class JobDetail {
 
   @Column({
     length: 50,
-    comment: '地址',
-    nullable: true,
+    comment: '工作地址',
   })
   address: string;
 
