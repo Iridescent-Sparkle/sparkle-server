@@ -49,6 +49,7 @@ export class JobService {
   async findOne({ userId, jobId }: { userId: number; jobId: number }): Promise<
     JobDetail & {
       isCollected: boolean;
+      jobCollectId: number;
     }
   > {
     const jobDetail = (await this.jobDetailRepository.findOne({
@@ -58,17 +59,20 @@ export class JobService {
       relations: ['jobBonus'],
     })) as JobDetail & {
       isCollected: boolean;
+      jobCollectId: number;
     };
 
-    const foundJobDeliver = await this.jobCollectRepository.findOne({
+    const foundJobCollect = await this.jobCollectRepository.findOne({
       where: {
         jobId: jobId,
         userId: userId,
+        isDelete: false,
       },
     });
 
-    if (foundJobDeliver) {
+    if (foundJobCollect) {
       jobDetail.isCollected = true;
+      jobDetail.jobCollectId = foundJobCollect.id;
     } else {
       jobDetail.isCollected = false;
     }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JobCollect } from '../entities/collect.entity';
 import { RpcException } from '@nestjs/microservices';
+import { JobDetail } from 'apps/boss/src/entities/job.entity';
 
 @Injectable()
 export class FavoriteService {
@@ -11,8 +12,13 @@ export class FavoriteService {
 
   constructor() {}
 
-  async findFavoritesByUserId(userId: number): Promise<JobCollect[]> {
-    return await this.jobCollectRepository.find({
+  async findFavoritesByUserId(userId: number): Promise<
+    (JobDetail & {
+      isCollected: boolean;
+      jobCollectId: number;
+    })[]
+  > {
+    const jobCollect = await this.jobCollectRepository.find({
       where: {
         user: {
           id: userId,
@@ -23,6 +29,11 @@ export class FavoriteService {
         job: true,
       },
     });
+    return jobCollect.map((item) => ({
+      ...item.job,
+      jobCollectId: item.id,
+      isCollected: true,
+    }));
   }
 
   async addJobToCollection(jobData: {
@@ -34,6 +45,7 @@ export class FavoriteService {
       where: {
         userId,
         jobId,
+        isDelete: false,
       },
     });
 

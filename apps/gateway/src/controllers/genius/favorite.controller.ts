@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
@@ -30,13 +30,12 @@ export class FavoriteController {
     );
   }
 
-  @Delete('remove')
+  @Post('remove')
   @RequireLogin()
   async removeJobFromCollection(@Body() jobData: { favoriteId: number }) {
+    console.log(jobData);
     return firstValueFrom(
-      this.GeniusClient.send('removeJobFromCollection', {
-        favoriteId: jobData.favoriteId,
-      }),
+      this.GeniusClient.send('removeJobFromCollection', jobData),
     );
   }
 }
