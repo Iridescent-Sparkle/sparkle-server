@@ -42,6 +42,14 @@ import { VolunteerController } from './controllers/genius/volunteer.controller';
           port: 3003,
         },
       },
+      {
+        name: 'ADMIN_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+          port: 3004,
+        },
+      },
     ]),
     ClientsModule.registerAsync([
       {

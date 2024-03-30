@@ -1,20 +1,21 @@
+import { Module } from '@nestjs/common';
+import { AdminController } from './admin.controller';
+import { AdminService } from './admin.service';
 import { ConfigModule } from '@app/config';
 import { DbModule } from '@app/db';
-import { EmailModule } from '@app/email';
-import { ImModule } from '@app/im';
-import { JwtModule } from '@app/jwt';
-import { RedisModule } from '@app/redis';
-import { SmsModule } from '@app/sms';
-import { WinstonModule } from '@app/winston';
-import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as chalk from 'chalk';
-import { format, transports } from 'winston';
+import { Permission } from './entities/permission.entity';
+import { Role } from './entities/role.entity';
 import { User } from './entities/user.entity';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { Company } from 'apps/boss/src/entities/company.entity';
+import { RedisModule } from '@app/redis';
+import { JwtModule } from '@app/jwt';
+import { WinstonModule } from '@app/winston';
+import { format, transports } from 'winston';
+import * as chalk from 'chalk';
+import { EmailModule } from '@app/email';
+import { SmsModule } from '@app/sms';
+import { HttpModule } from '@nestjs/axios';
+import { ImModule } from '@app/im';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { Company } from 'apps/boss/src/entities/company.entity';
     JwtModule,
     EmailModule,
     SmsModule,
-    TypeOrmModule.forFeature([User, Company]),
+    TypeOrmModule.forFeature([User, Role, Permission]),
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),
@@ -49,7 +50,7 @@ import { Company } from 'apps/boss/src/entities/company.entity';
       ],
     }),
   ],
-  controllers: [UserController],
-  providers: [UserService],
+  controllers: [AdminController],
+  providers: [AdminService],
 })
-export class UserModule {}
+export class AdminModule {}

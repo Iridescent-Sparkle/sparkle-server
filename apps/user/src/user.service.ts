@@ -11,8 +11,6 @@ import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { Permission } from './entities/permission.entity';
-import { Role } from './entities/role.entity';
 import { User } from './entities/user.entity';
 import { md5 } from './utils/index';
 
@@ -22,12 +20,6 @@ export class UserService {
 
   @InjectRepository(User)
   private userRepository: Repository<User>;
-
-  @InjectRepository(Role)
-  private roleRepository: Repository<Role>;
-
-  @InjectRepository(Permission)
-  private permissionRepository: Repository<Permission>;
 
   @Inject(RedisService)
   private redisService: RedisService;
@@ -121,11 +113,10 @@ export class UserService {
     }
   }
 
-  async login(loginUserDto: LoginUserDto, isAdmin: boolean) {
+  async login(loginUserDto: LoginUserDto) {
     const foundUser = await this.userRepository.findOne({
       where: {
         username: loginUserDto.username,
-        isAdmin,
       },
       relations: ['roles', 'roles.permissions'],
     });
@@ -143,15 +134,6 @@ export class UserService {
         {
           userId: foundUser.id,
           username: foundUser.username,
-          roles: foundUser.roles.map((item) => item.name),
-          permissions: foundUser.roles.reduce((arr, item) => {
-            item.permissions.forEach((permission) => {
-              if (arr.indexOf(permission) === -1) {
-                arr.push(permission);
-              }
-            });
-            return arr;
-          }, []),
         },
         {
           expiresIn:
@@ -212,37 +194,11 @@ export class UserService {
     });
   }
 
-  async findUserById(userId: number, isAdmin: boolean) {
-    const foundUser = await this.userRepository.findOne({
+  async findUserById(userId: number) {
+    return await this.userRepository.findOne({
       where: {
         id: userId,
-        isAdmin,
       },
-      relations: ['roles', 'roles.permissions'],
     });
-
-    return {
-      id: foundUser.id,
-      username: foundUser.username,
-      nickName: foundUser.nickName,
-      updateTime: foundUser.updateTime.getTime(),
-      avatar: foundUser.avatar,
-      contactIdToB: foundUser.contactIdToB,
-      contactIdToC: foundUser.contactIdToC,
-      contactPassword: foundUser.contactPassword,
-      email: foundUser.email,
-      createTime: foundUser.createTime.getTime(),
-      isFrozen: foundUser.isFrozen,
-      isAdmin: foundUser.isAdmin,
-      roles: foundUser.roles.map((item) => item.name),
-      permissions: foundUser.roles.reduce((arr, item) => {
-        item.permissions.forEach((permission) => {
-          if (arr.indexOf(permission) === -1) {
-            arr.push(permission);
-          }
-        });
-        return arr;
-      }, []),
-    };
   }
 }

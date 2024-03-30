@@ -10,7 +10,6 @@ service UserService {
   rpc  Login(LoginRequest) returns (LoginResponse);
   rpc  AdminLogin(LoginRequest) returns (LoginResponse);
   rpc  Refresh(RefreshRequest) returns (RefreshResponse);
-  rpc  AdminRefresh(RefreshRequest) returns (RefreshResponse);
   rpc  Info(InfoRequest) returns (UserInfo);
   rpc  ResetPassword(ResetPasswordRequest) returns (Empty);
   rpc  ValidateSmsCode(ValidateSmsCodeRequest) returns (Empty);

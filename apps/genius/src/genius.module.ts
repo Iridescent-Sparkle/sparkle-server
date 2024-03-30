@@ -9,23 +9,26 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JobCategory } from 'apps/boss/src/entities/category.entity';
 import { JobDetail } from 'apps/boss/src/entities/job.entity';
-import { Permission } from 'apps/user/src/entities/permission.entity';
-import { Role } from 'apps/user/src/entities/role.entity';
 import { User } from 'apps/user/src/entities/user.entity';
 import * as chalk from 'chalk';
 import { format, transports } from 'winston';
 import { DeliverController } from './controller/deliver.controller';
+import { FavoriteController } from './controller/favorite.controller';
 import { JobCollect } from './entities/collect.entity';
 import { JobDeliver } from './entities/deliver.entity';
-import { FavoriteController } from './controller/favorite.controller';
-import { DeliverService } from './service/deliver.service';
-import { FavoriteService } from './service/favorite.service';
 import { Education } from './entities/education.entity';
 import { Experience } from './entities/experience.entity';
 import { Profile } from './entities/profile.entity';
 import { Project } from './entities/project.entity';
 import { Volunteer } from './entities/volunteer.entity';
+import { DeliverService } from './service/deliver.service';
+import { FavoriteService } from './service/favorite.service';
 
+import { JobBonus } from 'apps/boss/src/entities/bonus.entity';
+import { JobEducation } from 'apps/boss/src/entities/education.entity';
+import { JobExperience } from 'apps/boss/src/entities/experience.entity';
+import { JobLevel } from 'apps/boss/src/entities/level.entity';
+import { EducationController } from './controller/education.controller';
 import { ExperienceController } from './controller/experience.controller';
 import { ProfileController } from './controller/profile.controller';
 import { ProjectController } from './controller/project.controller';
@@ -35,11 +38,7 @@ import { ExperienceService } from './service/experience.service';
 import { ProfileService } from './service/profile.service';
 import { ProjectService } from './service/project.service';
 import { VolunteerService } from './service/volunteer.service';
-import { JobBonus } from 'apps/boss/src/entities/bonus.entity';
-import { JobExperience } from 'apps/boss/src/entities/experience.entity';
-import { JobLevel } from 'apps/boss/src/entities/level.entity';
-import { JobEducation } from 'apps/boss/src/entities/education.entity';
-import { EducationController } from './controller/education.controller';
+import { Company } from 'apps/boss/src/entities/company.entity';
 
 @Module({
   imports: [
@@ -51,8 +50,7 @@ import { EducationController } from './controller/education.controller';
     SmsModule,
     TypeOrmModule.forFeature([
       User,
-      Role,
-      Permission,
+      Company,
       JobCollect,
       JobDeliver,
       JobDetail,

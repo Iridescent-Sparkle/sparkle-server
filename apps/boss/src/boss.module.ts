@@ -7,18 +7,20 @@ import { SmsModule } from '@app/sms';
 import { WinstonModule } from '@app/winston';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Permission } from 'apps/user/src/entities/permission.entity';
-import { Role } from 'apps/user/src/entities/role.entity';
+import { JobCollect } from 'apps/genius/src/entities/collect.entity';
+import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
 import { User } from 'apps/user/src/entities/user.entity';
 import * as chalk from 'chalk';
 import { format, transports } from 'winston';
 import { BonusController } from './controller/bonus.controller';
 import { CategoryController } from './controller/category.controller';
+import { EducationController } from './controller/education.controller';
 import { ExperienceController } from './controller/experience.controller';
 import { JobController } from './controller/job.controller';
 import { LevelController } from './controller/level.controller';
 import { JobBonus } from './entities/bonus.entity';
 import { JobCategory } from './entities/category.entity';
+import { Company } from './entities/company.entity';
 import { JobEducation } from './entities/education.entity';
 import { JobExperience } from './entities/experience.entity';
 import { JobDetail } from './entities/job.entity';
@@ -29,9 +31,6 @@ import { EducationService } from './service/education.service';
 import { ExperienceService } from './service/experience.service';
 import { JobService } from './service/job.service';
 import { LevelService } from './service/level.service';
-import { EducationController } from './controller/education.controller';
-import { JobCollect } from 'apps/genius/src/entities/collect.entity';
-import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
 
 @Module({
   imports: [
@@ -43,8 +42,7 @@ import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
     SmsModule,
     TypeOrmModule.forFeature([
       User,
-      Role,
-      Permission,
+      Company,
       JobDetail,
       JobCategory,
       JobBonus,

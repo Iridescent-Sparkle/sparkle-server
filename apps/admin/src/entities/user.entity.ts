@@ -2,16 +2,16 @@
  * @Date: 2024-01-11 12:54:59
  * @Description: User表
  */
-import { Company } from 'apps/boss/src/entities/company.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
-  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Role } from './role.entity';
 
 @Entity({
   name: 'users',
@@ -54,34 +54,6 @@ export class User {
   email: string;
 
   @Column({
-    length: 50,
-    comment: '联系ID老板',
-    nullable: true,
-  })
-  contactIdToB: string;
-
-  @Column({
-    length: 50,
-    comment: '联系ID牛人',
-    nullable: true,
-  })
-  contactIdToC: string;
-
-  @Column({
-    length: 50,
-    comment: '联系密码',
-    nullable: true,
-  })
-  contactPassword: string;
-
-  @ManyToOne(() => Company)
-  company: Company;
-
-  @Column()
-  @RelationId((user: User) => user.company)
-  companyId: number;
-
-  @Column({
     default: false,
     comment: '是否冻结',
   })
@@ -92,4 +64,10 @@ export class User {
 
   @UpdateDateColumn()
   updateTime: Date;
+
+  @ManyToMany(() => Role)
+  @JoinTable({
+    name: 'user_roles',
+  })
+  roles: Role[];
 }

@@ -22,17 +22,6 @@ export class Profile {
   user: User;
 
   @Column({
-    length: 50,
-    comment: '头像',
-  })
-  avatar: string;
-
-  @Column({
-    comment: '昵称',
-  })
-  nickname: string;
-
-  @Column({
     comment: '职业',
   })
   occupation: string;
@@ -66,12 +55,6 @@ export class Profile {
     comment: '个人总结',
   })
   summary: string;
-
-  @Column({
-    type: 'json',
-    comment: '技能',
-  })
-  skills: string[];
 
   @Column({
     comment: '简历pdf',
