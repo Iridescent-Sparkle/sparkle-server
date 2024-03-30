@@ -1,4 +1,4 @@
-import { Body, Controller, Param } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { Profile } from '../entities/profile.entity';
 import { ProfileService } from '../service/profile.service';
@@ -8,22 +8,25 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @MessagePattern('findProfile')
-  async findProfile(@Param('userId') userId: number) {
+  async findProfile(userId: number) {
     return this.profileService.findProfile(userId);
   }
 
   @MessagePattern('createProfile')
-  async createProfile(@Body() profile: Profile) {
+  async createProfile(profile: Profile) {
     return this.profileService.createProfile(profile);
   }
 
   @MessagePattern('updateProfile')
-  async updateProfile(@Body() profile: Profile) {
-    return this.profileService.updateProfile(profile);
+  async updateProfile(profileData: {
+    userId: number;
+    profile: Profile & { nickName: string; avatar: string };
+  }) {
+    return this.profileService.updateProfile(profileData);
   }
 
   @MessagePattern('deleteProfile')
-  async deleteProfile(@Body() profile: Profile) {
+  async deleteProfile(profile: Profile) {
     return this.profileService.deleteProfile(profile.id);
   }
 }

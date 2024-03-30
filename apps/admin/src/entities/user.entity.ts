@@ -16,7 +16,7 @@ import { Role } from './role.entity';
 @Entity({
   name: 'admin_users',
 })
-export class User {
+export class AdminUser {
   @PrimaryGeneratedColumn()
   id: number;
 

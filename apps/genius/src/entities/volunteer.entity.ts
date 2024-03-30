@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -18,6 +19,10 @@ export class Volunteer {
 
   @ManyToOne(() => User)
   user: User;
+
+  @RelationId((volunteer: Volunteer) => volunteer.user)
+  @Column()
+  userId: number;
 
   @Column({
     comment: '项目名称',

@@ -6,7 +6,7 @@ import { DbModule } from '@app/db';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Permission } from './entities/permission.entity';
 import { Role } from './entities/role.entity';
-import { User } from './entities/user.entity';
+import { AdminUser } from './entities/user.entity';
 import { RedisModule } from '@app/redis';
 import { JwtModule } from '@app/jwt';
 import { WinstonModule } from '@app/winston';
@@ -27,7 +27,7 @@ import { ImModule } from '@app/im';
     JwtModule,
     EmailModule,
     SmsModule,
-    TypeOrmModule.forFeature([User, Role, Permission]),
+    TypeOrmModule.forFeature([AdminUser, Role, Permission]),
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),

@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -18,6 +19,10 @@ export class Education {
 
   @ManyToOne(() => User)
   user: User;
+
+  @RelationId((education: Education) => education.user)
+  @Column()
+  userId: number;
 
   @Column({
     comment: '昵称',

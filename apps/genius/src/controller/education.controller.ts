@@ -1,4 +1,4 @@
-import { Body, Controller, Param } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { Education } from '../entities/education.entity';
 import { EducationService } from '../service/education.service';
@@ -8,22 +8,22 @@ export class EducationController {
   constructor(private readonly educationService: EducationService) {}
 
   @MessagePattern('findEducationByUserId')
-  async findEducationByUserId(@Param('userId') userId: number) {
+  async findEducationByUserId(userId: number) {
     return this.educationService.findEducationByUserId(userId);
   }
 
   @MessagePattern('createEducation')
-  async createEducation(@Body() education: Education) {
+  async createEducation(education: Education) {
     return this.educationService.createEducation(education);
   }
 
   @MessagePattern('updateEducation')
-  async updateEducation(@Body() education: Education) {
+  async updateEducation(education: Education) {
     return this.educationService.updateEducation(education);
   }
 
   @MessagePattern('deleteEducation')
-  async deleteEducation(@Body() education: Education) {
+  async deleteEducation(education: Education) {
     return this.educationService.deleteEducation(education.id);
   }
 }

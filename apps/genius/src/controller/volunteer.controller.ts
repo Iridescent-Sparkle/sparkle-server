@@ -1,4 +1,4 @@
-import { Body, Controller, Param } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { Volunteer } from '../entities/volunteer.entity';
 import { VolunteerService } from '../service/volunteer.service';
@@ -8,22 +8,22 @@ export class VolunteerController {
   constructor(private readonly volunteerService: VolunteerService) {}
 
   @MessagePattern('findVolunteer')
-  async findVolunteer(@Param('userId') userId: number) {
+  async findVolunteer(userId: number) {
     return this.volunteerService.findVolunteer(userId);
   }
 
   @MessagePattern('createVolunteer')
-  async createVolunteer(@Body() volunteer: Volunteer) {
+  async createVolunteer(volunteer: Volunteer) {
     return this.volunteerService.createVolunteer(volunteer);
   }
 
   @MessagePattern('updateVolunteer')
-  async updateVolunteer(@Body() volunteer: Volunteer) {
+  async updateVolunteer(volunteer: Volunteer) {
     return this.volunteerService.updateVolunteer(volunteer);
   }
 
   @MessagePattern('deleteVolunteer')
-  async deleteVolunteer(@Body() volunteer: Volunteer) {
+  async deleteVolunteer(volunteer: Volunteer) {
     return this.volunteerService.deleteVolunteer(volunteer.id);
   }
 }
