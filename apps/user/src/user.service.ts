@@ -5,7 +5,7 @@ import { SmsService } from '@app/sms';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { RpcException } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -13,9 +13,14 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { User } from './entities/user.entity';
 import { md5 } from './utils/index';
+import { Profile } from 'apps/genius/src/entities/profile.entity';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
+  @Inject('GENIUS_SERVICE')
+  private GeniusClient: ClientProxy;
+
   private logger = new Logger();
 
   @InjectRepository(User)
@@ -53,7 +58,7 @@ export class UserService {
   }
 
   async smsCode(username: string) {
-    // const code = Math.random().toString().slice(2, 6);
+    const code = Math.random().toString().slice(2, 6);
 
     await this.redisService.set(`smsCode_${username}`, '1234', 5 * 60);
     // await this.smsService.sendSms({
@@ -92,6 +97,10 @@ export class UserService {
         roleType: 'C',
       });
 
+      const profile = await firstValueFrom(
+        this.GeniusClient.send('createProfile', new Profile()),
+      );
+
       const newUser = new User();
       newUser.username = registerUserDto.username;
       newUser.password = md5(registerUserDto.password);
@@ -99,6 +108,7 @@ export class UserService {
       newUser.nickName = '用户' + Math.random().toString().slice(2, 6);
       newUser.contactPassword = registerUserDto.username + '_password';
       newUser.contactIdToB = registerUserDto.username + '_sparkle' + `_C`;
+      newUser.profileId = profile.id;
 
       await this.userRepository.save(newUser);
 

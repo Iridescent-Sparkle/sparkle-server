@@ -5,7 +5,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-  name: 'permissions',
+  name: 'admin_permissions',
 })
 export class Permission {
   @PrimaryGeneratedColumn()

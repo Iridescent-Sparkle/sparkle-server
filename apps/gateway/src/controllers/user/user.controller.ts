@@ -61,13 +61,6 @@ export class UserController {
     });
   }
 
-  @Get('admin/refresh')
-  async adminRefresh(@Query('refreshToken') refreshToken: string) {
-    return await this.userService.adminRefresh({
-      refreshToken,
-    });
-  }
-
   @Get('info')
   @RequireLogin()
   async info(@UserInfo('userId') userId: number) {

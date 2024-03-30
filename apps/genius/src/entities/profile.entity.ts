@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -18,46 +17,53 @@ export class Profile {
   id: number;
 
   @OneToOne(() => User)
-  @JoinColumn()
   user: User;
 
   @Column({
     comment: '职业',
+    default: '',
   })
   occupation: string;
 
   @Column({
     comment: '地址',
+    default: '',
   })
   address: string;
 
   @Column({
-    comment: '电话',
+    comment: '联系电话',
+    default: '',
   })
   phone: string;
 
   @Column({
     comment: '邮箱',
+    default: '',
   })
   email: string;
 
   @Column({
     comment: '最小期望薪资',
+    default: '',
   })
   minSalary: string;
 
   @Column({
     comment: '最大期望薪资',
+    default: '',
   })
   maxSalary: string;
 
   @Column({
     comment: '个人总结',
+    default: '',
   })
   summary: string;
 
   @Column({
     comment: '简历pdf',
+    default: '',
   })
   resume: string;
 

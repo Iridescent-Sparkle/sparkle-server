@@ -4,7 +4,7 @@ import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
 
-@Controller('profile')
+@Controller('genius/profile')
 export class ProfileController {
   @Inject('GENIUS_SERVICE')
   private GeniusClient: ClientProxy;

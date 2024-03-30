@@ -4,7 +4,7 @@ import { Project } from 'apps/genius/src/entities/project.entity';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
 
-@Controller('project')
+@Controller('genius/project')
 export class ProjectController {
   @Inject('GENIUS_SERVICE')
   private GeniusClient: ClientProxy;

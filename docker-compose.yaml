@@ -14,9 +14,6 @@ services:
       - redis-container
       - rabititmq-container
       - etcd-container
-      - nest-user
-      - nest-boss
-      - nest-genius
     ports:
       - 3000:3000
     networks:

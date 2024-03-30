@@ -14,7 +14,7 @@ import {
 import { Role } from './role.entity';
 
 @Entity({
-  name: 'users',
+  name: 'admin_users',
 })
 export class User {
   @PrimaryGeneratedColumn()
@@ -67,7 +67,7 @@ export class User {
 
   @ManyToMany(() => Role)
   @JoinTable({
-    name: 'user_roles',
+    name: 'admin_user_roles',
   })
   roles: Role[];
 }

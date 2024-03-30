@@ -12,7 +12,7 @@ import {
 import { Permission } from './permission.entity';
 
 @Entity({
-  name: 'roles',
+  name: 'admin_roles',
 })
 export class Role {
   @PrimaryGeneratedColumn()
@@ -26,7 +26,7 @@ export class Role {
 
   @ManyToMany(() => Permission)
   @JoinTable({
-    name: 'role_permissions',
+    name: 'admin_role_permissions',
   })
   permissions: Permission[];
 }

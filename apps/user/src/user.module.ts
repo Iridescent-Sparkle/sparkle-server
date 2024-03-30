@@ -15,6 +15,8 @@ import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { Company } from 'apps/boss/src/entities/company.entity';
+import { Profile } from 'apps/genius/src/entities/profile.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -26,7 +28,17 @@ import { Company } from 'apps/boss/src/entities/company.entity';
     JwtModule,
     EmailModule,
     SmsModule,
-    TypeOrmModule.forFeature([User, Company]),
+    TypeOrmModule.forFeature([User, Company, Profile]),
+    ClientsModule.register([
+      {
+        name: 'GENIUS_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+          port: 3003,
+        },
+      },
+    ]),
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),

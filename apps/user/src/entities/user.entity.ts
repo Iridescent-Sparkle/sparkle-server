@@ -3,11 +3,14 @@
  * @Description: User表
  */
 import { Company } from 'apps/boss/src/entities/company.entity';
+import { Profile } from 'apps/genius/src/entities/profile.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   RelationId,
   UpdateDateColumn,
@@ -77,9 +80,19 @@ export class User {
   @ManyToOne(() => Company)
   company: Company;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @RelationId((user: User) => user.company)
   companyId: number;
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile;
+
+  @Column()
+  @RelationId((user: User) => user.profile)
+  profileId: number;
 
   @Column({
     default: false,

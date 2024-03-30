@@ -31,6 +31,7 @@ import { EducationService } from './service/education.service';
 import { ExperienceService } from './service/experience.service';
 import { JobService } from './service/job.service';
 import { LevelService } from './service/level.service';
+import { Profile } from 'apps/genius/src/entities/profile.entity';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { LevelService } from './service/level.service';
     TypeOrmModule.forFeature([
       User,
       Company,
+      Profile,
       JobDetail,
       JobCategory,
       JobBonus,
