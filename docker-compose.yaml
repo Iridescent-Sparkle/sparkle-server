@@ -72,6 +72,24 @@ services:
       - "3003:3003"
     networks:
       - common-network
+  nest-admin:
+    image: registry.cn-chengdu.aliyuncs.com/sparkle_server/admin:latest
+    secrets:
+      - my_auth
+    build:
+      context: ./
+      dockerfile: ./apps/admin/Dockerfile
+    environment:
+     NODE_ENV: production
+    depends_on:
+       - mysql-container
+       - redis-container
+       - rabititmq-container
+       - etcd-container
+    ports:
+      - "3004:3004"
+    networks:
+      - common-network    
   mysql-container:
     image: mysql:latest
     ports:
