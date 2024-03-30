@@ -57,6 +57,7 @@ export class JobService {
       },
       relations: {
         jobBonus: true,
+        user: true,
       },
     })) as JobDetail & {
       isCollected: boolean;

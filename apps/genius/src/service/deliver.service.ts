@@ -51,7 +51,7 @@ export class DeliverService {
     const newDeliver = this.jobDeliverRepository.create({
       jobId,
       userId,
-      status: 0,
+      status: 1,
     });
 
     return await this.jobDeliverRepository.save(newDeliver);

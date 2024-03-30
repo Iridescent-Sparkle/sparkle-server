@@ -8,13 +8,7 @@ export class JobController {
   constructor(private readonly jobService: JobService) {}
 
   @MessagePattern('create')
-  create({
-    userId,
-    jobDetail,
-  }: {
-    userId: number;
-    jobDetail: JobDetail;
-  }): Promise<JobDetail> {
+  create({ userId, jobDetail }: { userId: number; jobDetail: JobDetail }) {
     return this.jobService.create({
       userId,
       jobDetail,
@@ -22,16 +16,12 @@ export class JobController {
   }
 
   @MessagePattern('findAll')
-  findAll(): Promise<JobDetail[]> {
+  findAll() {
     return this.jobService.findAll();
   }
 
   @MessagePattern('findOne')
-  findOne({ userId, jobId }: { userId: number; jobId: number }): Promise<
-    JobDetail & {
-      isCollected: boolean;
-    }
-  > {
+  findOne({ userId, jobId }: { userId: number; jobId: number }) {
     return this.jobService.findOne({
       jobId,
       userId,
@@ -39,13 +29,7 @@ export class JobController {
   }
 
   @MessagePattern('update')
-  update({
-    jobId,
-    jobDetail,
-  }: {
-    jobId: number;
-    jobDetail: JobDetail;
-  }): Promise<JobDetail> {
+  update({ jobId, jobDetail }: { jobId: number; jobDetail: JobDetail }) {
     return this.jobService.update({
       jobId,
       jobDetail,
@@ -53,27 +37,21 @@ export class JobController {
   }
 
   @MessagePattern('remove')
-  remove({ jobId }: { jobId: number }): Promise<void> {
+  remove({ jobId }: { jobId: number }) {
     return this.jobService.remove({
       jobId,
     });
   }
 
   @MessagePattern('search')
-  search({ keyword }: { keyword: string }): Promise<JobDetail[]> {
+  search({ keyword }: { keyword: string }) {
     return this.jobService.search({
       keyword,
     });
   }
 
   @MessagePattern('paginate')
-  paginate({
-    page,
-    take,
-  }: {
-    page: number;
-    take: number;
-  }): Promise<JobDetail[]> {
+  paginate({ page, take }: { page: number; take: number }) {
     return this.jobService.paginate({
       page,
       take,
