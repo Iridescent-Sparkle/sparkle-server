@@ -19,7 +19,7 @@ export class ProfileController {
   @RequireLogin()
   async updateProfile(
     @UserInfo('userId') userId: number,
-    @Body() profile: Profile & { nickName: string; avatar: string },
+    @Body() profile: Profile & { nickname: string; avatar: string },
   ) {
     return firstValueFrom(
       this.GeniusClient.send('updateProfile', {

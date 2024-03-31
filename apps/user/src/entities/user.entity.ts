@@ -36,11 +36,10 @@ export class User {
   password: string;
 
   @Column({
-    name: 'nick_name',
     length: 50,
     comment: '昵称',
   })
-  nickName: string;
+  nickname: string;
 
   @Column({
     length: 50,
@@ -48,6 +47,13 @@ export class User {
     nullable: true,
   })
   avatar: string;
+
+  @Column({
+    length: 50,
+    comment: '职业',
+    nullable: true,
+  })
+  occupation: string;
 
   @Column({
     length: 50,

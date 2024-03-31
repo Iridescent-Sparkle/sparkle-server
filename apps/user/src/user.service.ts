@@ -109,10 +109,12 @@ export class UserService {
       newUser.username = registerUserDto.username;
       newUser.password = md5(registerUserDto.password);
       newUser.username = registerUserDto.username;
-      newUser.nickName = '用户' + Math.random().toString().slice(2, 6);
+      newUser.nickname = '用户' + Math.random().toString().slice(2, 6);
       newUser.contactPassword = registerUserDto.username + '_password';
       newUser.contactIdToB = registerUserDto.username + '_sparkle' + `_C`;
       newUser.profileId = profile.id;
+      newUser.avatar =
+        'https://sparkle-cdn.oss-cn-chengdu.aliyuncs.com/sparkle-mobile/stars.png';
 
       await this.userRepository.save(newUser);
 
@@ -213,6 +215,11 @@ export class UserService {
         id: userId,
       },
     });
+  }
+
+  async update(user: User) {
+    console.log(user);
+    return await this.userRepository.update(user.id, user);
   }
 
   async getStsToken() {

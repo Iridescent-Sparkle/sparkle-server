@@ -23,7 +23,7 @@ export class ProfileService {
       relations: ['user'],
     });
     const res = {
-      nickName: profile.user.nickName,
+      nickname: profile.user.nickname,
       avatar: profile.user.avatar,
       ...profile,
     };
@@ -40,11 +40,11 @@ export class ProfileService {
     profile,
   }: {
     userId: number;
-    profile: Profile & { nickName: string; avatar: string };
+    profile: Profile & { nickname: string; avatar: string };
   }) {
-    if (profile.nickName || profile.avatar) {
+    if (profile.nickname || profile.avatar) {
       await this.userRepository.update(userId, {
-        nickName: profile.nickName,
+        nickname: profile.nickname,
         avatar: profile.avatar,
       });
     }

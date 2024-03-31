@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package user;
 
 service UserService {
@@ -12,11 +14,30 @@ service UserService {
   rpc  Refresh(RefreshRequest) returns (RefreshResponse);
   rpc  ResetPassword(ResetPasswordRequest) returns (Empty);
   rpc  ValidateSmsCode(ValidateSmsCodeRequest) returns (Empty);
-  rpc  Info(InfoRequest) returns (UserInfo);
+  rpc  Info(InfoRequest) returns (User);
+  rpc  Update(UpdateRequest) returns (User);
   rpc  GetStsToken(Empty) returns (GetStsTokenResponse);
 }
 
 message Empty {}
+
+message User {
+  int32 id = 1;
+  string username = 2;
+  string password = 3;
+  string nickname = 4;
+  string avatar = 5;
+  string occupation = 6;
+  string email = 7;
+  string contactIdToB = 8;
+  string contactIdToC = 9;
+  string contactPassword = 10;
+  int32 companyId = 11;
+  int32 profileId = 12;
+  bool isFrozen = 13;
+  google.protobuf.Timestamp createTime = 14;
+  google.protobuf.Timestamp updateTime = 15;
+}
 
 message CaptchaRequest {
   string address = 1;
@@ -47,22 +68,6 @@ message RegisterReponse {
 message LoginRequest {
   string username = 1;
   string password = 2;
-}
-
-message UserInfo {
-  int32 id = 1;
-  string username = 2;
-  string password = 3;
-  string nickName = 4;
-  string avatar = 5;
-  string email = 6;
-  string contactIdToB = 7;
-  string contactIdToC = 8;
-  string contactPassword = 9;
-  bool isFrozen = 10;
-  bool isAdmin = 11;
-  string createTime = 12;
-  string updateTime = 13;
 }
 
 message LoginResponse {
@@ -98,4 +103,11 @@ message GetStsTokenResponse {
   string accessKeySecret = 2;
   string expiration = 3;
   string securityToken = 4;
+}
+
+message UpdateRequest {
+  int32 id = 1;
+  string nickname = 2;
+  string avatar = 3;
+  string occupation = 4;
 }

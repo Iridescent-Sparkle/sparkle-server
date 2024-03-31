@@ -20,7 +20,7 @@ export class ProfileController {
   @MessagePattern('updateProfile')
   async updateProfile(profileData: {
     userId: number;
-    profile: Profile & { nickName: string; avatar: string };
+    profile: Profile & { nickname: string; avatar: string };
   }) {
     return this.profileService.updateProfile(profileData);
   }

@@ -6,6 +6,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UserService } from './user.service';
+import { User } from './entities/user.entity';
 
 @Controller()
 export class UserController {
@@ -99,6 +100,12 @@ export class UserController {
   @GrpcMethod('UserService', 'Info')
   async info({ userId }: { userId: number }) {
     return await this.userService.findUserById(userId);
+  }
+
+  /** 更新用户信息 */
+  @GrpcMethod('UserService', 'Update')
+  async update(user: User) {
+    return await this.userService.update(user);
   }
 
   /** 获取OSS STS Token */

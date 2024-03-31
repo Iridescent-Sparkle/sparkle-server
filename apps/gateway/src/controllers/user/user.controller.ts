@@ -5,6 +5,7 @@ import { RegisterUserDto } from 'apps/user/src/dto/register-user.dto';
 import { ResetPasswordDto } from 'apps/user/src/dto/reset-password.dto';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { UserController as UserService } from '../../../../user/src/user.controller';
+import { User } from 'apps/user/src/entities/user.entity';
 
 @Controller({
   path: 'user',
@@ -65,6 +66,12 @@ export class UserController {
   @RequireLogin()
   async info(@UserInfo('userId') userId: number) {
     return await this.userService.info({ userId });
+  }
+
+  @Post('update')
+  @RequireLogin()
+  async update(@Body() user: User) {
+    return await this.userService.update(user);
   }
 
   @Get('sts')
