@@ -15,14 +15,20 @@ export class ProfileService {
   constructor() {}
 
   async findProfile(userId: number) {
-    return await this.profileRepository.find({
+    const profile = await this.profileRepository.findOne({
       where: {
         isDelete: false,
-        user: {
-          id: userId,
-        },
+        id: userId,
       },
+      relations: ['user'],
     });
+    const res = {
+      nickName: profile.user.nickName,
+      avatar: profile.user.avatar,
+      ...profile,
+    };
+    delete res.user;
+    return res;
   }
 
   async createProfile(profile: Profile) {
@@ -36,10 +42,12 @@ export class ProfileService {
     userId: number;
     profile: Profile & { nickName: string; avatar: string };
   }) {
-    await this.userRepository.update(userId, {
-      nickName: profile.nickName,
-      avatar: profile.avatar,
-    });
+    if (profile.nickName || profile.avatar) {
+      await this.userRepository.update(userId, {
+        nickName: profile.nickName,
+        avatar: profile.avatar,
+      });
+    }
 
     return await this.profileRepository.update(profile.id, profile);
   }

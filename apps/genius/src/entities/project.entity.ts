@@ -46,11 +46,13 @@ export class Project {
 
   @Column({
     comment: '项目地址',
+    default: '',
   })
-  website: number;
+  website: string;
 
   @Column({
     comment: '经历描述',
+    default: '',
   })
   description: string;
 

@@ -7,9 +7,14 @@ import { ProjectService } from '../service/project.service';
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  @MessagePattern('findProject')
-  async findProject(userId: number) {
-    return this.projectService.findProject(userId);
+  @MessagePattern('findProjectByUserId')
+  async findProjectByUserId(userId: number) {
+    return this.projectService.findProjectByUserId(userId);
+  }
+
+  @MessagePattern('findProjectById')
+  async findProjectById(id: number) {
+    return this.projectService.findProjectById(id);
   }
 
   @MessagePattern('createProject')

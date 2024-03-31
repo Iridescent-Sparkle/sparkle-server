@@ -6,12 +6,6 @@ import { Education } from '../entities/education.entity';
 @Injectable()
 export class EducationService {
   @InjectRepository(Education)
-  private jobDetailRepository: Repository<Education>;
-
-  @InjectRepository(Education)
-  private jobDeliverRepository: Repository<Education>;
-
-  @InjectRepository(Education)
   private educationRepository: Repository<Education>;
 
   constructor() {}
@@ -19,6 +13,7 @@ export class EducationService {
   async findEducationByUserId(userId: number) {
     return await this.educationRepository.find({
       where: {
+        isDelete: false,
         user: {
           id: userId,
         },
@@ -26,21 +21,21 @@ export class EducationService {
     });
   }
 
+  async findEducationById(id: number) {
+    return await this.educationRepository.findOne({
+      where: {
+        isDelete: false,
+        id,
+      },
+    });
+  }
+
   async createEducation(education: Education): Promise<Education> {
     return await this.educationRepository.save(education);
   }
+
   async updateEducation(education: Education): Promise<any> {
-    return await this.educationRepository.update(education.id, {
-      id: education.id,
-      school: education.school,
-      profession: education.profession,
-      startTime: education.startTime,
-      endTime: education.endTime,
-      graduate: education.graduate,
-      gpa: education.gpa,
-      totalGpa: education.totalGpa,
-      description: education.description,
-    });
+    return await this.educationRepository.update(education.id, education);
   }
 
   async deleteEducation(id: number): Promise<void> {

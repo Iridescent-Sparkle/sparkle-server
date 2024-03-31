@@ -6,12 +6,6 @@ import { Experience } from '../entities/experience.entity';
 @Injectable()
 export class ExperienceService {
   @InjectRepository(Experience)
-  private jobDetailRepository: Repository<Experience>;
-
-  @InjectRepository(Experience)
-  private jobDeliverRepository: Repository<Experience>;
-
-  @InjectRepository(Experience)
   private ExperienceRepository: Repository<Experience>;
 
   constructor() {}
@@ -19,9 +13,19 @@ export class ExperienceService {
   async findExperienceByUserId(userId: number) {
     return await this.ExperienceRepository.find({
       where: {
+        isDelete: false,
         user: {
           id: userId,
         },
+      },
+    });
+  }
+
+  async findExperienceById(id: number) {
+    return await this.ExperienceRepository.findOne({
+      where: {
+        isDelete: false,
+        id,
       },
     });
   }

@@ -1,6 +1,7 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobBonus } from 'apps/boss/src/entities/bonus.entity';
+import { RequireLogin } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
 
 @Controller({
@@ -11,11 +12,13 @@ export class BonusController {
   private BossClient: ClientProxy;
 
   @Get('init')
+  @RequireLogin()
   initJobBonus() {
     return this.BossClient.send('initJobBonus', {});
   }
 
   @Get('all')
+  @RequireLogin()
   findAllJobBonus(): Promise<JobBonus[]> {
     return firstValueFrom(this.BossClient.send('findAllJobBonus', {}));
   }

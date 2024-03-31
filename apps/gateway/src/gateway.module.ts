@@ -12,14 +12,16 @@ import { CategoryController } from './controllers/boss/category.controller';
 import { JobController } from './controllers/boss/job.controller';
 import { UserController } from './controllers/user/user.controller';
 import { BonusController } from './controllers/boss/bonus.controller';
-import { ExperienceController } from './controllers/boss/experience.controller';
+import { ExperienceController as BossExperienceController } from './controllers/boss/experience.controller';
 import { LevelController } from './controllers/boss/level.controller';
-import { EducationController } from './controllers/boss/education.controller';
+import { EducationController as BossEducationController } from './controllers/boss/education.controller';
+import { EducationController as GeniusEducationController } from './controllers/genius/education.controller';
 import { DeliverController } from './controllers/genius/deliver.controller';
 import { FavoriteController } from './controllers/genius/favorite.controller';
 import { ProfileController } from './controllers/genius/profile.controller';
 import { ProjectController } from './controllers/genius/project.controller';
 import { VolunteerController } from './controllers/genius/volunteer.controller';
+import { ExperienceController as GeniusExperienceController } from './controllers/genius/experience.controller';
 
 @Module({
   imports: [
@@ -111,11 +113,12 @@ import { VolunteerController } from './controllers/genius/volunteer.controller';
     JobController,
     BonusController,
     CategoryController,
-    ExperienceController,
+    BossExperienceController,
+    GeniusExperienceController,
     LevelController,
-    EducationController,
+    BossEducationController,
+    GeniusEducationController,
     DeliverController,
-    ExperienceController,
     FavoriteController,
     ProfileController,
     ProjectController,

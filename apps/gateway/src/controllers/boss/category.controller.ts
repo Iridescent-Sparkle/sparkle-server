@@ -13,11 +13,13 @@ export class CategoryController {
   private BossClient: ClientProxy;
 
   @Get('init')
+  @RequireLogin()
   async initJobCategory() {
     return firstValueFrom(await this.BossClient.send('initJobCategory', {}));
   }
 
   @Get('all')
+  @RequireLogin()
   findAllJobCategory(): Promise<JobCategory[]> {
     return firstValueFrom(this.BossClient.send('findAllJobCategory', {}));
   }

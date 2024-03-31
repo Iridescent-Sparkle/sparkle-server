@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Project } from 'apps/genius/src/entities/project.entity';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
@@ -11,14 +11,30 @@ export class ProjectController {
 
   @Get('user')
   @RequireLogin()
-  async findProject(@UserInfo('userId') userId: number) {
-    return firstValueFrom(this.GeniusClient.send('findProject', userId));
+  async findProjectByUserId(@UserInfo('userId') userId: number) {
+    return firstValueFrom(
+      this.GeniusClient.send('findProjectByUserId', userId),
+    );
+  }
+
+  @Get('single')
+  @RequireLogin()
+  async findProjectById(@Query() id: number) {
+    return firstValueFrom(this.GeniusClient.send('findProjectById', id));
   }
 
   @Post('create')
   @RequireLogin()
-  async createProject(@Body() project: Project) {
-    return firstValueFrom(this.GeniusClient.send('createProject', project));
+  async createProject(
+    @UserInfo('userId') userId: number,
+    @Body() project: Project,
+  ) {
+    return firstValueFrom(
+      this.GeniusClient.send('createProject', {
+        userId,
+        ...project,
+      }),
+    );
   }
 
   @Post('update')

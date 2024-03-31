@@ -7,9 +7,14 @@ import { VolunteerService } from '../service/volunteer.service';
 export class VolunteerController {
   constructor(private readonly volunteerService: VolunteerService) {}
 
-  @MessagePattern('findVolunteer')
-  async findVolunteer(userId: number) {
-    return this.volunteerService.findVolunteer(userId);
+  @MessagePattern('findVolunteerByUserId')
+  async findVolunteerByUserId(userId: number) {
+    return this.volunteerService.findVolunteerByUserId(userId);
+  }
+
+  @MessagePattern('findVolunteerById')
+  async findVolunteerById(id: number) {
+    return this.volunteerService.findVolunteerById(id);
   }
 
   @MessagePattern('createVolunteer')

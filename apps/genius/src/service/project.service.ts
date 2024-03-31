@@ -10,13 +10,22 @@ export class ProjectService {
 
   constructor() {}
 
-  async findProject(userId: number) {
+  async findProjectByUserId(userId: number) {
     return await this.projectRepository.find({
       where: {
         isDelete: false,
         user: {
           id: userId,
         },
+      },
+    });
+  }
+
+  async findProjectById(id: number) {
+    return await this.projectRepository.findOne({
+      where: {
+        id,
+        isDelete: false,
       },
     });
   }

@@ -33,6 +33,7 @@ export class JobController {
   }
 
   @Get('all')
+  @RequireLogin()
   async findAll(): Promise<{ jobDetail: JobDetail[] }> {
     return firstValueFrom(await this.BossClient.send('findAll', {}));
   }
@@ -53,6 +54,7 @@ export class JobController {
   }
 
   @Put(':id')
+  @RequireLogin()
   update(
     @Param('id') jobId: string,
     @Body() jobDetail: JobDetail,
@@ -66,16 +68,19 @@ export class JobController {
   }
 
   @Delete(':id')
+  @RequireLogin()
   remove(@Param('id') jobId: string): Promise<void> {
     return firstValueFrom(this.BossClient.send('remove', { jobId: +jobId }));
   }
 
   @Get('search')
+  @RequireLogin()
   search(@Query('keyword') keyword: string): Promise<JobDetail[]> {
     return firstValueFrom(this.BossClient.send('search', { keyword }));
   }
 
   @Get('paginate')
+  @RequireLogin()
   paginate(
     @Query('page') page: number,
     @Query('take') take: number,

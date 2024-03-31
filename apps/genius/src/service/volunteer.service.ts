@@ -10,13 +10,22 @@ export class VolunteerService {
 
   constructor() {}
 
-  async findVolunteer(userId: number) {
+  async findVolunteerByUserId(userId: number) {
     return await this.volunteerRepository.find({
       where: {
         isDelete: false,
         user: {
           id: userId,
         },
+      },
+    });
+  }
+
+  async findVolunteerById(id: number) {
+    return await this.volunteerRepository.findOne({
+      where: {
+        id,
+        isDelete: false,
       },
     });
   }

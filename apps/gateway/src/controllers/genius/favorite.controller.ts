@@ -33,7 +33,6 @@ export class FavoriteController {
   @Post('remove')
   @RequireLogin()
   async removeJobFromCollection(@Body() jobData: { favoriteId: number }) {
-    console.log(jobData);
     return firstValueFrom(
       this.GeniusClient.send('removeJobFromCollection', jobData),
     );

@@ -46,11 +46,13 @@ export class Experience {
 
   @Column({
     comment: '是否在职',
+    default: false,
   })
   isWork: boolean;
 
   @Column({
     comment: '经历描述',
+    default: '',
   })
   description: string;
 

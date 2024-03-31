@@ -12,6 +12,11 @@ export class EducationController {
     return this.educationService.findEducationByUserId(userId);
   }
 
+  @MessagePattern('findEducationById')
+  async findEducationById(id: number) {
+    return this.educationService.findEducationById(id);
+  }
+
   @MessagePattern('createEducation')
   async createEducation(education: Education) {
     return this.educationService.createEducation(education);

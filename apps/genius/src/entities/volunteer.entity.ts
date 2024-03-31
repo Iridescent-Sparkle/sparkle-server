@@ -25,9 +25,9 @@ export class Volunteer {
   userId: number;
 
   @Column({
-    comment: '项目名称',
+    comment: '活动名称',
   })
-  projectName: string;
+  activityName: string;
 
   @Column({
     comment: '承担角色',
@@ -45,12 +45,8 @@ export class Volunteer {
   endTime: Date;
 
   @Column({
-    comment: '项目地址',
-  })
-  website: number;
-
-  @Column({
     comment: '经历描述',
+    default: '',
   })
   description: string;
 

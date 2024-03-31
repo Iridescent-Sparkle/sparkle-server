@@ -12,6 +12,11 @@ export class ExperienceController {
     return this.experienceService.findExperienceByUserId(userId);
   }
 
+  @MessagePattern('findExperienceById')
+  async findExperienceById(id: number) {
+    return this.experienceService.findExperienceById(id);
+  }
+
   @MessagePattern('createExperience')
   async createExperience(experience: Experience) {
     return this.experienceService.createExperience(experience);

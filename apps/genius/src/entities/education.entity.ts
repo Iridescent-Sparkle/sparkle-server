@@ -25,7 +25,7 @@ export class Education {
   userId: number;
 
   @Column({
-    comment: '昵称',
+    comment: '学校',
   })
   school: string;
 
@@ -45,22 +45,13 @@ export class Education {
   endTime: Date;
 
   @Column({
-    comment: '是否毕业',
-  })
-  graduate: boolean;
-
-  @Column({
     comment: '绩点',
   })
   gpa: number;
 
   @Column({
-    comment: '满绩点',
-  })
-  totalGpa: number;
-
-  @Column({
     comment: '经历描述',
+    default: '',
   })
   description: string;
 
