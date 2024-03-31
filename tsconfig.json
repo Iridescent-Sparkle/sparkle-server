@@ -77,6 +77,12 @@
       ],
       "@app/im/*": [
         "libs/im/src/*"
+      ],
+      "@app/oss": [
+        "libs/oss/src"
+      ],
+      "@app/oss/*": [
+        "libs/oss/src/*"
       ]
     }
   }

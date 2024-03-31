@@ -10,9 +10,10 @@ service UserService {
   rpc  Login(LoginRequest) returns (LoginResponse);
   rpc  AdminLogin(LoginRequest) returns (LoginResponse);
   rpc  Refresh(RefreshRequest) returns (RefreshResponse);
-  rpc  Info(InfoRequest) returns (UserInfo);
   rpc  ResetPassword(ResetPasswordRequest) returns (Empty);
   rpc  ValidateSmsCode(ValidateSmsCodeRequest) returns (Empty);
+  rpc  Info(InfoRequest) returns (UserInfo);
+  rpc  GetStsToken(Empty) returns (GetStsTokenResponse);
 }
 
 message Empty {}
@@ -92,3 +93,9 @@ message ResetPasswordRequest {
   string password = 2;
 }
 
+message GetStsTokenResponse {
+  string accessKeyId = 1;
+  string accessKeySecret = 2;
+  string expiration = 3;
+  string securityToken = 4;
+}

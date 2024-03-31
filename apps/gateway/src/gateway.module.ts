@@ -25,32 +25,6 @@ import { VolunteerController } from './controllers/genius/volunteer.controller';
   imports: [
     ConfigModule,
     JwtModule,
-    ClientsModule.register([
-      {
-        name: 'BOSS_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
-          port: 3002,
-        },
-      },
-      {
-        name: 'GENIUS_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
-          port: 3003,
-        },
-      },
-      {
-        name: 'ADMIN_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
-          port: 3004,
-        },
-      },
-    ]),
     ClientsModule.registerAsync([
       {
         name: 'user',
@@ -74,6 +48,46 @@ import { VolunteerController } from './controllers/genius/volunteer.controller';
                 longs: String,
                 enums: String,
               },
+            },
+          };
+        },
+      },
+      {
+        name: 'BOSS_SERVICE',
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          return {
+            transport: Transport.TCP,
+            options: {
+              host: configService.get('boss_server_host'),
+              port: 3002,
+            },
+          };
+        },
+      },
+      {
+        name: 'GENIUS_SERVICE',
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          console.log(configService.get('genius_server_host'));
+          return {
+            transport: Transport.TCP,
+            options: {
+              host: configService.get('genius_server_host'),
+              port: 3003,
+            },
+          };
+        },
+      },
+      {
+        name: 'ADMIN_SERVICE',
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          return {
+            transport: Transport.TCP,
+            options: {
+              host: configService.get('admin_server_host'),
+              port: 3004,
             },
           };
         },

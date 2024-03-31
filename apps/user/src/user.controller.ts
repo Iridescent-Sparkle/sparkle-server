@@ -100,4 +100,10 @@ export class UserController {
   async info({ userId }: { userId: number }) {
     return await this.userService.findUserById(userId);
   }
+
+  /** 获取OSS STS Token */
+  @GrpcMethod('UserService', 'GetStsToken')
+  async getStsToken({}: object) {
+    return await this.userService.getStsToken();
+  }
 }

@@ -66,4 +66,10 @@ export class UserController {
   async info(@UserInfo('userId') userId: number) {
     return await this.userService.info({ userId });
   }
+
+  @Get('sts')
+  @RequireLogin()
+  async getStsToken() {
+    return await this.userService.getStsToken({});
+  }
 }

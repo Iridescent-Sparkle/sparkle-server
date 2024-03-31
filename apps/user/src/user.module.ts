@@ -17,9 +17,11 @@ import { UserService } from './user.service';
 import { Company } from 'apps/boss/src/entities/company.entity';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { OssModule } from '@app/oss';
 
 @Module({
   imports: [
+    OssModule,
     HttpModule,
     ConfigModule,
     ImModule,

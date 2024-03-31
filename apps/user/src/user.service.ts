@@ -15,6 +15,7 @@ import { User } from './entities/user.entity';
 import { md5 } from './utils/index';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { firstValueFrom } from 'rxjs';
+import { OssService } from '@app/oss';
 
 @Injectable()
 export class UserService {
@@ -43,6 +44,9 @@ export class UserService {
 
   @Inject(ConfigService)
   private configService: ConfigService;
+
+  @Inject(OssService)
+  private ossService: OssService;
 
   async captcha(address: string) {
     const code = Math.random().toString().slice(2, 6);
@@ -128,7 +132,6 @@ export class UserService {
       where: {
         username: loginUserDto.username,
       },
-      relations: ['roles', 'roles.permissions'],
     });
 
     if (!foundUser) {
@@ -210,5 +213,9 @@ export class UserService {
         id: userId,
       },
     });
+  }
+
+  async getStsToken() {
+    return await this.ossService.getSTSToken();
   }
 }

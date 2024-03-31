@@ -156,6 +156,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/admin/tsconfig.app.json"
       }
+    },
+    "oss": {
+      "type": "library",
+      "root": "libs/oss",
+      "entryFile": "index",
+      "sourceRoot": "libs/oss/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/oss/tsconfig.lib.json"
+      }
     }
   }
 }
