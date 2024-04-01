@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AdminController } from './admin.controller';
-import { AdminService } from './admin.service';
+import { AdminUserController } from './controller/user.controller';
+import { AdminUserService } from './service/user.service';
 import { ConfigModule } from '@app/config';
 import { DbModule } from '@app/db';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -16,9 +16,11 @@ import { EmailModule } from '@app/email';
 import { SmsModule } from '@app/sms';
 import { HttpModule } from '@nestjs/axios';
 import { ImModule } from '@app/im';
+import { OssModule } from '@app/oss';
 
 @Module({
   imports: [
+    OssModule,
     HttpModule,
     ConfigModule,
     ImModule,
@@ -50,7 +52,7 @@ import { ImModule } from '@app/im';
       ],
     }),
   ],
-  controllers: [AdminController],
-  providers: [AdminService],
+  controllers: [AdminUserController],
+  providers: [AdminUserService],
 })
 export class AdminModule {}

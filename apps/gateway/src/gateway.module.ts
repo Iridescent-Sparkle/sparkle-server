@@ -11,6 +11,7 @@ import { join } from 'path';
 import { CategoryController } from './controllers/boss/category.controller';
 import { JobController } from './controllers/boss/job.controller';
 import { UserController } from './controllers/user/user.controller';
+import { UserController as AdminUserController } from './controllers/admin/user.controller';
 import { BonusController } from './controllers/boss/bonus.controller';
 import { ExperienceController as BossExperienceController } from './controllers/boss/experience.controller';
 import { LevelController } from './controllers/boss/level.controller';
@@ -122,6 +123,7 @@ import { ExperienceController as GeniusExperienceController } from './controller
     ProfileController,
     ProjectController,
     VolunteerController,
+    AdminUserController,
   ],
   providers: [
     {
