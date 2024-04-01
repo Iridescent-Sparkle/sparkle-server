@@ -18,6 +18,7 @@ import { Company } from 'apps/boss/src/entities/company.entity';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { OssModule } from '@app/oss';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -31,13 +32,18 @@ import { OssModule } from '@app/oss';
     EmailModule,
     SmsModule,
     TypeOrmModule.forFeature([User, Company, Profile]),
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'GENIUS_SERVICE',
-        transport: Transport.TCP,
-        options: {
-          host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
-          port: 3003,
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          return {
+            transport: Transport.TCP,
+            options: {
+              host: configService.get('genius_server_host'),
+              port: 3003,
+            },
+          };
         },
       },
     ]),

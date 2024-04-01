@@ -71,7 +71,6 @@ import { ExperienceController as GeniusExperienceController } from './controller
         name: 'GENIUS_SERVICE',
         inject: [ConfigService],
         useFactory(configService: ConfigService) {
-          console.log(configService.get('genius_server_host'));
           return {
             transport: Transport.TCP,
             options: {
