@@ -42,7 +42,7 @@ export class User {
   nickname: string;
 
   @Column({
-    length: 50,
+    length: 200,
     comment: '头像',
     nullable: true,
   })

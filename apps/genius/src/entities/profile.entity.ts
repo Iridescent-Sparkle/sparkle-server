@@ -63,7 +63,8 @@ export class Profile {
 
   @Column({
     comment: '简历pdf',
-    default: '',
+    type: 'json',
+    nullable: true,
   })
   resume: string;
 
