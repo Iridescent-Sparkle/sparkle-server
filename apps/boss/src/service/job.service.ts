@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobCollect } from 'apps/genius/src/entities/collect.entity';
 import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
-import { In, Repository } from 'typeorm';
+import { Between, In, Like, Repository } from 'typeorm';
 import { JobDetail } from '../entities/job.entity';
 import { JobBonus } from './../entities/bonus.entity';
 
@@ -38,11 +38,56 @@ export class JobService {
     return await this.jobDetailRepository.save(jobDetail);
   }
 
-  async findAll() {
-    return await this.jobDetailRepository.find({
+  async findAll(parmas: JobDetail & Pagination) {
+    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = parmas;
+
+    const condition: Record<string, any> = {};
+
+    if (rest.address) {
+      condition.address = Like(`%${rest.address}%`);
+    }
+
+    if (rest.jobBonus) {
+      condition.JobBonus = In(rest.jobBonus);
+    }
+
+    if (rest.jobName) {
+      condition.jobName = Like(`%${rest.jobName}%`);
+    }
+
+    if (rest.jobDescription) {
+      condition.jobDescription = Like(`%${rest.jobDescription}%`);
+    }
+
+    if (rest.jobRequirements) {
+      condition.jobRequirements = Like(`%${rest.jobRequirements}%`);
+    }
+
+    if (rest.minSalary && rest.maxSalary) {
+      condition.minSalary = Between(rest.minSalary, rest.maxSalary);
+      condition.maxSalary = Between(rest.minSalary, rest.maxSalary);
+    }
+
+    if (rest.createStart && rest.createEnd) {
+      condition.createTime = Between(
+        new Date(rest.createStart),
+        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+      );
+    }
+
+    if (rest.updateStart && rest.updateEnd) {
+      condition.updateTime = Between(
+        new Date(rest.updateStart),
+        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+      );
+    }
+
+    const [data, total] = await this.jobDetailRepository.find({
       where: {
-        isFrozen: false,
+        isFrozen,
         isDelete: false,
+        ...rest,
+        ...condition,
       },
       relations: [
         'jobCategory',
@@ -51,7 +96,16 @@ export class JobService {
         'jobEducation',
         'jobLevel',
       ],
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
 
   async findOne({ userId, jobId }: { userId: number; jobId: number }) {
