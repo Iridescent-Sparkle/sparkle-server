@@ -40,6 +40,10 @@ export class JobService {
 
   async findAll() {
     return await this.jobDetailRepository.find({
+      where: {
+        isFrozen: false,
+        isDelete: false,
+      },
       relations: [
         'jobCategory',
         'jobBonus',

@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobCategory } from 'apps/boss/src/entities/category.entity';
 import { RequireLogin } from 'decorators/custom.decorator';
@@ -18,10 +18,10 @@ export class CategoryController {
     return firstValueFrom(await this.BossClient.send('initJobCategory', {}));
   }
 
-  @Get('all')
+  @Post('all')
   @RequireLogin()
-  findAllJobCategory(): Promise<JobCategory[]> {
-    return firstValueFrom(this.BossClient.send('findAllJobCategory', {}));
+  findAllJobCategory(@Body() parmas: JobCategory & Pagination) {
+    return firstValueFrom(this.BossClient.send('findAllJobCategory', parmas));
   }
 
   @Get('job/:id')
@@ -30,5 +30,11 @@ export class CategoryController {
     return firstValueFrom(
       this.BossClient.send('findJobByCategory', { categoryId }),
     );
+  }
+
+  @Post('update')
+  @RequireLogin()
+  updateJobCategory(@Body() parmas: JobCategory) {
+    return firstValueFrom(this.BossClient.send('updateJobCategory', parmas));
   }
 }

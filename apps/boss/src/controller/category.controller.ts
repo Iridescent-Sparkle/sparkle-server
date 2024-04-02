@@ -13,12 +13,17 @@ export class CategoryController {
   }
 
   @MessagePattern('findAllJobCategory')
-  findAllJobCategory(): Promise<JobCategory[]> {
-    return this.categoryService.findAllJobCategory();
+  findAllJobCategory(parmas: JobCategory & Pagination) {
+    return this.categoryService.findAllJobCategory(parmas);
   }
 
   @MessagePattern('findJobByCategory')
   findJobByCategory({ categoryId }: { categoryId: number }) {
     return this.categoryService.findJobByCategory({ categoryId });
+  }
+
+  @MessagePattern('updateJobCategory')
+  async updateJobCategory(params: JobCategory) {
+    await this.categoryService.updateJobCategory(params);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Like, Repository } from 'typeorm';
 import { JobBonus } from '../entities/bonus.entity';
 
 @Injectable()
@@ -101,7 +101,52 @@ export class BonusService {
     return {};
   }
 
-  async findAllJobBonus(): Promise<JobBonus[]> {
-    return await this.jobBonusRepository.find();
+  async findAllJobBonus(parmas: JobBonus & Pagination) {
+    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = parmas;
+
+    const condition: Record<string, any> = {};
+
+    if (rest.bonusName) {
+      condition.bonusName = Like(`%${rest.bonusName}%`);
+    }
+
+    if (rest.bonusDescription) {
+      condition.bonusDescription = Like(`%${rest.bonusDescription}%`);
+    }
+
+    if (rest.createStart && rest.createEnd) {
+      condition.createTime = Between(
+        new Date(rest.createStart),
+        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+      );
+    }
+
+    if (rest.updateStart && rest.updateEnd) {
+      condition.updateTime = Between(
+        new Date(rest.updateStart),
+        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+      );
+    }
+
+    const [data, total] = await this.jobBonusRepository.findAndCount({
+      where: {
+        isDelete: false,
+        isFrozen,
+        ...condition,
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
+  }
+
+  async updateJobBonus(params: JobBonus) {
+    await this.jobBonusRepository.update(params.id, params);
   }
 }

@@ -28,6 +28,12 @@ export class JobBonus {
 
   @Column({
     default: false,
+    comment: '是否禁用',
+  })
+  isFrozen: boolean;
+
+  @Column({
+    default: false,
     comment: '是否删除',
   })
   isDelete: boolean;

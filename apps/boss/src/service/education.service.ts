@@ -50,6 +50,10 @@ export class EducationService {
   }
 
   async findAllJobEducation(): Promise<JobEducation[]> {
-    return await this.jobEducationRepository.find();
+    return await this.jobEducationRepository.find({
+      where: {
+        isDelete: false,
+      },
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Like, Repository } from 'typeorm';
 import { JobCategory } from '../entities/category.entity';
 import { JobDetail } from '../entities/job.entity';
 
@@ -125,15 +125,50 @@ export class CategoryService {
     return {};
   }
 
-  async findAllJobCategory(): Promise<JobCategory[]> {
-    return await this.jobCategoryRepository.find();
+  async findAllJobCategory(parmas: JobCategory & Pagination) {
+    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = parmas;
+    const condition: Record<string, any> = {};
+    if (rest.categoryName) {
+      condition.categoryName = Like(`%${rest.categoryName}%`);
+    }
+
+    if (rest.categoryDescription) {
+      condition.categoryDescription = Like(`%${rest.categoryDescription}%`);
+    }
+
+    if (rest.createStart && rest.createEnd) {
+      condition.createTime = Between(
+        new Date(rest.createStart),
+        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+      );
+    }
+
+    if (rest.updateStart && rest.updateEnd) {
+      condition.updateTime = Between(
+        new Date(rest.updateStart),
+        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+      );
+    }
+
+    const [data, total] = await this.jobCategoryRepository.findAndCount({
+      where: {
+        isDelete: false,
+        isFrozen,
+        ...condition,
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
 
-  async findJobByCategory({
-    categoryId,
-  }: {
-    categoryId: number;
-  }): Promise<JobDetail[]> {
+  async findJobByCategory({ categoryId }: { categoryId: number }) {
     if (categoryId == 1) {
       return await this.jobDetailRepository.find();
     }
@@ -145,5 +180,9 @@ export class CategoryService {
         },
       },
     });
+  }
+
+  async updateJobCategory(params: JobCategory) {
+    await this.jobCategoryRepository.update(params.id, params);
   }
 }

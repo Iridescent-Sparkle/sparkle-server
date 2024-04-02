@@ -42,6 +42,10 @@ export class ExperienceService {
   }
 
   async findAllJobExperience(): Promise<JobExperience[]> {
-    return await this.jobexperienceRepository.find();
+    return await this.jobexperienceRepository.find({
+      where: {
+        isDelete: false,
+      },
+    });
   }
 }

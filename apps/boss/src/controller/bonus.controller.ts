@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { JobBonus } from 'apps/boss/src/entities/bonus.entity';
 import { BonusService } from 'apps/boss/src/service/bonus.service';
+import { JobBonus } from '../entities/bonus.entity';
 
 @Controller()
 export class BonusController {
@@ -13,7 +13,12 @@ export class BonusController {
   }
 
   @MessagePattern('findAllJobBonus')
-  findAllJobBonus(): Promise<JobBonus[]> {
-    return this.bonusService.findAllJobBonus();
+  findAllJobBonus(parmas: JobBonus & Pagination) {
+    return this.bonusService.findAllJobBonus(parmas);
+  }
+
+  @MessagePattern('updateJobBonus')
+  async updateJobBonus(params: JobBonus) {
+    await this.bonusService.updateJobBonus(params);
   }
 }

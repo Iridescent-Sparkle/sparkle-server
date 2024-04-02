@@ -42,6 +42,10 @@ export class LevelService {
   }
 
   async findAllJobLevel(): Promise<JobLevel[]> {
-    return await this.jobLevelRepository.find();
+    return await this.jobLevelRepository.find({
+      where: {
+        isDelete: false,
+      },
+    });
   }
 }
