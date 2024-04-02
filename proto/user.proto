@@ -17,6 +17,7 @@ service UserService {
   rpc  Info(InfoRequest) returns (User);
   rpc  Update(UpdateRequest) returns (User);
   rpc  GetStsToken(Empty) returns (GetStsTokenResponse);
+  rpc  CreateCompanyInfo(CreateCompanyInfoRequest) returns (User);
 }
 
 message Empty {}
@@ -37,6 +38,18 @@ message User {
   bool isFrozen = 13;
   google.protobuf.Timestamp createTime = 14;
   google.protobuf.Timestamp updateTime = 15;
+}
+
+message Company {
+  int32 id = 1;
+  repeated user.User user = 2;
+  string company_name = 3;
+  string company_avatar = 4;
+  string company_license = 5;
+  int32 status = 6;
+  bool is_delete = 7;
+  google.protobuf.Timestamp create_time = 8;
+  google.protobuf.Timestamp update_time = 9;
 }
 
 message CaptchaRequest {
@@ -110,4 +123,9 @@ message UpdateRequest {
   string nickname = 2;
   string avatar = 3;
   string occupation = 4;
+}
+
+message CreateCompanyInfoRequest {
+  int32 userId = 1;
+  Company company = 2;
 }

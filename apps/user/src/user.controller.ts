@@ -7,6 +7,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
+import { Company } from 'apps/boss/src/entities/company.entity';
 
 @Controller()
 export class UserController {
@@ -112,5 +113,11 @@ export class UserController {
   @GrpcMethod('UserService', 'GetStsToken')
   async getStsToken({}: object) {
     return await this.userService.getStsToken();
+  }
+
+  /** 创建公司信息 */
+  @GrpcMethod('UserService', 'CreateCompanyInfo')
+  async createCompanyInfo(params: { userId: number; company: Company }) {
+    return await this.userService.createCompanyInfo(params);
   }
 }

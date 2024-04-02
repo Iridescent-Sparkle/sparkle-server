@@ -6,6 +6,7 @@ import { ResetPasswordDto } from 'apps/user/src/dto/reset-password.dto';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { UserController as UserService } from '../../../../user/src/user.controller';
 import { User } from 'apps/user/src/entities/user.entity';
+import { Company } from 'apps/boss/src/entities/company.entity';
 
 @Controller({
   path: 'user',
@@ -78,5 +79,17 @@ export class UserController {
   @RequireLogin()
   async getStsToken() {
     return await this.userService.getStsToken({});
+  }
+
+  @Post('company/create')
+  @RequireLogin()
+  async createCompanyInfo(
+    @UserInfo('userId') userId: number,
+    @Body() company: Company,
+  ) {
+    return await this.userService.createCompanyInfo({
+      userId,
+      company,
+    });
   }
 }

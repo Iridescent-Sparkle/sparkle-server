@@ -2,7 +2,7 @@ import { EmailService } from '@app/email';
 import { ImService } from '@app/im';
 import { RedisService } from '@app/redis';
 import { SmsService } from '@app/sms';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
@@ -16,13 +16,18 @@ import { md5 } from './utils/index';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { firstValueFrom } from 'rxjs';
 import { OssService } from '@app/oss';
+import { Logger } from 'winston';
+import { Company } from 'apps/boss/src/entities/company.entity';
 
 @Injectable()
 export class UserService {
+  private logger = new Logger();
+
   @Inject('GENIUS_SERVICE')
   private GeniusClient: ClientProxy;
 
-  private logger = new Logger();
+  @Inject('BOSS_SERVICE')
+  private BOSSClient: ClientProxy;
 
   @InjectRepository(User)
   private userRepository: Repository<User>;
@@ -224,5 +229,17 @@ export class UserService {
 
   async getStsToken() {
     return await this.ossService.getSTSToken();
+  }
+
+  async createCompanyInfo(params: { userId: number; company: Company }) {
+    const { company, userId } = params;
+
+    const companyInfo = await firstValueFrom(
+      this.BOSSClient.send('createCompanyInfo', company),
+    );
+
+    return await this.userRepository.update(userId, {
+      companyId: companyInfo.id,
+    });
   }
 }

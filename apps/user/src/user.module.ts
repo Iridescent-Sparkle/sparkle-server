@@ -46,6 +46,19 @@ import { ConfigService } from '@nestjs/config';
           };
         },
       },
+      {
+        name: 'BOSS_SERVICE',
+        inject: [ConfigService],
+        useFactory(configService: ConfigService) {
+          return {
+            transport: Transport.TCP,
+            options: {
+              host: configService.get('boss_server_host'),
+              port: 3002,
+            },
+          };
+        },
+      },
     ]),
     WinstonModule.forRoot({
       level: 'debug',

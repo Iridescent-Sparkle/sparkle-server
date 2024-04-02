@@ -20,19 +20,25 @@ export class Company {
   user: User[];
 
   @Column({
-    comment: '职业',
+    comment: '公司名称',
   })
   companyName: string;
 
   @Column({
-    comment: '地址',
+    comment: '公司头像',
   })
   companyAvatar: string;
 
   @Column({
-    comment: '电话',
+    comment: '营业执照',
   })
-  companyDesc: string;
+  companyLicense: string;
+
+  @Column({
+    comment: '审核状态',
+    default: 0,
+  })
+  status: number;
 
   @Column({
     default: false,
