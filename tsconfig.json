@@ -83,6 +83,12 @@
       ],
       "@app/oss/*": [
         "libs/oss/src/*"
+      ],
+      "@app/alipay": [
+        "libs/alipay/src"
+      ],
+      "@app/alipay/*": [
+        "libs/alipay/src/*"
       ]
     }
   }

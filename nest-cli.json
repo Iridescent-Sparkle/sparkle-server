@@ -165,6 +165,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/oss/tsconfig.lib.json"
       }
+    },
+    "alipay": {
+      "type": "library",
+      "root": "libs/alipay",
+      "entryFile": "index",
+      "sourceRoot": "libs/alipay/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/alipay/tsconfig.lib.json"
+      }
     }
   }
 }
