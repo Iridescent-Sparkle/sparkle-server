@@ -49,4 +49,5 @@ auth.txt
 
 /cert
 
-
+/**/*.crt
+/**/*.pem

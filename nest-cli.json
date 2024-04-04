@@ -6,6 +6,8 @@
   },
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
+    "watchAssets": true,
+    "assets": ["/**/*.crt","/**/*.pem"],
     "deleteOutDir": true,
     "webpack": true,
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
@@ -28,6 +30,8 @@
       "entryFile": "main",
       "sourceRoot": "apps/user/src",
       "compilerOptions": {
+        "watchAssets": true,
+        "assets": ["/**/*.crt","/**/*.pem"],
         "tsConfigPath": "apps/user/tsconfig.app.json"
       }
     },

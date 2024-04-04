@@ -20,19 +20,22 @@ import { ConfigService } from '@nestjs/config';
                   path.join(__dirname, '../cert/private-key.pem'),
                   'ascii',
                 )
-              : fs.readFileSync('/cert/private-key.pem', 'ascii'),
+              : fs.readFileSync(
+                  path.join(__dirname, './cert/private-key.pem'),
+                  'ascii',
+                ),
           alipayRootCertPath:
             process.env.NODE_ENV === 'production'
               ? path.join(__dirname, '../cert/alipayRootCert.crt')
-              : '/cert/alipayRootCert.crt',
+              : path.join(__dirname, './cert/alipayRootCert.crt'),
           alipayPublicCertPath:
             process.env.NODE_ENV === 'production'
-              ? path.join(__dirname, '../cert/alipayCertPublicKey_RSA2.crt')
-              : '/cert/alipayCertPublicKey_RSA2.crt',
+              ? path.join(__dirname, '../cert/alipayPublicCert.crt')
+              : path.join(__dirname, './cert/alipayPublicCert.crt'),
           appCertPath:
             process.env.NODE_ENV === 'production'
-              ? path.join(__dirname, '../cert/appCertPublicKey.crt')
-              : '/cert/appCertPublicKey.crt',
+              ? path.join(__dirname, '../cert/appPublicCert.crt')
+              : path.join(__dirname, './cert/appPublicCert.crt'),
           gateway: 'https://openapi-sandbox.dl.alipaydev.com/gateway.do',
         });
         return alipaySdk;
