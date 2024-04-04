@@ -16,8 +16,8 @@ export class JobController {
   }
 
   @MessagePattern('findAll')
-  findAll() {
-    return this.jobService.findAll();
+  findAll(parmas: JobDetail & Pagination) {
+    return this.jobService.findAll(parmas);
   }
 
   @MessagePattern('findOne')

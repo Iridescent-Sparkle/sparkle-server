@@ -11,7 +11,12 @@ export class CompanyService {
   constructor() {}
 
   async createCompanyInfo(company: Company) {
-    await this.companyRepository.save(company);
+    const newCompany = new Company();
+    newCompany.companyName = company.companyName;
+    newCompany.companyAvatar = company.companyAvatar;
+    newCompany.companyLicense = company.companyLicense;
+    newCompany.status = company.status;
+    return await this.companyRepository.save(newCompany);
   }
 
   async findAllCompanyInfo(parmas: Company & Pagination) {

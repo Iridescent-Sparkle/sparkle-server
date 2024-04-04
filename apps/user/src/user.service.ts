@@ -27,7 +27,7 @@ export class UserService {
   private GeniusClient: ClientProxy;
 
   @Inject('BOSS_SERVICE')
-  private BOSSClient: ClientProxy;
+  private BossClient: ClientProxy;
 
   @InjectRepository(User)
   private userRepository: Repository<User>;
@@ -215,9 +215,22 @@ export class UserService {
   }
 
   async findUserById(userId: number) {
+    console.log(
+      await this.userRepository.findOne({
+        where: {
+          id: userId,
+        },
+        relations: {
+          company: true,
+        },
+      }),
+    );
     return await this.userRepository.findOne({
       where: {
         id: userId,
+      },
+      relations: {
+        company: true,
       },
     });
   }
@@ -235,7 +248,7 @@ export class UserService {
     const { company, userId } = params;
 
     const companyInfo = await firstValueFrom(
-      this.BOSSClient.send('createCompanyInfo', company),
+      this.BossClient.send('createCompanyInfo', company),
     );
 
     return await this.userRepository.update(userId, {

@@ -32,6 +32,8 @@ import { ExperienceService } from './service/experience.service';
 import { JobService } from './service/job.service';
 import { LevelService } from './service/level.service';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
+import { CompanyController } from './controller/company.controller';
+import { CompanyService } from './service/company.service';
 
 @Module({
   imports: [
@@ -83,6 +85,7 @@ import { Profile } from 'apps/genius/src/entities/profile.entity';
     EducationController,
     ExperienceController,
     LevelController,
+    CompanyController,
   ],
   providers: [
     JobService,
@@ -91,6 +94,7 @@ import { Profile } from 'apps/genius/src/entities/profile.entity';
     EducationService,
     ExperienceService,
     LevelService,
+    CompanyService,
   ],
 })
 export class BossModule {}
