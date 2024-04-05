@@ -41,6 +41,7 @@ import { AlipayModule } from '@app/alipay';
 import { OrderService } from './service/order.service';
 import { OrderController } from './controller/order.controller';
 import { OrderInfo } from './entities/order.entity';
+import { Contact } from './entities/contact.entity';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { OrderInfo } from './entities/order.entity';
       JobDeliver,
       IntegralMeal,
       OrderInfo,
+      Contact,
     ]),
     WinstonModule.forRoot({
       level: 'debug',

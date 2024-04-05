@@ -39,6 +39,7 @@ import { ProfileService } from './service/profile.service';
 import { ProjectService } from './service/project.service';
 import { VolunteerService } from './service/volunteer.service';
 import { Company } from 'apps/boss/src/entities/company.entity';
+import { Contact } from 'apps/boss/src/entities/contact.entity';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { Company } from 'apps/boss/src/entities/company.entity';
       JobExperience,
       JobLevel,
       JobEducation,
+      Contact,
     ]),
     WinstonModule.forRoot({
       level: 'debug',

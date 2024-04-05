@@ -2,7 +2,7 @@ import { EmailService } from '@app/email';
 import { ImService } from '@app/im';
 import { RedisService } from '@app/redis';
 import { SmsService } from '@app/sms';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
@@ -16,7 +16,6 @@ import { md5 } from './utils/index';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { firstValueFrom } from 'rxjs';
 import { OssService } from '@app/oss';
-import { Logger } from 'winston';
 import { Company } from 'apps/boss/src/entities/company.entity';
 
 @Injectable()

@@ -19,6 +19,15 @@ import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { OssModule } from '@app/oss';
 import { ConfigService } from '@nestjs/config';
+import { Contact } from 'apps/boss/src/entities/contact.entity';
+import { JobDetail } from 'apps/boss/src/entities/job.entity';
+import { JobBonus } from 'apps/boss/src/entities/bonus.entity';
+import { JobExperience } from 'apps/boss/src/entities/experience.entity';
+import { JobEducation } from 'apps/boss/src/entities/education.entity';
+import { JobLevel } from 'apps/boss/src/entities/level.entity';
+import { JobCategory } from 'apps/boss/src/entities/category.entity';
+import { JobCollect } from 'apps/genius/src/entities/collect.entity';
+import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
 
 @Module({
   imports: [
@@ -31,7 +40,20 @@ import { ConfigService } from '@nestjs/config';
     JwtModule,
     EmailModule,
     SmsModule,
-    TypeOrmModule.forFeature([User, Company, Profile]),
+    TypeOrmModule.forFeature([
+      User,
+      Company,
+      Profile,
+      Contact,
+      JobDetail,
+      JobBonus,
+      JobExperience,
+      JobLevel,
+      JobEducation,
+      JobCategory,
+      JobCollect,
+      JobDeliver,
+    ]),
     ClientsModule.registerAsync([
       {
         name: 'GENIUS_SERVICE',

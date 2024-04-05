@@ -3,6 +3,7 @@
  * @Description: User表
  */
 import { Company } from 'apps/boss/src/entities/company.entity';
+import { Contact } from 'apps/boss/src/entities/contact.entity';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
 import {
   Column,
@@ -10,6 +11,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   RelationId,
@@ -105,6 +107,16 @@ export class User {
   @Column()
   @RelationId((user: User) => user.profile)
   profileId: number;
+
+  @OneToMany(() => Contact, (contact) => contact.user)
+  contact: Contact[];
+
+  @Column({
+    type: 'simple-array',
+    nullable: true,
+  })
+  @RelationId((user: User) => user.contact)
+  contactId: number[];
 
   @Column({
     default: false,
