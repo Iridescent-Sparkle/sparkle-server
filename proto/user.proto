@@ -38,6 +38,7 @@ message User {
   string updateTime = 15;
   Company company = 16;
   int64 integral = 17;
+  repeated int32 contactId = 18;
 }
 
 message Company {

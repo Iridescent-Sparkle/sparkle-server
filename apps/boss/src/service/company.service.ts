@@ -17,7 +17,7 @@ export class CompanyService {
     newCompany.companyLicense = company.companyLicense;
     newCompany.companyDesc = company.companyDesc;
     newCompany.status = company.status;
-    return await this.companyRepository.save(company);
+    return await this.companyRepository.save(newCompany);
   }
 
   async findAllCompanyInfo(params: Company & Pagination) {
