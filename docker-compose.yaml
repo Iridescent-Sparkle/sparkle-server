@@ -30,8 +30,6 @@ services:
        - redis-container
        - rabititmq-container
        - etcd-container
-    volumes:
-      - ./cert:/app/apps/cert
     environment:
        NODE_ENV: production
     ports:
@@ -52,6 +50,8 @@ services:
       - etcd-container
     environment:
        NODE_ENV: production
+    volumes:
+      - ./cert:/app/apps/cert
     ports:
       - "3002:3002"
     networks:

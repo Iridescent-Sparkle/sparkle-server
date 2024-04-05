@@ -12,7 +12,7 @@ export class AlipayService {
     try {
       const { totalAmount, subject } = params;
       const result = await this.alipaySdk.sdkExec('alipay.trade.app.pay', {
-        notify_url: 'https://api.iridescent.icu/user/pay/',
+        notify_url: 'https://api.iridescent.icu/boss/order/receive',
         bizContent: {
           out_trade_no: generateAlipayOrderNumber(), // 订单号，用于识别订单，不能重复
           total_amount: totalAmount, // 金额

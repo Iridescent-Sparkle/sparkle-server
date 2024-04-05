@@ -19,11 +19,9 @@ import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { OssModule } from '@app/oss';
 import { ConfigService } from '@nestjs/config';
-import { AlipayModule } from '@app/alipay';
 
 @Module({
   imports: [
-    AlipayModule,
     OssModule,
     HttpModule,
     ConfigModule,
