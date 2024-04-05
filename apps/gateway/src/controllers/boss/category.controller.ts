@@ -20,8 +20,8 @@ export class CategoryController {
 
   @Post('all')
   @RequireLogin()
-  findAllJobCategory(@Body() parmas: JobCategory & Pagination) {
-    return firstValueFrom(this.BossClient.send('findAllJobCategory', parmas));
+  findAllJobCategory(@Body() params: JobCategory & Pagination) {
+    return firstValueFrom(this.BossClient.send('findAllJobCategory', params));
   }
 
   @Get('job/:id')
@@ -34,7 +34,7 @@ export class CategoryController {
 
   @Post('update')
   @RequireLogin()
-  updateJobCategory(@Body() parmas: JobCategory) {
-    return firstValueFrom(this.BossClient.send('updateJobCategory', parmas));
+  updateJobCategory(@Body() params: JobCategory) {
+    return firstValueFrom(this.BossClient.send('updateJobCategory', params));
   }
 }

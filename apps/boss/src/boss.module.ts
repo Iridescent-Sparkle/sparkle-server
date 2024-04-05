@@ -34,9 +34,17 @@ import { LevelService } from './service/level.service';
 import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { CompanyController } from './controller/company.controller';
 import { CompanyService } from './service/company.service';
+import { IntegralMeal } from './entities/integral.entity';
+import { IntegralService } from './service/integral.service';
+import { IntegralController } from './controller/integral.controller';
+import { AlipayModule } from '@app/alipay';
+import { OrderService } from './service/order.service';
+import { OrderController } from './controller/order.controller';
+import { OrderInfo } from './entities/order.entity';
 
 @Module({
   imports: [
+    AlipayModule,
     ConfigModule,
     DbModule,
     RedisModule,
@@ -55,6 +63,8 @@ import { CompanyService } from './service/company.service';
       JobExperience,
       JobCollect,
       JobDeliver,
+      IntegralMeal,
+      OrderInfo,
     ]),
     WinstonModule.forRoot({
       level: 'debug',
@@ -86,6 +96,8 @@ import { CompanyService } from './service/company.service';
     ExperienceController,
     LevelController,
     CompanyController,
+    IntegralController,
+    OrderController,
   ],
   providers: [
     JobService,
@@ -95,6 +107,8 @@ import { CompanyService } from './service/company.service';
     ExperienceService,
     LevelService,
     CompanyService,
+    IntegralService,
+    OrderService,
   ],
 })
 export class BossModule {}

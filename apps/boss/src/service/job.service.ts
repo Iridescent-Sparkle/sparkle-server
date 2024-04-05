@@ -38,8 +38,8 @@ export class JobService {
     return await this.jobDetailRepository.save(jobDetail);
   }
 
-  async findAll(parmas: JobDetail & Pagination) {
-    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = parmas;
+  async findAll(params: JobDetail & Pagination) {
+    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = params;
 
     const condition: Record<string, any> = {};
 

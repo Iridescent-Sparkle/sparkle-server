@@ -125,8 +125,8 @@ export class CategoryService {
     return {};
   }
 
-  async findAllJobCategory(parmas: JobCategory & Pagination) {
-    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = parmas;
+  async findAllJobCategory(params: JobCategory & Pagination) {
+    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = params;
     const condition: Record<string, any> = {};
     if (rest.categoryName) {
       condition.categoryName = Like(`%${rest.categoryName}%`);

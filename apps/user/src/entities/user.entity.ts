@@ -83,6 +83,12 @@ export class User {
   })
   contactPassword: string;
 
+  @Column({
+    comment: '积分',
+    default: 0,
+  })
+  integral: number;
+
   @ManyToOne(() => Company)
   company: Company;
 

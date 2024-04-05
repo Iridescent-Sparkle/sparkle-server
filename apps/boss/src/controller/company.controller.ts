@@ -13,8 +13,8 @@ export class CompanyController {
   }
 
   @MessagePattern('findAllCompanyInfo')
-  findAllCompanyInfo(parmas: Company & Pagination) {
-    return this.companyService.findAllCompanyInfo(parmas);
+  findAllCompanyInfo(params: Company & Pagination) {
+    return this.companyService.findAllCompanyInfo(params);
   }
 
   @MessagePattern('updateCompanyInfo')

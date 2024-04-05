@@ -131,6 +131,8 @@
       "entryFile": "main",
       "sourceRoot": "apps/genius/src",
       "compilerOptions": {
+        "watchAssets": true,
+        "assets": ["/**/*.crt","/**/*.pem"],
         "tsConfigPath": "apps/genius/tsconfig.app.json"
       }
     },

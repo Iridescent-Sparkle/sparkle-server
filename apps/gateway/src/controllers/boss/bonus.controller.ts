@@ -19,13 +19,13 @@ export class BonusController {
 
   @Post('all')
   @RequireLogin()
-  findAllJobBonus(@Body() parmas: JobBonus & Pagination): Promise<JobBonus[]> {
-    return firstValueFrom(this.BossClient.send('findAllJobBonus', parmas));
+  findAllJobBonus(@Body() params: JobBonus & Pagination): Promise<JobBonus[]> {
+    return firstValueFrom(this.BossClient.send('findAllJobBonus', params));
   }
 
   @Post('update')
   @RequireLogin()
-  updateJobBonus(@Body() parmas: JobBonus): Promise<JobBonus[]> {
-    return firstValueFrom(this.BossClient.send('updateJobBonus', parmas));
+  updateJobBonus(@Body() params: JobBonus): Promise<JobBonus[]> {
+    return firstValueFrom(this.BossClient.send('updateJobBonus', params));
   }
 }

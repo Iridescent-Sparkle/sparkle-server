@@ -13,8 +13,8 @@ export class CategoryController {
   }
 
   @MessagePattern('findAllJobCategory')
-  findAllJobCategory(parmas: JobCategory & Pagination) {
-    return this.categoryService.findAllJobCategory(parmas);
+  findAllJobCategory(params: JobCategory & Pagination) {
+    return this.categoryService.findAllJobCategory(params);
   }
 
   @MessagePattern('findJobByCategory')

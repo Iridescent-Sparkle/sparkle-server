@@ -13,8 +13,8 @@ export class BonusController {
   }
 
   @MessagePattern('findAllJobBonus')
-  findAllJobBonus(parmas: JobBonus & Pagination) {
-    return this.bonusService.findAllJobBonus(parmas);
+  findAllJobBonus(params: JobBonus & Pagination) {
+    return this.bonusService.findAllJobBonus(params);
   }
 
   @MessagePattern('updateJobBonus')

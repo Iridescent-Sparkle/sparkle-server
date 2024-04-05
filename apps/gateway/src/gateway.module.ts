@@ -23,6 +23,8 @@ import { ProfileController } from './controllers/genius/profile.controller';
 import { ProjectController } from './controllers/genius/project.controller';
 import { VolunteerController } from './controllers/genius/volunteer.controller';
 import { ExperienceController as GeniusExperienceController } from './controllers/genius/experience.controller';
+import { IntegralController } from './controllers/boss/integral.controller';
+import { OrderController } from './controllers/boss/order.controller';
 
 @Module({
   imports: [
@@ -124,6 +126,8 @@ import { ExperienceController as GeniusExperienceController } from './controller
     ProjectController,
     VolunteerController,
     AdminUserController,
+    IntegralController,
+    OrderController,
   ],
   providers: [
     {

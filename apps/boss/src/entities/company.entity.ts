@@ -35,6 +35,11 @@ export class Company {
   companyLicense: string;
 
   @Column({
+    comment: '公司描述',
+  })
+  companyDesc: string;
+
+  @Column({
     comment: '审核状态',
     default: 0,
   })

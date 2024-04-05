@@ -19,8 +19,8 @@ export class CompanyService {
     return await this.companyRepository.save(newCompany);
   }
 
-  async findAllCompanyInfo(parmas: Company & Pagination) {
-    const { page = 1, pageSize = 10, ...rest } = parmas;
+  async findAllCompanyInfo(params: Company & Pagination) {
+    const { page = 1, pageSize = 10, ...rest } = params;
     const condition: Record<string, any> = {};
     if (rest.companyName) {
       condition.companyName = Like(`%${rest.companyName}%`);

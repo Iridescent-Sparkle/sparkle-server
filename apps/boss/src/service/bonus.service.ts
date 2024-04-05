@@ -101,8 +101,8 @@ export class BonusService {
     return {};
   }
 
-  async findAllJobBonus(parmas: JobBonus & Pagination) {
-    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = parmas;
+  async findAllJobBonus(params: JobBonus & Pagination) {
+    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = params;
 
     const condition: Record<string, any> = {};
 

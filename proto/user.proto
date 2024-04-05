@@ -37,18 +37,20 @@ message User {
   string createTime = 14;
   string updateTime = 15;
   Company company = 16;
+  int64 integral = 17;
 }
 
 message Company {
   int32 id = 1;
   repeated user.User user = 2;
-  string company_name = 3;
-  string company_avatar = 4;
-  string company_license = 5;
+  string companyName = 3;
+  string companyAvatar = 4;
+  string companyLicense = 5;
   int32 status = 6;
-  bool is_delete = 7;
-  string create_time = 8;
-  string update_time = 9;
+  bool isDelete = 7;
+  string createTime = 8;
+  string updateTime = 9;
+  string companyDesc = 10;
 }
 
 message CaptchaRequest {
