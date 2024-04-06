@@ -31,6 +31,7 @@ export class ExperienceService {
   }
 
   async createExperience(experience: Experience): Promise<Experience> {
+    experience.profileId = experience.userId;
     return await this.ExperienceRepository.save(experience);
   }
   async updateExperience(experience: Experience): Promise<any> {

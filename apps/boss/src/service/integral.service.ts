@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { IntegralMeal } from '../entities/integral.entity';
+import { User } from 'apps/user/src/entities/user.entity';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class IntegralService {
   @InjectRepository(IntegralMeal)
   private integralMealRepository: Repository<IntegralMeal>;
+  @InjectRepository(User)
+  private userRepository: Repository<User>;
 
   constructor() {}
 
@@ -89,6 +93,39 @@ export class IntegralService {
   async deleteIntegralMeal(id: number) {
     await this.integralMealRepository.update(id, {
       isDelete: true,
+    });
+  }
+
+  async rechargeIntegral(params: { integral: number; userId: number }) {
+    const { integral, userId } = params;
+
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    return await this.userRepository.update(userId, {
+      integral: user.integral + integral,
+    });
+  }
+  async consumeIntegral(params: { integral: number; userId: number }) {
+    const { integral, userId } = params;
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user.integral < integral) {
+      throw new RpcException({
+        message: '积分不足',
+        status: HttpStatus.BAD_REQUEST,
+      });
+    }
+
+    return await this.userRepository.update(userId, {
+      integral: user.integral - integral,
     });
   }
 }

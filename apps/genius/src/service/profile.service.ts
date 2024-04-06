@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Profile } from '../entities/profile.entity';
 import { User } from 'apps/user/src/entities/user.entity';
+import { Between, Like, Repository } from 'typeorm';
+import { Profile } from '../entities/profile.entity';
 
 @Injectable()
 export class ProfileService {
@@ -13,14 +13,71 @@ export class ProfileService {
   private userRepository: Repository<User>;
 
   constructor() {}
+  async findAllProfile(params: Profile & Pagination) {
+    const { page = 1, pageSize = 10, ...rest } = params;
 
-  async findProfile(userId: number) {
+    const condition: Record<string, any> = {};
+
+    if (rest.address) {
+      condition.address = Like(`%${rest.address}%`);
+    }
+
+    if (rest.minSalary && rest.maxSalary) {
+      condition.minSalary = Between(rest.minSalary, rest.maxSalary);
+      condition.maxSalary = Between(rest.minSalary, rest.maxSalary);
+    }
+
+    if (rest.createStart && rest.createEnd) {
+      condition.createTime = Between(
+        new Date(rest.createStart),
+        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+      );
+    }
+
+    if (rest.updateStart && rest.updateEnd) {
+      condition.updateTime = Between(
+        new Date(rest.updateStart),
+        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+      );
+    }
+
+    const [data, total] = await this.profileRepository.findAndCount({
+      where: {
+        isDelete: false,
+        ...rest,
+        ...condition,
+      },
+      relations: {
+        user: true,
+        eduction: true,
+        project: true,
+        volunteer: true,
+        experience: true,
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
+  }
+  async findProfileByUser(userId: number) {
     const profile = await this.profileRepository.findOne({
       where: {
         isDelete: false,
         id: userId,
       },
-      relations: ['user'],
+      relations: {
+        user: true,
+        eduction: true,
+        project: true,
+        volunteer: true,
+        experience: true,
+      },
     });
     const res = {
       nickname: profile.user.nickname,

@@ -82,7 +82,7 @@ export class JobService {
       );
     }
 
-    const [data, total] = await this.jobDetailRepository.find({
+    const [data, total] = await this.jobDetailRepository.findAndCount({
       where: {
         isFrozen,
         isDelete: false,
@@ -95,6 +95,7 @@ export class JobService {
         'jobExperience',
         'jobEducation',
         'jobLevel',
+        'company',
       ],
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -166,27 +167,12 @@ export class JobService {
   }
 
   async remove({ jobId }: { jobId: number }) {
-    await this.jobDetailRepository.delete(jobId);
+    await this.jobDetailRepository.update(jobId, {
+      isDelete: true,
+    });
 
     return {
       message: '删除成功',
     };
-  }
-
-  async search({ keyword }: { keyword: string }) {
-    return await this.jobDetailRepository
-      .createQueryBuilder('jobDetail')
-      .where('jobDetail.jobName LIKE :keyword', { keyword: `%${keyword}%` })
-      .getMany();
-  }
-
-  async paginate({ page, take }: { page: number; take: number }) {
-    const skip = (page - 1) * take;
-    return await this.jobDetailRepository
-      .createQueryBuilder('jobDetail')
-      .orderBy('jobDetail.id', 'DESC')
-      .skip(skip)
-      .take(take)
-      .getMany();
   }
 }

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { IntegralMeal } from 'apps/boss/src/entities/integral.entity';
-import { RequireLogin } from 'decorators/custom.decorator';
+import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { firstValueFrom } from 'rxjs';
 
 @Controller({
@@ -27,5 +27,33 @@ export class IntegralController {
   @RequireLogin()
   async updateIntegralMeal(@Body() params: IntegralMeal) {
     return firstValueFrom(this.BossClient.send('updateIntegralMeal', params));
+  }
+
+  @Post('recharge')
+  @RequireLogin()
+  async rechargeIntegral(
+    @UserInfo('userId') userId: number,
+    @Body() params: { integral: number },
+  ) {
+    return firstValueFrom(
+      this.BossClient.send('rechargeIntegral', {
+        userId,
+        integral: params.integral,
+      }),
+    );
+  }
+
+  @Post('consume')
+  @RequireLogin()
+  async consumeIntegral(
+    @UserInfo('userId') userId: number,
+    @Body() params: { integral: number },
+  ) {
+    return firstValueFrom(
+      this.BossClient.send('consumeIntegral', {
+        userId,
+        integral: params.integral,
+      }),
+    );
   }
 }

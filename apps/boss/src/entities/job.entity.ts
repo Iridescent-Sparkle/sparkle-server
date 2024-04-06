@@ -18,6 +18,7 @@ import { JobExperience } from './experience.entity';
 import { JobLevel } from './level.entity';
 import { JobCollect } from 'apps/genius/src/entities/collect.entity';
 import { JobDeliver } from '../../../genius/src/entities/deliver.entity';
+import { Company } from './company.entity';
 
 @Entity({
   name: 'job_detail',
@@ -40,19 +41,12 @@ export class JobDetail {
   })
   jobName: string;
 
-  @Column({
-    length: 50,
-    comment: '公司名称',
-    nullable: true,
-  })
-  companyName: string;
+  @ManyToOne(() => Company)
+  company: Company;
 
-  @Column({
-    length: 50,
-    comment: '公司头像',
-    nullable: true,
-  })
-  companyAvatar: string;
+  @RelationId((jobDetail: JobDetail) => jobDetail.company)
+  @Column({})
+  companyId: number;
 
   @Column({
     length: 50,

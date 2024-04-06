@@ -31,6 +31,7 @@ export class VolunteerService {
   }
 
   async createVolunteer(volunteer: Volunteer): Promise<Volunteer> {
+    volunteer.profileId = volunteer.userId;
     return await this.volunteerRepository.save(volunteer);
   }
 

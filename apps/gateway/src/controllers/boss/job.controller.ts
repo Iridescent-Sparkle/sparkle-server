@@ -7,7 +7,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobDetail } from 'apps/boss/src/entities/job.entity';
@@ -32,10 +31,18 @@ export class JobController {
     );
   }
 
-  @Get('all')
+  @Post('all')
   @RequireLogin()
-  async findAll(): Promise<{ jobDetail: JobDetail[] }> {
-    return firstValueFrom(await this.BossClient.send('findAll', {}));
+  async findAll(
+    @UserInfo('userId') userId: number,
+    @Body() params: JobDetail & Pagination,
+  ): Promise<{ jobDetail: JobDetail[] }> {
+    return firstValueFrom(
+      await this.BossClient.send('findAll', {
+        userId,
+        ...params,
+      }),
+    );
   }
 
   @Get(':id')
@@ -67,24 +74,9 @@ export class JobController {
     );
   }
 
-  @Delete(':id')
+  @Post('remove')
   @RequireLogin()
-  remove(@Param('id') jobId: string): Promise<void> {
-    return firstValueFrom(this.BossClient.send('remove', { jobId: +jobId }));
-  }
-
-  @Get('search')
-  @RequireLogin()
-  search(@Query('keyword') keyword: string): Promise<JobDetail[]> {
-    return firstValueFrom(this.BossClient.send('search', { keyword }));
-  }
-
-  @Get('paginate')
-  @RequireLogin()
-  paginate(
-    @Query('page') page: number,
-    @Query('take') take: number,
-  ): Promise<JobDetail[]> {
-    return firstValueFrom(this.BossClient.send('paginate', { page, take }));
+  remove(@Body() params: { jobId: string }): Promise<void> {
+    return firstValueFrom(this.BossClient.send('remove', params));
   }
 }

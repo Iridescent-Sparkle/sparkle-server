@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobExperience } from 'apps/boss/src/entities/experience.entity';
 import { RequireLogin } from 'decorators/custom.decorator';
@@ -17,7 +17,7 @@ export class ExperienceController {
     return this.BossClient.send('initJobExperience', {});
   }
 
-  @Get('all')
+  @Post('all')
   @RequireLogin()
   findAllJobExperience(): Promise<JobExperience[]> {
     return firstValueFrom(this.BossClient.send('findAllJobExperience', {}));

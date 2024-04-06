@@ -31,6 +31,7 @@ export class EducationService {
   }
 
   async createEducation(education: Education): Promise<Education> {
+    education.profileId = education.userId;
     return await this.educationRepository.save(education);
   }
 

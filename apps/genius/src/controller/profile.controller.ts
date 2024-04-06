@@ -7,9 +7,14 @@ import { ProfileService } from '../service/profile.service';
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
-  @MessagePattern('findProfile')
-  async findProfile(userId: number) {
-    return this.profileService.findProfile(userId);
+  @MessagePattern('findAllProfile')
+  async findAllProfile(params: Profile & Pagination) {
+    return this.profileService.findAllProfile(params);
+  }
+
+  @MessagePattern('findProfileByUser')
+  async findProfileByUser(userId: number) {
+    return this.profileService.findProfileByUser(userId);
   }
 
   @MessagePattern('createProfile')

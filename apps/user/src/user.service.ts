@@ -105,6 +105,11 @@ export class UserService {
         roleType: 'C',
       });
 
+      await this.imService.register({
+        username: registerUserDto.username,
+        roleType: 'B',
+      });
+
       const profile = await firstValueFrom(
         this.GeniusClient.send('createProfile', new Profile()),
       );
@@ -116,6 +121,7 @@ export class UserService {
       newUser.nickname = '用户' + Math.random().toString().slice(2, 6);
       newUser.contactPassword = registerUserDto.username + '_password';
       newUser.contactIdToB = registerUserDto.username + '_sparkle' + `_C`;
+      newUser.contactIdToC = registerUserDto.username + '_sparkle' + `_B`;
       newUser.profileId = profile.id;
       newUser.avatar =
         'https://sparkle-cdn.oss-cn-chengdu.aliyuncs.com/sparkle-mobile/stars.png';

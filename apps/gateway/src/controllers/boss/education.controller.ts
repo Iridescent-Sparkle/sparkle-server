@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobEducation } from 'apps/boss/src/entities/education.entity';
 import { RequireLogin } from 'decorators/custom.decorator';
@@ -17,7 +17,7 @@ export class EducationController {
     return this.BossClient.send('initJobEducation', {});
   }
 
-  @Get('all')
+  @Post('all')
   @RequireLogin()
   findAllJobEducation(): Promise<JobEducation[]> {
     return firstValueFrom(this.BossClient.send('findAllJobEducation', {}));

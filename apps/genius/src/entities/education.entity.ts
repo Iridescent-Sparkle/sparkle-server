@@ -8,6 +8,7 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Profile } from './profile.entity';
 
 @Entity({
   name: 'education',
@@ -23,6 +24,13 @@ export class Education {
   @RelationId((education: Education) => education.user)
   @Column()
   userId: number;
+
+  @ManyToOne(() => Profile)
+  profile: Profile;
+
+  @RelationId((education: Education) => education.profile)
+  @Column()
+  profileId: number;
 
   @Column({
     comment: '学校',

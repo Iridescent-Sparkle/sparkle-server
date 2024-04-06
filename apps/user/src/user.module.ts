@@ -28,6 +28,10 @@ import { JobLevel } from 'apps/boss/src/entities/level.entity';
 import { JobCategory } from 'apps/boss/src/entities/category.entity';
 import { JobCollect } from 'apps/genius/src/entities/collect.entity';
 import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
+import { Education } from 'apps/genius/src/entities/education.entity';
+import { Volunteer } from 'apps/genius/src/entities/volunteer.entity';
+import { Project } from 'apps/genius/src/entities/project.entity';
+import { Experience } from 'apps/genius/src/entities/experience.entity';
 
 @Module({
   imports: [
@@ -53,6 +57,10 @@ import { JobDeliver } from 'apps/genius/src/entities/deliver.entity';
       JobCategory,
       JobCollect,
       JobDeliver,
+      Education,
+      Volunteer,
+      Project,
+      Experience,
     ]),
     ClientsModule.registerAsync([
       {

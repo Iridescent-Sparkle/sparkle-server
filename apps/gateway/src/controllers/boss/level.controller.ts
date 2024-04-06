@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobLevel } from 'apps/boss/src/entities/level.entity';
 import { RequireLogin } from 'decorators/custom.decorator';
@@ -17,7 +17,7 @@ export class LevelController {
     return this.BossClient.send('initJobLevel', {});
   }
 
-  @Get('all')
+  @Post('all')
   @RequireLogin()
   findAllJobLevel(): Promise<JobLevel[]> {
     return firstValueFrom(this.BossClient.send('findAllJobLevel', {}));

@@ -42,19 +42,4 @@ export class JobController {
       jobId,
     });
   }
-
-  @MessagePattern('search')
-  search({ keyword }: { keyword: string }) {
-    return this.jobService.search({
-      keyword,
-    });
-  }
-
-  @MessagePattern('paginate')
-  paginate({ page, take }: { page: number; take: number }) {
-    return this.jobService.paginate({
-      page,
-      take,
-    });
-  }
 }

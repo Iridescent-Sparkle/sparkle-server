@@ -42,6 +42,10 @@ import { OrderService } from './service/order.service';
 import { OrderController } from './controller/order.controller';
 import { OrderInfo } from './entities/order.entity';
 import { Contact } from './entities/contact.entity';
+import { Education } from 'apps/genius/src/entities/education.entity';
+import { Experience } from 'apps/genius/src/entities/experience.entity';
+import { Project } from 'apps/genius/src/entities/project.entity';
+import { Volunteer } from 'apps/genius/src/entities/volunteer.entity';
 
 @Module({
   imports: [
@@ -67,6 +71,10 @@ import { Contact } from './entities/contact.entity';
       IntegralMeal,
       OrderInfo,
       Contact,
+      Education,
+      Experience,
+      Project,
+      Volunteer,
     ]),
     WinstonModule.forRoot({
       level: 'debug',

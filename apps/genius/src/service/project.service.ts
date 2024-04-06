@@ -31,6 +31,7 @@ export class ProjectService {
   }
 
   async createProject(project: Project): Promise<Project> {
+    project.profileId = project.userId;
     return await this.projectRepository.save(project);
   }
 

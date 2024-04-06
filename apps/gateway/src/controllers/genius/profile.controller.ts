@@ -11,8 +11,14 @@ export class ProfileController {
 
   @Get('user')
   @RequireLogin()
-  async findProfile(@UserInfo('userId') userId: number) {
-    return firstValueFrom(this.GeniusClient.send('findProfile', userId));
+  async findProfileByUser(@UserInfo('userId') userId: number) {
+    return firstValueFrom(this.GeniusClient.send('findProfileByUser', userId));
+  }
+
+  @Post('all')
+  @RequireLogin()
+  async findAllProfile(@Body() params: Profile & Pagination) {
+    return firstValueFrom(this.GeniusClient.send('findAllProfile', params));
   }
 
   @Post('update')

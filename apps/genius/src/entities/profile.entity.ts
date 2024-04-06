@@ -3,10 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Education } from './education.entity';
+import { Project } from './project.entity';
+import { Volunteer } from './volunteer.entity';
+import { Experience } from './experience.entity';
 
 @Entity({
   name: 'profile',
@@ -18,6 +23,18 @@ export class Profile {
 
   @OneToOne(() => User, (user: User) => user.profile)
   user: User;
+
+  @OneToMany(() => Education, (education) => education.profile)
+  eduction: Education[];
+
+  @OneToMany(() => Project, (project) => project.profile)
+  project: Project[];
+
+  @OneToMany(() => Volunteer, (volunteer) => volunteer.profile)
+  volunteer: Volunteer[];
+
+  @OneToMany(() => Experience, (experience) => experience.profile)
+  experience: Experience[];
 
   @Column({
     comment: '职业',

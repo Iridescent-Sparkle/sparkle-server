@@ -8,6 +8,7 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
+import { Profile } from './profile.entity';
 
 @Entity({
   name: 'volunteer',
@@ -23,6 +24,13 @@ export class Volunteer {
   @RelationId((volunteer: Volunteer) => volunteer.user)
   @Column()
   userId: number;
+
+  @ManyToOne(() => Profile)
+  profile: Profile;
+
+  @RelationId((volunteer: Volunteer) => volunteer.profile)
+  @Column()
+  profileId: number;
 
   @Column({
     comment: '活动名称',
