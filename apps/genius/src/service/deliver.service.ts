@@ -31,6 +31,20 @@ export class DeliverService {
     }));
   }
 
+  async findDeliverStatusByJobId(deliverData: { deliverId: number }) {
+    const { deliverId } = deliverData;
+
+    return await this.jobDeliverRepository.findOne({
+      where: {
+        id: deliverId,
+        isDelete: false,
+      },
+      relations: {
+        user: true,
+      },
+    });
+    // status:0 未投递 1 已投递 2 已查看3 已通过 4 已拒绝
+  }
   async createDeliver(deliverData: { jobId: number; userId: number }) {
     const { jobId, userId } = deliverData;
 

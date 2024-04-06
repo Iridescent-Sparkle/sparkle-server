@@ -42,4 +42,11 @@ export class JobController {
       jobId,
     });
   }
+
+  @MessagePattern('findDeliverByJobId')
+  findDeliverByJobId({ jobId }: { jobId: number }) {
+    return this.jobService.findDeliverByJobId({
+      jobId,
+    });
+  }
 }

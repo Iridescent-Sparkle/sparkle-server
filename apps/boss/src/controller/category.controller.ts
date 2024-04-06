@@ -24,6 +24,6 @@ export class CategoryController {
 
   @MessagePattern('updateJobCategory')
   async updateJobCategory(params: JobCategory) {
-    await this.categoryService.updateJobCategory(params);
+    return await this.categoryService.updateJobCategory(params);
   }
 }

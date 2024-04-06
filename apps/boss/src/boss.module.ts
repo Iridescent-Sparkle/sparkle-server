@@ -46,6 +46,12 @@ import { Education } from 'apps/genius/src/entities/education.entity';
 import { Experience } from 'apps/genius/src/entities/experience.entity';
 import { Project } from 'apps/genius/src/entities/project.entity';
 import { Volunteer } from 'apps/genius/src/entities/volunteer.entity';
+import { IntegralRecord } from './entities/consume.entity';
+import { ContactController } from './controller/contact.controller';
+
+import { ContactService } from './service/contact.service';
+import { ConsumeService } from './service/consume.service';
+import { ConsumeController } from './controller/consume.controller';
 
 @Module({
   imports: [
@@ -75,6 +81,7 @@ import { Volunteer } from 'apps/genius/src/entities/volunteer.entity';
       Experience,
       Project,
       Volunteer,
+      IntegralRecord,
     ]),
     WinstonModule.forRoot({
       level: 'debug',
@@ -108,6 +115,8 @@ import { Volunteer } from 'apps/genius/src/entities/volunteer.entity';
     CompanyController,
     IntegralController,
     OrderController,
+    ContactController,
+    ConsumeController,
   ],
   providers: [
     JobService,
@@ -119,6 +128,8 @@ import { Volunteer } from 'apps/genius/src/entities/volunteer.entity';
     CompanyService,
     IntegralService,
     OrderService,
+    ContactService,
+    ConsumeService,
   ],
 })
 export class BossModule {}

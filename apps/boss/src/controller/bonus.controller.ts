@@ -19,6 +19,6 @@ export class BonusController {
 
   @MessagePattern('updateJobBonus')
   async updateJobBonus(params: JobBonus) {
-    await this.bonusService.updateJobBonus(params);
+    return await this.bonusService.updateJobBonus(params);
   }
 }

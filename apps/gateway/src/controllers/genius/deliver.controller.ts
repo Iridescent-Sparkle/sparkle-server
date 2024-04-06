@@ -16,6 +16,14 @@ export class DeliverController {
     );
   }
 
+  @Post('query')
+  @RequireLogin()
+  async findDeliverStatusByJobId(@Body() deliverData: { deliverId: number }) {
+    return firstValueFrom(
+      this.GeniusClient.send('findDeliverStatusByJobId', deliverData),
+    );
+  }
+
   @Post('create')
   @RequireLogin()
   async createDeliver(

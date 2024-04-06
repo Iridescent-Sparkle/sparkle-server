@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   Param,
@@ -78,5 +77,11 @@ export class JobController {
   @RequireLogin()
   remove(@Body() params: { jobId: string }): Promise<void> {
     return firstValueFrom(this.BossClient.send('remove', params));
+  }
+
+  @Post('deliver')
+  @RequireLogin()
+  findDeliverByJobId(@Body() params: { jobId: string }): Promise<void> {
+    return firstValueFrom(this.BossClient.send('findDeliverByJobId', params));
   }
 }

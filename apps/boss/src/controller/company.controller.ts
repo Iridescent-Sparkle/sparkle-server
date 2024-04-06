@@ -19,6 +19,6 @@ export class CompanyController {
 
   @MessagePattern('updateCompanyInfo')
   async updateCompanyInfo(params: Company) {
-    await this.companyService.updateCompanyInfo(params);
+    return await this.companyService.updateCompanyInfo(params);
   }
 }

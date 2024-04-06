@@ -11,6 +11,11 @@ export class DeliverController {
     return this.deliverService.findDeliverStatusByUserId({ userId });
   }
 
+  @MessagePattern('findDeliverStatusByJobId')
+  async findDeliverStatusByJobId(deliverData: { deliverId: number }) {
+    return this.deliverService.findDeliverStatusByJobId(deliverData);
+  }
+
   @MessagePattern('createDeliver')
   async createDeliver(deliverData: { jobId: number; userId: number }) {
     return this.deliverService.createDeliver(deliverData);

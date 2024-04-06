@@ -175,4 +175,37 @@ export class JobService {
       message: '删除成功',
     };
   }
+
+  async findDeliverByJobId({ jobId }: { jobId: number }) {
+    const res = await this.jobDelivertRepository.find({
+      where: {
+        jobId,
+        isDelete: false,
+      },
+      relations: {
+        user: {
+          profile: {
+            eduction: true,
+            experience: true,
+            project: true,
+            volunteer: true,
+          },
+        },
+      },
+    });
+
+    return res.map((item) => {
+      return {
+        ...item,
+        eduction: item.user.profile.eduction,
+        experience: item.user.profile.experience,
+        project: item.user.profile.project,
+        volunteer: item.user.profile.volunteer,
+        address: item.user.profile.address,
+        summary: item.user.profile.summary,
+        id: item.user.profile.id,
+        deliverId: item.id,
+      };
+    });
+  }
 }

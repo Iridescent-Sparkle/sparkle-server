@@ -1,4 +1,3 @@
-import { Profile } from 'apps/genius/src/entities/profile.entity';
 import { User } from 'apps/user/src/entities/user.entity';
 import {
   Column,
@@ -11,31 +10,28 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'contact_list',
+  name: 'integral_record',
 })
-export class Contact {
+export class IntegralRecord {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToOne(() => Profile)
-  profile: Profile;
-
-  @RelationId((contact: Contact) => contact.profile)
-  @Column()
-  profileId: number;
 
   @ManyToOne(() => User)
   user: User;
 
-  @RelationId((contact: Contact) => contact.user)
+  @RelationId((integralRecord: IntegralRecord) => integralRecord.user)
   @Column()
   userId: number;
 
   @Column({
-    default: false,
-    comment: '是否禁用',
+    comment: '积分变化数量',
   })
-  isFrozen: boolean;
+  integral: number;
+
+  @Column({
+    comment: '积分记录类型',
+  })
+  type: string;
 
   @Column({
     default: false,
