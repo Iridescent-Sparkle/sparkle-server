@@ -16,7 +16,7 @@ export class UserController {
 
   @Get('register-captcha')
   async captcha(@Query('address') address: string) {
-    return firstValueFrom(this.adminClient.send('captcha', { address }));
+    return firstValueFrom(this.adminClient.send('captcha', address));
   }
 
   @Get('register-smsCode')

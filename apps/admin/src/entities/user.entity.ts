@@ -40,7 +40,6 @@ export class AdminUser {
   nickname: string;
 
   @Column({
-    length: 50,
     comment: '头像',
     nullable: true,
   })

@@ -20,14 +20,13 @@ export class AdminUserController {
 
   /** 获取邮箱验证码 */
   @MessagePattern('captcha')
-  async captcha({ address }: { address: string }) {
+  async captcha(address: string) {
     return await this.adminService.captcha(address);
   }
 
   /** 获取短信验证码 */
   @MessagePattern('smsCode')
-  async smsCode({ phone }: { phone: string }) {
-    console.log(phone);
+  async smsCode(phone: string) {
     return await this.adminService.smsCode(phone);
   }
 
