@@ -41,7 +41,7 @@ export class UserController {
     return firstValueFrom(this.adminClient.send('validateSmsCode', params));
   }
 
-  @Post('admin/login')
+  @Post('login')
   async adminLogin(@Body() loginUserDto: LoginUserDto) {
     return firstValueFrom(this.adminClient.send('adminLogin', loginUserDto));
   }
