@@ -16,4 +16,14 @@ export class ConsumeController {
   async createIntegralRecord(integralRecord: IntegralRecord) {
     return this.consumeService.createIntegralRecord(integralRecord);
   }
+
+  @MessagePattern('queryUsageByType')
+  async queryUsageByType() {
+    return this.consumeService.queryUsageByType();
+  }
+
+  @MessagePattern('queryConsumptionLast7Days')
+  async queryConsumptionLast7Days() {
+    return this.consumeService.queryConsumptionLast7Days();
+  }
 }

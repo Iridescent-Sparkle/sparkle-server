@@ -29,8 +29,17 @@ export class JobController {
   }
 
   @MessagePattern('update')
-  update({ jobId, jobDetail }: { jobId: number; jobDetail: JobDetail }) {
+  update({
+    userId,
+    jobId,
+    jobDetail,
+  }: {
+    userId: number;
+    jobId: number;
+    jobDetail: JobDetail;
+  }) {
     return this.jobService.update({
+      userId,
       jobId,
       jobDetail,
     });

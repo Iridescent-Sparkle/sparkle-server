@@ -157,13 +157,18 @@ export class JobService {
     return jobDetail;
   }
 
-  async update({ jobId, jobDetail }: { jobId: number; jobDetail: JobDetail }) {
-    await this.jobDetailRepository.update(jobId, jobDetail);
-    return await this.jobDetailRepository.findOne({
-      where: {
-        id: jobId,
-      },
-    });
+  async update({
+    userId,
+    jobId,
+    jobDetail,
+  }: {
+    userId: number;
+    jobId: number;
+    jobDetail: JobDetail;
+  }) {
+    jobDetail.id = jobId;
+    jobDetail.userId = userId;
+    return await this.jobDetailRepository.save(jobDetail);
   }
 
   async remove({ jobId }: { jobId: number }) {

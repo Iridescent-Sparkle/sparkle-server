@@ -32,4 +32,18 @@ export class ConsumeController {
       }),
     );
   }
+
+  @Post('usage/type')
+  @RequireLogin()
+  async queryUsageByType() {
+    return firstValueFrom(this.BossClient.send('queryUsageByType', {}));
+  }
+
+  @Post('usage/days')
+  @RequireLogin()
+  async queryConsumptionLast7Days() {
+    return firstValueFrom(
+      this.BossClient.send('queryConsumptionLast7Days', {}),
+    );
+  }
 }

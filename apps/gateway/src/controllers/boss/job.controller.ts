@@ -59,14 +59,16 @@ export class JobController {
     );
   }
 
-  @Put(':id')
+  @Post(':id')
   @RequireLogin()
   update(
+    @UserInfo('userId') userId: number,
     @Param('id') jobId: string,
     @Body() jobDetail: JobDetail,
   ): Promise<JobDetail> {
     return firstValueFrom(
       this.BossClient.send('update', {
+        userId,
         jobId: +jobId,
         jobDetail,
       }),
