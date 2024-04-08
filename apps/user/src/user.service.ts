@@ -52,14 +52,14 @@ export class UserService {
   @Inject(OssService)
   private ossService: OssService;
 
-  async captcha(address: string) {
+  async emailCode(email: string) {
     const code = Math.random().toString().slice(2, 6);
-    await this.redisService.set(`captcha_${address}`, code, 5 * 60);
-    await this.emailService.sendMail({
-      to: address,
-      subject: '注册验证码',
-      html: `<p>你的注册验证码是${code}</p>`,
-    });
+    await this.redisService.set(`emailCode_${email}`, '1234', 5 * 60);
+    // await this.emailService.sendMail({
+    //   to: address,
+    //   subject: '注册验证码',
+    //   html: `<p>你的注册验证码是${code}</p>`,
+    // });
     return {
       countDown: 60,
     };
@@ -179,23 +179,27 @@ export class UserService {
     return token;
   }
 
-  async validateSmsCode(username: string, code: string) {
-    const foundUser = await this.userRepository.findOne({
-      where: {
-        username: username,
-      },
-    });
-
-    if (!foundUser) {
-      throw new RpcException('用户不存在');
-    }
-
-    const captcha = await this.redisService.get(`smsCode_${username}`);
+  async validateSmsCode(phone: string, code: string) {
+    const captcha = await this.redisService.get(`smsCode_${phone}`);
 
     if (!captcha) {
       throw new RpcException('验证码已失效');
     }
-    console.log(captcha, code, username);
+
+    if (code !== captcha) {
+      throw new RpcException('验证码不正确');
+    }
+
+    return {};
+  }
+
+  async validateEmailCode(email: string, code: string) {
+    const captcha = await this.redisService.get(`emailCode_${email}`);
+
+    if (!captcha) {
+      throw new RpcException('验证码已失效');
+    }
+
     if (code !== captcha) {
       throw new RpcException('验证码不正确');
     }
@@ -214,7 +218,7 @@ export class UserService {
       throw new RpcException('用户不存在');
     }
 
-    return await this.userRepository.update(resetPasswordDto.username, {
+    return await this.userRepository.update(foundUser.id, {
       password: md5(resetPasswordDto.password),
     });
   }
@@ -243,6 +247,26 @@ export class UserService {
   async update(user: User) {
     console.log(user);
     return await this.userRepository.update(user.id, user);
+  }
+
+  async bindEmail(params: { userId: number; email: string; code: string }) {
+    const { userId, email, code } = params;
+
+    await this.validateEmailCode(email, code);
+
+    const foundUser = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!foundUser) {
+      throw new RpcException('用户不存在');
+    }
+
+    return await this.userRepository.update(userId, {
+      email,
+    });
   }
 
   async getStsToken() {

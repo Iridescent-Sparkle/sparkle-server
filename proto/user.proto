@@ -3,7 +3,7 @@ syntax = "proto3";
 package user;
 
 service UserService {
-  rpc  Captcha(CaptchaRequest) returns (CaptchaResponse);
+  rpc  EmailCode(EmailCodeRequest) returns (EmailCodeResponse);
   rpc  SmsCode(SmsCodeRequest) returns (SmsCodeResponse);
   rpc  Register(RegisterUserDto) returns (RegisterReponse);
   rpc  InitData(Empty) returns (Empty);
@@ -12,8 +12,10 @@ service UserService {
   rpc  Refresh(RefreshRequest) returns (RefreshResponse);
   rpc  ResetPassword(ResetPasswordRequest) returns (Empty);
   rpc  ValidateSmsCode(ValidateSmsCodeRequest) returns (Empty);
+  rpc  ValidateEmailCode(ValidateEmailCodeRequest) returns (Empty);
   rpc  Info(InfoRequest) returns (User);
   rpc  Update(UpdateRequest) returns (User);
+  rpc  BindEmail(BindEmailRequest) returns (User);
   rpc  GetStsToken(Empty) returns (GetStsTokenResponse);
   rpc  CreateCompanyInfo(CreateCompanyInfoRequest) returns (User);
 }
@@ -54,10 +56,10 @@ message Company {
   string companyDesc = 10;
 }
 
-message CaptchaRequest {
-  string address = 1;
+message EmailCodeRequest {
+  string email = 1;
 }
-message CaptchaResponse {
+message EmailCodeResponse {
   string countDown = 1;
 }
 
@@ -108,6 +110,11 @@ message ValidateSmsCodeRequest {
   string code = 2;
 }
 
+message ValidateEmailCodeRequest {
+  string email = 1;
+  string code = 2;
+}
+
 message ResetPasswordRequest {
   string username = 1;
   string password = 2;
@@ -125,6 +132,12 @@ message UpdateRequest {
   string nickname = 2;
   string avatar = 3;
   string occupation = 4;
+}
+
+message BindEmailRequest {
+  int32 userId = 1;
+  string email = 2;
+  string code = 3;
 }
 
 message CreateCompanyInfoRequest {

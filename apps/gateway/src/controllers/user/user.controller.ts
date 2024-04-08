@@ -21,9 +21,15 @@ export class UserController {
     this.userService = this.client.getService('UserService');
   }
 
-  @Get('register-captcha')
-  async captcha(@Query('address') address: string) {
-    return await this.userService.captcha({ address });
+  @Get('sts')
+  @RequireLogin()
+  async getStsToken() {
+    return await this.userService.getStsToken({});
+  }
+
+  @Get('register-emailCode')
+  async emailCode(@Query('email') email: string) {
+    return await this.userService.emailCode({ email });
   }
 
   @Get('register-smsCode')
@@ -41,19 +47,21 @@ export class UserController {
     return await this.userService.login(loginUserDto);
   }
 
-  @Post('resetPassword')
+  @Post('reset/password')
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
     return await this.userService.resetPassword(resetPasswordDto);
   }
 
-  @Post('validateSmsCode')
+  @Post('validate/sms')
+  @RequireLogin()
   async validateSmsCode(@Body() params: { phone: string; code: string }) {
     return await this.userService.validateSmsCode(params);
   }
 
-  @Post('admin/login')
-  async adminLogin(@Body() loginUserDto: LoginUserDto) {
-    return await this.userService.adminLogin(loginUserDto);
+  @Post('validate/email')
+  @RequireLogin()
+  async validateEmailCode(@Body() params: { email: string; code: string }) {
+    return await this.userService.validateEmailCode(params);
   }
 
   @Get('refresh')
@@ -75,10 +83,16 @@ export class UserController {
     return await this.userService.update(user);
   }
 
-  @Get('sts')
+  @Post('email/bind')
   @RequireLogin()
-  async getStsToken() {
-    return await this.userService.getStsToken({});
+  async bindEmail(
+    @UserInfo('userId') userId: number,
+    @Body() params: { email: string; code: string },
+  ) {
+    return await this.userService.bindEmail({
+      userId,
+      ...params,
+    });
   }
 
   @Post('company/create')

@@ -20,9 +20,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   /** 获取邮箱验证码 */
-  @GrpcMethod('UserService', 'Captcha')
-  async captcha({ address }: { address: string }) {
-    return await this.userService.captcha(address);
+  @GrpcMethod('UserService', 'EmailCode')
+  async emailCode({ email }: { email: string }) {
+    return await this.userService.emailCode(email);
   }
 
   /** 获取短信验证码 */
@@ -47,6 +47,12 @@ export class UserController {
   @GrpcMethod('UserService', 'ValidateSmsCode')
   async validateSmsCode({ phone, code }: { phone: string; code: string }) {
     return await this.userService.validateSmsCode(phone, code);
+  }
+
+  /** 验证邮箱验证码 */
+  @GrpcMethod('UserService', 'ValidateEmailCode')
+  async validateEmailCode({ email, code }: { email: string; code: string }) {
+    return await this.userService.validateEmailCode(email, code);
   }
 
   /** 重置密码 */
@@ -107,6 +113,12 @@ export class UserController {
   @GrpcMethod('UserService', 'Update')
   async update(user: User) {
     return await this.userService.update(user);
+  }
+
+  /** 绑定邮箱 */
+  @GrpcMethod('UserService', 'BindEmail')
+  async bindEmail(params: { userId: number; email: string; code: string }) {
+    return await this.userService.bindEmail(params);
   }
 
   /** 获取OSS STS Token */
