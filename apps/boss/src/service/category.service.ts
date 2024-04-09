@@ -168,18 +168,32 @@ export class CategoryService {
     };
   }
 
-  async findJobByCategory({ categoryId }: { categoryId: number }) {
-    if (categoryId == 1) {
-      return await this.jobDetailRepository.find();
+  async findJobByCategory(params: { categoryId: number } & Pagination) {
+    const { categoryId, page = 1, pageSize = 10 } = params;
+
+    const condition = {} as Record<string, any>;
+
+    if (categoryId != 1) {
+      condition.jobCategory = {
+        id: categoryId,
+      };
     }
 
-    return await this.jobDetailRepository.find({
+    const [data, total] = await this.jobDetailRepository.findAndCount({
       where: {
-        jobCategory: {
-          id: categoryId,
-        },
+        isDelete: false,
+        ...condition,
       },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
 
   async updateJobCategory(params: JobCategory) {

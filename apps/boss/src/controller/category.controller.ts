@@ -18,8 +18,8 @@ export class CategoryController {
   }
 
   @MessagePattern('findJobByCategory')
-  findJobByCategory({ categoryId }: { categoryId: number }) {
-    return this.categoryService.findJobByCategory({ categoryId });
+  findJobByCategory(params: { categoryId: number } & Pagination) {
+    return this.categoryService.findJobByCategory(params);
   }
 
   @MessagePattern('updateJobCategory')
