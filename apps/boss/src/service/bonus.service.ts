@@ -102,7 +102,7 @@ export class BonusService {
   }
 
   async findAllJobBonus(params: JobBonus & Pagination) {
-    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = params;
+    const { page = 1, pageSize = 10, ...rest } = params;
 
     const condition: Record<string, any> = {};
 
@@ -129,11 +129,7 @@ export class BonusService {
     }
 
     const [data, total] = await this.jobBonusRepository.findAndCount({
-      where: {
-        isDelete: false,
-        isFrozen,
-        ...condition,
-      },
+      where: condition,
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
@@ -146,7 +142,61 @@ export class BonusService {
     };
   }
 
+  async createJobBonus(params: JobBonus) {
+    if (params.bonusName) {
+      const jobBonus = await this.jobBonusRepository.findOne({
+        where: {
+          bonusName: params.bonusName,
+        },
+      });
+
+      if (jobBonus) {
+        return {
+          message: '该记录已存在',
+        };
+      }
+    }
+
+    return await this.jobBonusRepository.save(params);
+  }
+
   async updateJobBonus(params: JobBonus) {
-    await this.jobBonusRepository.update(params.id, params);
+    const jobBonus = await this.jobBonusRepository.findOne({
+      where: {
+        id: params.id,
+        isDelete: false,
+      },
+    });
+
+    if (!jobBonus) {
+      return {
+        message: '该记录不存在',
+      };
+    }
+
+    return await this.jobBonusRepository.save({
+      ...jobBonus,
+      ...params,
+    });
+  }
+
+  async deleteJobBonus(params: JobBonus) {
+    const jobBonus = await this.jobBonusRepository.findOne({
+      where: {
+        id: params.id,
+        isDelete: false,
+      },
+    });
+
+    if (!jobBonus) {
+      return {
+        message: '该记录不存在',
+      };
+    }
+
+    return await this.jobBonusRepository.save({
+      ...jobBonus,
+      isDelete: true,
+    });
   }
 }

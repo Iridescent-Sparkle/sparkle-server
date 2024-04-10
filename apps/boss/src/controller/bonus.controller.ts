@@ -17,8 +17,18 @@ export class BonusController {
     return this.bonusService.findAllJobBonus(params);
   }
 
+  @MessagePattern('createJobBonus')
+  async createJobBonus(params: JobBonus) {
+    return await this.bonusService.createJobBonus(params);
+  }
+
   @MessagePattern('updateJobBonus')
   async updateJobBonus(params: JobBonus) {
     return await this.bonusService.updateJobBonus(params);
+  }
+
+  @MessagePattern('deleteJobBonus')
+  async deleteJobBonus(params: JobBonus) {
+    return await this.bonusService.deleteJobBonus(params);
   }
 }
