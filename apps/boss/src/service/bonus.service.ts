@@ -102,9 +102,11 @@ export class BonusService {
   }
 
   async findAllJobBonus(params: JobBonus & Pagination) {
-    const { page = 1, pageSize = 10, ...rest } = params;
+    const { page = 1, pageSize = 10, isDelete = false, ...rest } = params;
 
-    const condition: Record<string, any> = {};
+    const condition: Record<string, any> = {
+      isDelete,
+    };
 
     if (rest.bonusName) {
       condition.bonusName = Like(`%${rest.bonusName}%`);
@@ -132,6 +134,9 @@ export class BonusService {
       where: condition,
       skip: (page - 1) * pageSize,
       take: pageSize,
+      order: {
+        updateTime: 'DESC',
+      },
     });
 
     return {
@@ -156,8 +161,11 @@ export class BonusService {
         };
       }
     }
+    const jobBonus = new JobBonus();
+    jobBonus.bonusName = params.bonusName;
+    jobBonus.bonusDescription = params.bonusDescription;
 
-    return await this.jobBonusRepository.save(params);
+    return await this.jobBonusRepository.save(jobBonus);
   }
 
   async updateJobBonus(params: JobBonus) {
