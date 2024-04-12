@@ -126,8 +126,12 @@ export class CategoryService {
   }
 
   async findAllJobCategory(params: JobCategory & Pagination) {
-    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = params;
-    const condition: Record<string, any> = {};
+    const { page = 1, pageSize = 10, isDelete = false, ...rest } = params;
+
+    const condition: Record<string, any> = {
+      isDelete,
+    };
+
     if (rest.categoryName) {
       condition.categoryName = Like(`%${rest.categoryName}%`);
     }
@@ -151,11 +155,7 @@ export class CategoryService {
     }
 
     const [data, total] = await this.jobCategoryRepository.findAndCount({
-      where: {
-        isDelete: false,
-        isFrozen,
-        ...condition,
-      },
+      where: condition,
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
