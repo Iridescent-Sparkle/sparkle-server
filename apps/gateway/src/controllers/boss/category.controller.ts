@@ -30,9 +30,21 @@ export class CategoryController {
     return firstValueFrom(this.BossClient.send('findJobByCategory', params));
   }
 
+  @Post('create')
+  @RequireLogin()
+  createJobCategory(@Body() params: JobCategory) {
+    return firstValueFrom(this.BossClient.send('createJobCategory', params));
+  }
+
   @Post('update')
   @RequireLogin()
   updateJobCategory(@Body() params: JobCategory) {
     return firstValueFrom(this.BossClient.send('updateJobCategory', params));
+  }
+
+  @Post('delete')
+  @RequireLogin()
+  deleteJobCategory(@Body() params: JobCategory) {
+    return firstValueFrom(this.BossClient.send('deleteJobCategory', params));
   }
 }

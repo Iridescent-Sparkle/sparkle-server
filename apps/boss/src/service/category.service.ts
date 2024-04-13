@@ -196,7 +196,64 @@ export class CategoryService {
     };
   }
 
+  async createJobCategory(params: JobCategory) {
+    if (params.categoryName) {
+      const jobCategory = await this.jobCategoryRepository.findOne({
+        where: {
+          categoryName: params.categoryName,
+        },
+      });
+
+      if (jobCategory) {
+        return {
+          message: '该记录已存在',
+        };
+      }
+    }
+    const jobCategory = new JobCategory();
+    jobCategory.categoryName = params.categoryName;
+    jobCategory.categoryDescription = params.categoryDescription;
+
+    return await this.jobCategoryRepository.save(jobCategory);
+  }
+
   async updateJobCategory(params: JobCategory) {
-    await this.jobCategoryRepository.update(params.id, params);
+    const jobCategory = await this.jobCategoryRepository.findOne({
+      where: {
+        id: params.id,
+        isDelete: false,
+      },
+    });
+
+    if (!jobCategory) {
+      return {
+        message: '该记录不存在',
+      };
+    }
+
+    return await this.jobCategoryRepository.save({
+      ...jobCategory,
+      ...params,
+    });
+  }
+
+  async deleteJobCategory(params: JobCategory) {
+    const jobCategory = await this.jobCategoryRepository.findOne({
+      where: {
+        id: params.id,
+        isDelete: false,
+      },
+    });
+
+    if (!jobCategory) {
+      return {
+        message: '该记录不存在',
+      };
+    }
+
+    return await this.jobCategoryRepository.save({
+      ...jobCategory,
+      isDelete: true,
+    });
   }
 }

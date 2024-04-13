@@ -22,8 +22,18 @@ export class CategoryController {
     return this.categoryService.findJobByCategory(params);
   }
 
+  @MessagePattern('createJobCategory')
+  async createJobCategory(params: JobCategory) {
+    return await this.categoryService.createJobCategory(params);
+  }
+
   @MessagePattern('updateJobCategory')
   async updateJobCategory(params: JobCategory) {
     return await this.categoryService.updateJobCategory(params);
+  }
+
+  @MessagePattern('deleteJobCategory')
+  async deleteJobCategory(params: JobCategory) {
+    return await this.categoryService.deleteJobCategory(params);
   }
 }
