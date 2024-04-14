@@ -21,4 +21,9 @@ export class CompanyController {
   async updateCompanyInfo(params: Company) {
     return await this.companyService.updateCompanyInfo(params);
   }
+
+  @MessagePattern('deleteCompanyInfo')
+  async deleteCompanyInfo(params: Company) {
+    return await this.companyService.deleteCompanyInfo(params);
+  }
 }

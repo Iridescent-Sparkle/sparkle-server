@@ -59,6 +59,42 @@ export class CompanyService {
   }
 
   async updateCompanyInfo(params: Company) {
-    await this.companyRepository.update(params.id, params);
+    const companyInfo = await this.companyRepository.findOne({
+      where: {
+        id: params.id,
+        isDelete: false,
+      },
+    });
+
+    if (!companyInfo) {
+      return {
+        message: '该记录不存在',
+      };
+    }
+
+    return await this.companyRepository.save({
+      ...companyInfo,
+      ...params,
+    });
+  }
+
+  async deleteCompanyInfo(params: Company) {
+    const companyInfo = await this.companyRepository.findOne({
+      where: {
+        id: params.id,
+        isDelete: false,
+      },
+    });
+
+    if (!companyInfo) {
+      return {
+        message: '该记录不存在',
+      };
+    }
+
+    return await this.companyRepository.save({
+      ...companyInfo,
+      isDelete: true,
+    });
   }
 }
