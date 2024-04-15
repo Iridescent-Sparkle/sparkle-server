@@ -124,6 +124,12 @@ export class User {
   })
   isFrozen: boolean;
 
+  @Column({
+    default: false,
+    comment: '是否删除',
+  })
+  isDelete: boolean;
+
   @CreateDateColumn()
   createTime: Date;
 

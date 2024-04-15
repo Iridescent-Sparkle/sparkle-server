@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -283,5 +283,43 @@ export class UserService {
     return await this.userRepository.update(userId, {
       companyId: companyInfo.id,
     });
+  }
+
+  async findAllUsers(params: User & Pagination) {
+    const { page = 1, pageSize = 10, isDelete = false, ...rest } = params;
+
+    const condition: Record<string, any> = {
+      isDelete,
+    };
+
+    if (rest.createStart && rest.createEnd) {
+      condition.createTime = Between(
+        new Date(rest.createStart),
+        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+      );
+    }
+
+    if (rest.updateStart && rest.updateEnd) {
+      condition.updateTime = Between(
+        new Date(rest.updateStart),
+        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+      );
+    }
+
+    const [data, total] = await this.userRepository.findAndCount({
+      where: condition,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      order: {
+        updateTime: 'DESC',
+      },
+    });
+
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
 }
