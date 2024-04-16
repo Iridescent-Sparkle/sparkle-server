@@ -65,6 +65,7 @@ export class ProfileService {
       pageSize,
     };
   }
+
   async findProfileByUser(userId: number) {
     const profile = await this.profileRepository.findOne({
       where: {

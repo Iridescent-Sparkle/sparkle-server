@@ -8,12 +8,13 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { AdminUser } from '../entities/user.entity';
 import { md5 } from '../utils';
+import { UserListVo } from '../vo/user-list.vo';
 
 @Injectable()
 export class AdminUserService {
@@ -205,5 +206,38 @@ export class AdminUserService {
 
   async getStsToken() {
     return await this.ossService.getSTSToken();
+  }
+
+  async findUserByPage(
+    username: string,
+    nickName: string,
+    email: string,
+    pageNo: number,
+    pageSize: number,
+  ) {
+    const condition: Record<string, any> = {};
+
+    if (username) {
+      condition.username = Like(`%${username}%`);
+    }
+    if (nickName) {
+      condition.nickName = Like(`%${nickName}%`);
+    }
+    if (email) {
+      condition.email = Like(`%${email}%`);
+    }
+
+    const [users, totalCount] = await this.adminUserRepository.findAndCount({
+      select: ['id', 'username', 'email', 'isFrozen', 'createTime'],
+      skip: (pageNo - 1) * pageSize,
+      take: pageSize,
+      where: condition,
+    });
+
+    const vo = new UserListVo();
+
+    vo.users = users;
+    vo.totalCount = totalCount;
+    return vo;
   }
 }
