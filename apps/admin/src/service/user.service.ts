@@ -193,11 +193,26 @@ export class AdminUserService {
   }
 
   async findUserById(userId: number) {
-    return await this.adminUserRepository.findOne({
+    const foundUser = await this.adminUserRepository.findOne({
       where: {
         id: userId,
       },
+      relations: ['roles', 'roles.permissions'],
     });
+
+    return {
+      id: foundUser.id,
+      username: foundUser.username,
+      roles: foundUser.roles.map((item) => item.name),
+      permissions: foundUser.roles.reduce((arr, item) => {
+        item.permissions.forEach((permission) => {
+          if (arr.indexOf(permission) === -1) {
+            arr.push(permission);
+          }
+        });
+        return arr;
+      }, []),
+    };
   }
 
   async update(user: AdminUser) {
