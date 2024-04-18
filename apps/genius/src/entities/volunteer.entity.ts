@@ -11,7 +11,7 @@ import {
 import { Profile } from './profile.entity';
 
 @Entity({
-  name: 'volunteer',
+  name: 'genius_volunteer',
   comment: '志愿者经历表',
 })
 export class Volunteer {
