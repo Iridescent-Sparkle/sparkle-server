@@ -109,6 +109,7 @@ export class IntegralService {
       integral: user.integral + integral,
     });
   }
+
   async consumeIntegral(params: { integral: number; userId: number }) {
     const { integral, userId } = params;
     const user = await this.userRepository.findOne({

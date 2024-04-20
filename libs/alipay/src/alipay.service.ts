@@ -11,7 +11,7 @@ export class AlipayService {
   async createOrder(params: { totalAmount: number; subject: string }) {
     try {
       const { totalAmount, subject } = params;
-      const result = await this.alipaySdk.sdkExec('alipay.trade.app.pay', {
+      return await this.alipaySdk.sdkExec('alipay.trade.app.pay', {
         notify_url: 'https://api.iridescent.icu/boss/order/receive',
         bizContent: {
           out_trade_no: generateAlipayOrderNumber(), // 订单号，用于识别订单，不能重复
@@ -19,7 +19,6 @@ export class AlipayService {
           subject: subject, // 支付商品名称
         },
       });
-      return result;
     } catch (error) {
       throw new RpcException({
         message: JSON.stringify(error),

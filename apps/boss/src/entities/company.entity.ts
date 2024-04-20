@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'company',
+  name: 'company_info',
   comment: '企业信息表',
 })
 export class Company {
