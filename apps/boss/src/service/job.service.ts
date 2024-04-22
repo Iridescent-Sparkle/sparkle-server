@@ -166,9 +166,19 @@ export class JobService {
     jobId: number;
     jobDetail: JobDetail;
   }) {
-    jobDetail.id = jobId;
-    jobDetail.userId = userId;
-    return await this.jobDetailRepository.save(jobDetail);
+    const job = await this.jobDetailRepository.findOne({
+      where: {
+        id: jobId,
+        userId,
+      },
+    });
+    const updatedJobDetail = await this.jobDetailRepository.save({
+      id: jobId,
+      userId,
+      ...job,
+      ...jobDetail,
+    });
+    return updatedJobDetail;
   }
 
   async remove({ jobId }: { jobId: number }) {

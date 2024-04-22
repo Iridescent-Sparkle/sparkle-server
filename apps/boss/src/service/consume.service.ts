@@ -22,6 +22,7 @@ export class ConsumeService {
     newIntegralRecord.userId = integralRecord.userId;
     newIntegralRecord.integral = integralRecord.integral;
     newIntegralRecord.type = integralRecord.type;
+    newIntegralRecord.isConsume = integralRecord.isConsume;
     return await this.integralRecordRepository.save(integralRecord);
   }
 

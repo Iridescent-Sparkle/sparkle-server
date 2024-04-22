@@ -132,4 +132,13 @@ export class UserController {
   async createCompanyInfo(params: { userId: number; company: Company }) {
     return await this.userService.createCompanyInfo(params);
   }
+
+  @GrpcMethod('UserService', 'FindImUsers')
+  async findImUsers(params: { userIds: string[] }) {
+    const { userIds } = params;
+
+    return await this.userService.findImUsers({
+      userIds,
+    });
+  }
 }

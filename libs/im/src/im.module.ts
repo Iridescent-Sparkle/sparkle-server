@@ -15,7 +15,7 @@ import { ImService } from './im.service';
         configService: ConfigService,
         httpService: HttpService,
       ) => {
-        return await firstValueFrom(
+        const { data } = await firstValueFrom(
           httpService.post(
             `https://${configService.get('im_host')}/${configService.get(
               'im_org_name',
@@ -34,6 +34,7 @@ import { ImService } from './im.service';
             },
           ),
         );
+        return data;
       },
     },
   ],

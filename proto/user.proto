@@ -18,6 +18,7 @@ service UserService {
   rpc  BindEmail(BindEmailRequest) returns (User);
   rpc  GetStsToken(Empty) returns (GetStsTokenResponse);
   rpc  CreateCompanyInfo(CreateCompanyInfoRequest) returns (User);
+  rpc  FindImUsers(FindImUsersRequest) returns (FindImUsersReponse);
 }
 
 message Empty {}
@@ -144,3 +145,20 @@ message CreateCompanyInfoRequest {
   int32 userId = 1;
   Company company = 2;
 }
+
+message FindImUsersRequest {
+  repeated string userIds = 1;
+}
+
+message FindImUsers {
+  string phone = 1;
+  string avatarurl = 2;
+  string nickname = 3;
+}
+
+message FindImUsersReponse {
+  map<string, FindImUsers> findImUsers = 1;
+}
+
+
+

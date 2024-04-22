@@ -102,12 +102,32 @@ export class UserService {
 
       await this.imService.register({
         username: registerUserDto.username,
-        roleType: 'C',
+        roleType: 'c',
       });
 
       await this.imService.register({
         username: registerUserDto.username,
-        roleType: 'B',
+        roleType: 'b',
+      });
+
+      await this.imService.updateUser({
+        username: registerUserDto.username,
+        roleType: 'b',
+        nickname: '用户' + Math.random().toString().slice(2, 6),
+        avatarurl:
+          'https://sparkle-cdn.oss-cn-chengdu.aliyuncs.com/sparkle-mobile/stars.png',
+        phone: registerUserDto.username,
+        mail: '',
+      });
+
+      await this.imService.updateUser({
+        username: registerUserDto.username,
+        roleType: 'c',
+        nickname: '用户' + Math.random().toString().slice(2, 6),
+        avatarurl:
+          'https://sparkle-cdn.oss-cn-chengdu.aliyuncs.com/sparkle-mobile/stars.png',
+        phone: registerUserDto.username,
+        mail: '',
       });
 
       const profile = await firstValueFrom(
@@ -120,8 +140,8 @@ export class UserService {
       newUser.username = registerUserDto.username;
       newUser.nickname = '用户' + Math.random().toString().slice(2, 6);
       newUser.contactPassword = registerUserDto.username + '_password';
-      newUser.contactIdToB = registerUserDto.username + '_sparkle' + `_C`;
-      newUser.contactIdToC = registerUserDto.username + '_sparkle' + `_B`;
+      newUser.contactIdToB = registerUserDto.username + '_sparkle' + `_c`;
+      newUser.contactIdToC = registerUserDto.username + '_sparkle' + `_b`;
       newUser.profileId = profile.id;
       newUser.avatar =
         'https://sparkle-cdn.oss-cn-chengdu.aliyuncs.com/sparkle-mobile/stars.png';
@@ -245,8 +265,31 @@ export class UserService {
   }
 
   async update(user: User) {
-    console.log(user);
-    return await this.userRepository.update(user.id, user);
+    await this.userRepository.update(user.id, user);
+
+    const foundUser = await this.userRepository.findOneBy({
+      id: user.id,
+    });
+
+    await this.imService.updateUser({
+      username: foundUser.username,
+      roleType: 'b',
+      nickname: foundUser.nickname,
+      avatarurl: foundUser.avatar,
+      phone: foundUser.username,
+      mail: foundUser.email,
+    });
+
+    await this.imService.updateUser({
+      username: foundUser.username,
+      roleType: 'c',
+      nickname: foundUser.nickname,
+      avatarurl: foundUser.avatar,
+      phone: foundUser.username,
+      mail: foundUser.email,
+    });
+
+    return foundUser;
   }
 
   async bindEmail(params: { userId: number; email: string; code: string }) {
@@ -320,6 +363,18 @@ export class UserService {
       total,
       page,
       pageSize,
+    };
+  }
+
+  async findImUsers(params: { userIds: string[] }) {
+    const { userIds } = params;
+
+    const foundImUsers = await this.imService.findAllUser({
+      userIds,
+    });
+
+    return {
+      findImUsers: foundImUsers.data.data,
     };
   }
 }

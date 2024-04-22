@@ -106,4 +106,14 @@ export class UserController {
       company,
     });
   }
+
+  @Post('im/users')
+  @RequireLogin()
+  async findImUsers(@Body() params: { userIds: string[] }) {
+    const { userIds } = params;
+
+    return await this.userService.findImUsers({
+      userIds,
+    });
+  }
 }
