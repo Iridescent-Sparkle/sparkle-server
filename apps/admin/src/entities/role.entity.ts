@@ -4,10 +4,12 @@
  */
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Permission } from './permission.entity';
 
@@ -29,4 +31,16 @@ export class Role {
     name: 'admin_role_permissions',
   })
   permissions: Permission[];
+
+  @CreateDateColumn()
+  createTime: Date;
+
+  @UpdateDateColumn()
+  updateTime: Date;
+
+  @Column({
+    default: false,
+    comment: '是否冻结',
+  })
+  isFrozen: boolean;
 }

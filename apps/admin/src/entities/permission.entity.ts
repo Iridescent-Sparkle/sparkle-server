@@ -2,7 +2,13 @@
  * @Date: 2024-01-11 12:55:28
  * @Description: Permission表
  */
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'admin_permissions',
@@ -22,4 +28,16 @@ export class Permission {
     comment: '权限描述',
   })
   description: string;
+
+  @CreateDateColumn()
+  createTime: Date;
+
+  @UpdateDateColumn()
+  updateTime: Date;
+
+  @Column({
+    default: false,
+    comment: '是否冻结',
+  })
+  isFrozen: boolean;
 }

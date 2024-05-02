@@ -124,6 +124,5 @@
       "^@app/oss(|/.*)$": "<rootDir>/libs/oss/src/$1",
       "^@app/alipay(|/.*)$": "<rootDir>/libs/alipay/src/$1"
     }
-  },
-  "packageManager": "pnpm@8.10.0+sha1.77d568bacf41eeefd6695a7087c1282433955b5c"
+  }
 }
