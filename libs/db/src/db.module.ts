@@ -20,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           connectorPackage: 'mysql2',
           extra: { authPlugin: 'sha256_password' },
           autoLoadEntities: true,
+          timezone: 'Asia/Shanghai',
         };
       },
     }),

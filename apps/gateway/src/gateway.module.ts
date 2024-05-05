@@ -27,6 +27,7 @@ import { IntegralController } from './controllers/boss/integral.controller';
 import { OrderController } from './controllers/boss/order.controller';
 import { ContactController } from './controllers/boss/contact.controller';
 import { ConsumeController } from './controllers/boss/consume.controller';
+import { PermissionController } from './controllers/admin/permission.controller';
 
 @Module({
   imports: [
@@ -132,6 +133,7 @@ import { ConsumeController } from './controllers/boss/consume.controller';
     OrderController,
     ContactController,
     ConsumeController,
+    PermissionController,
   ],
   providers: [
     {

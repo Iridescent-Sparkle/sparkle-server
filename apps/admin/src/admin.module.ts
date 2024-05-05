@@ -17,6 +17,8 @@ import { SmsModule } from '@app/sms';
 import { HttpModule } from '@nestjs/axios';
 import { ImModule } from '@app/im';
 import { OssModule } from '@app/oss';
+import { PermissionController } from './controller/permission.controller';
+import { PermissionService } from './service/permission.service';
 
 @Module({
   imports: [
@@ -52,7 +54,7 @@ import { OssModule } from '@app/oss';
       ],
     }),
   ],
-  controllers: [AdminUserController],
-  providers: [AdminUserService],
+  controllers: [AdminUserController, PermissionController],
+  providers: [AdminUserService, PermissionService],
 })
 export class AdminModule {}

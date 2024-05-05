@@ -3,7 +3,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { Role } from '../entities/role.entity';
 import { RoleService } from '../service/role.service';
 
-@Controller('roles')
+@Controller()
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 

@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { Role } from './../../../../admin/src/entities/role.entity';
 
 @Controller({
-  path: 'admin/Role',
+  path: 'admin/role',
 })
 export class RoleController {
   @Inject('ADMIN_SERVICE')

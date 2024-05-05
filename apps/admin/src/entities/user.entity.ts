@@ -46,13 +46,6 @@ export class AdminUser {
   avatar: string;
 
   @Column({
-    length: 50,
-    default: '',
-    comment: '邮箱',
-  })
-  email: string;
-
-  @Column({
     default: false,
     comment: '是否冻结',
   })
