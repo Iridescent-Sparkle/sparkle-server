@@ -17,9 +17,14 @@ export class RoleController {
     return await this.roleService.getRoleById(id);
   }
 
+  @MessagePattern('findAllRole')
+  async findAllRole(params: Role & Pagination) {
+    return await this.roleService.findAllRole(params);
+  }
+
   @MessagePattern('updateRole')
-  async updateRole({ id, updateRoleDto }: { id: number; updateRoleDto: Role }) {
-    return await this.roleService.updateRole(id, updateRoleDto);
+  async updateRole(params: Role) {
+    return await this.roleService.updateRole(params);
   }
 
   @MessagePattern('deleteRole')

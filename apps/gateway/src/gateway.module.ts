@@ -28,6 +28,7 @@ import { OrderController } from './controllers/boss/order.controller';
 import { ContactController } from './controllers/boss/contact.controller';
 import { ConsumeController } from './controllers/boss/consume.controller';
 import { PermissionController } from './controllers/admin/permission.controller';
+import { RoleController } from './controllers/admin/role.controller';
 
 @Module({
   imports: [
@@ -134,6 +135,7 @@ import { PermissionController } from './controllers/admin/permission.controller'
     ContactController,
     ConsumeController,
     PermissionController,
+    RoleController,
   ],
   providers: [
     {

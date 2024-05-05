@@ -19,6 +19,8 @@ import { ImModule } from '@app/im';
 import { OssModule } from '@app/oss';
 import { PermissionController } from './controller/permission.controller';
 import { PermissionService } from './service/permission.service';
+import { RoleController } from './controller/role.controller';
+import { RoleService } from './service/role.service';
 
 @Module({
   imports: [
@@ -54,7 +56,7 @@ import { PermissionService } from './service/permission.service';
       ],
     }),
   ],
-  controllers: [AdminUserController, PermissionController],
-  providers: [AdminUserService, PermissionService],
+  controllers: [AdminUserController, PermissionController, RoleController],
+  providers: [AdminUserService, PermissionService, RoleService],
 })
 export class AdminModule {}
