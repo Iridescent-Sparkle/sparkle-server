@@ -22,30 +22,38 @@ export class CompanyService {
 
   async findAllCompanyInfo(params: Company & Pagination) {
     const { current = 1, pageSize = 10, ...rest } = params;
-    const condition: Record<string, any> = {};
+
+    const condition: Record<string, any> = {
+      isDelete: false,
+    };
+
     if (rest.companyName) {
       condition.companyName = Like(`%${rest.companyName}%`);
     }
+    if (rest.companyDesc) {
+      condition.companyDesc = Like(`%${rest.companyDesc}%`);
+    }
 
-    if (rest.createStart && rest.createEnd) {
+    if (rest.status !== undefined) {
+      condition.status = rest.status;
+    }
+
+    if (rest.createTime) {
       condition.createTime = Between(
-        new Date(rest.createStart),
-        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+        new Date(rest.createTime[0]),
+        new Date(rest.createTime[1]),
       );
     }
 
-    if (rest.updateStart && rest.updateEnd) {
+    if (rest.updateTime) {
       condition.updateTime = Between(
-        new Date(rest.updateStart),
-        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+        new Date(rest.updateTime[0]),
+        new Date(rest.updateTime[1]),
       );
     }
 
     const [data, total] = await this.companyRepository.findAndCount({
-      where: {
-        isDelete: false,
-        ...condition,
-      },
+      where: condition,
       skip: (current - 1) * pageSize,
       take: pageSize,
     });
