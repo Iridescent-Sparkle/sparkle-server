@@ -22,6 +22,11 @@ export class IntegralController {
     return await this.integralService.updateIntegralMeal(params);
   }
 
+  @MessagePattern('createIntegralMeal')
+  async createIntegralMeal(params: IntegralMeal) {
+    return await this.integralService.createIntegralMeal(params);
+  }
+
   @MessagePattern('rechargeIntegral')
   async rechargeIntegral(params: { integral: number; userId: number }) {
     return await this.integralService.rechargeIntegral(params);

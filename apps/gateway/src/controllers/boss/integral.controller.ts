@@ -23,6 +23,12 @@ export class IntegralController {
     return firstValueFrom(this.BossClient.send('findAllIntegralMeal', params));
   }
 
+  @Post('create')
+  @RequireLogin()
+  createIntegralMeal(@Body() params: IntegralMeal) {
+    return firstValueFrom(this.BossClient.send('createIntegralMeal', params));
+  }
+
   @Post('update')
   @RequireLogin()
   async updateIntegralMeal(@Body() params: IntegralMeal) {
