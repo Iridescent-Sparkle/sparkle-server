@@ -57,10 +57,17 @@ export class UserController {
     return firstValueFrom(this.adminClient.send('info', userId));
   }
 
+  /** 获取用户信息 */
+  @Post('all')
+  // @RequireLogin()
+  async findAllUser(@Body() params: AdminUser & Pagination) {
+    return firstValueFrom(this.adminClient.send('findAllUser', params));
+  }
+
   @Post('update')
-  @RequireLogin()
-  async update(@Body() user: AdminUser) {
-    return firstValueFrom(this.adminClient.send('update', user));
+  // @RequireLogin()
+  async updateAdminUser(@Body() user: AdminUser) {
+    return firstValueFrom(this.adminClient.send('updateAdminUser', user));
   }
 
   @Get('sts')

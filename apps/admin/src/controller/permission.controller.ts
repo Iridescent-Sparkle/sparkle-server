@@ -23,17 +23,8 @@ export class PermissionController {
   }
 
   @MessagePattern('updatePermission')
-  async updatePermission({
-    id,
-    updatePermissionDto,
-  }: {
-    id: number;
-    updatePermissionDto: Permission;
-  }) {
-    return await this.permissionService.updatePermission(
-      id,
-      updatePermissionDto,
-    );
+  async updatePermission(params: Permission) {
+    return await this.permissionService.updatePermission(params);
   }
 
   @MessagePattern('deletePermission')

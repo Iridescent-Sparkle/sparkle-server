@@ -30,17 +30,9 @@ export class PermissionController {
   @Post('update')
   async updatePermission(
     @Body()
-    {
-      id,
-      updatePermissionDto,
-    }: {
-      id: number;
-      updatePermissionDto: Permission;
-    },
+    params: Permission,
   ) {
-    return firstValueFrom(
-      this.adminClient.send('updatePermission', { id, updatePermissionDto }),
-    );
+    return firstValueFrom(this.adminClient.send('updatePermission', params));
   }
 
   @Post('delete')

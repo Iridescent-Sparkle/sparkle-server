@@ -104,9 +104,15 @@ export class AdminUserController {
     return await this.adminService.findUserById(userId);
   }
 
+  /** 获取用户信息 */
+  @MessagePattern('findAllUser')
+  async findAllUser(params: AdminUser & Pagination) {
+    return await this.adminService.findAllUser(params);
+  }
+
   /** 更新用户信息 */
-  @MessagePattern('update')
-  async update(user: AdminUser) {
-    return await this.adminService.update(user);
+  @MessagePattern('updateAdminUser')
+  async updateAdminUser(user: AdminUser) {
+    return await this.adminService.updateAdminUser(user);
   }
 }

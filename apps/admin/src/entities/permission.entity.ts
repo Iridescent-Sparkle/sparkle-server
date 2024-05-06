@@ -18,7 +18,6 @@ export class Permission {
   id: number;
 
   @Column({
-    length: 20,
     comment: '权限代码',
   })
   code: string;

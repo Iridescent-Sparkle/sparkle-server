@@ -8,13 +8,13 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Between, Like, Repository } from 'typeorm';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
+import { Role } from '../entities/role.entity';
 import { AdminUser } from '../entities/user.entity';
 import { md5 } from '../utils';
-import { UserListVo } from '../vo/user-list.vo';
 
 @Injectable()
 export class AdminUserService {
@@ -43,6 +43,9 @@ export class AdminUserService {
 
   @Inject(OssService)
   private ossService: OssService;
+
+  @InjectRepository(Role)
+  private readonly roleRepository: Repository<Role>;
 
   async captcha(address: string) {
     const code = Math.random().toString().slice(2, 6);
@@ -197,7 +200,7 @@ export class AdminUserService {
       where: {
         id: userId,
       },
-      relations: ['roles', 'roles.permissions'],
+      relations: ['roles', 'roles.roles'],
     });
 
     return {
@@ -215,44 +218,83 @@ export class AdminUserService {
     };
   }
 
-  async update(user: AdminUser) {
-    return await this.adminUserRepository.update(user.id, user);
+  async updateAdminUser(user: AdminUser) {
+    const foundUser = await this.adminUserRepository.findOneBy({
+      id: user.id,
+    });
+
+    if (user.username) {
+      foundUser.username = user.username;
+    }
+
+    if (user.roles) {
+      foundUser.roles = [];
+
+      for (const roleId of user.roles) {
+        const role = await this.roleRepository.findOne({
+          where: {
+            id: roleId as unknown as number,
+          },
+        });
+
+        if (role) {
+          foundUser.roles.push(role);
+        }
+      }
+    }
+
+    if (user.isFrozen !== undefined) {
+      foundUser.isFrozen = user.isFrozen;
+    }
+
+    return await this.adminUserRepository.save(foundUser);
   }
 
   async getStsToken() {
     return await this.ossService.getSTSToken();
   }
 
-  async findUserByPage(
-    username: string,
-    nickName: string,
-    email: string,
-    pageNo: number,
-    pageSize: number,
-  ) {
-    const condition: Record<string, any> = {};
+  async findAllUser(params: AdminUser & Pagination) {
+    const { page = 1, pageSize = 10, ...rest } = params;
 
-    if (username) {
-      condition.username = Like(`%${username}%`);
-    }
-    if (nickName) {
-      condition.nickName = Like(`%${nickName}%`);
-    }
-    if (email) {
-      condition.email = Like(`%${email}%`);
+    const condition: Record<string, any> = {
+      id: rest.id,
+    };
+
+    if (rest.username) {
+      condition.description = Like(`%${rest.username}%`);
     }
 
-    const [users, totalCount] = await this.adminUserRepository.findAndCount({
-      select: ['id', 'username', 'email', 'isFrozen', 'createTime'],
-      skip: (pageNo - 1) * pageSize,
-      take: pageSize,
+    if (rest.nickname) {
+      condition.code = Like(`%${rest.nickname}%`);
+    }
+
+    if (rest.createTime) {
+      condition.createTime = Between(
+        new Date(rest.createTime[0]),
+        new Date(rest.createTime[1]),
+      );
+    }
+
+    if (rest.updateTime) {
+      condition.updateTime = Between(
+        new Date(rest.updateTime[0]),
+        new Date(rest.updateTime[1]),
+      );
+    }
+
+    const [data, total] = await this.adminUserRepository.findAndCount({
       where: condition,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      relations: ['roles'],
     });
 
-    const vo = new UserListVo();
-
-    vo.users = users;
-    vo.totalCount = totalCount;
-    return vo;
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+    };
   }
 }

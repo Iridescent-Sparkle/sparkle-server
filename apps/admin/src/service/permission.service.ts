@@ -63,12 +63,9 @@ export class PermissionService {
     });
   }
 
-  async updatePermission(
-    id: number,
-    permissionData: Permission,
-  ): Promise<Permission> {
-    await this.permissionRepository.update(id, permissionData);
-    return this.getPermissionById(id);
+  async updatePermission(params: Permission): Promise<Permission> {
+    await this.permissionRepository.update(params.id, params);
+    return this.getPermissionById(params.id);
   }
 
   async deletePermission(id: number) {
