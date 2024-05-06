@@ -34,7 +34,7 @@ export class RoleService {
   }
 
   async findAllRole(params: Role & Pagination) {
-    const { page = 1, pageSize = 10, ...rest } = params;
+    const { current = 1, pageSize = 10, ...rest } = params;
 
     const condition: Record<string, any> = {
       id: rest.id,
@@ -70,7 +70,7 @@ export class RoleService {
 
     const [data, total] = await this.roleRepository.findAndCount({
       where: condition,
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
       relations: {
         permissions: true,
@@ -80,7 +80,7 @@ export class RoleService {
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

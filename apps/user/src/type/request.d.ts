@@ -1,5 +1,5 @@
 declare type Pagination = {
-  page?: number;
+  current?: number;
   pageSize?: number;
   createStart?: number;
   createEnd?: number;

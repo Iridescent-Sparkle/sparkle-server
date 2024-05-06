@@ -39,7 +39,7 @@ export class JobService {
   }
 
   async findAll(params: JobDetail & Pagination) {
-    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = params;
+    const { current = 1, pageSize = 10, isFrozen = false, ...rest } = params;
 
     const condition: Record<string, any> = {};
 
@@ -97,14 +97,14 @@ export class JobService {
         'jobLevel',
         'company',
       ],
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

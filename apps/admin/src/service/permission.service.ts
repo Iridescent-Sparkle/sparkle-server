@@ -15,7 +15,7 @@ export class PermissionService {
   }
 
   async findAllPermission(params: Permission & Pagination) {
-    const { page = 1, pageSize = 10, ...rest } = params;
+    const { current = 1, pageSize = 10, ...rest } = params;
 
     const condition: Record<string, any> = {
       id: rest.id,
@@ -45,14 +45,14 @@ export class PermissionService {
 
     const [data, total] = await this.permissionRepository.findAndCount({
       where: condition,
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

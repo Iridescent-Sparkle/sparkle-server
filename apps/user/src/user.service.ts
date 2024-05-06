@@ -329,7 +329,7 @@ export class UserService {
   }
 
   async findAllUsers(params: User & Pagination) {
-    const { page = 1, pageSize = 10, isDelete = false, ...rest } = params;
+    const { current = 1, pageSize = 10, isDelete = false, ...rest } = params;
 
     const condition: Record<string, any> = {
       isDelete,
@@ -351,7 +351,7 @@ export class UserService {
 
     const [data, total] = await this.userRepository.findAndCount({
       where: condition,
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
       order: {
         updateTime: 'DESC',
@@ -361,7 +361,7 @@ export class UserService {
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

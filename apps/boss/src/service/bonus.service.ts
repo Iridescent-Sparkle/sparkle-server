@@ -102,7 +102,7 @@ export class BonusService {
   }
 
   async findAllJobBonus(params: JobBonus & Pagination) {
-    const { page = 1, pageSize = 10, isDelete = false, ...rest } = params;
+    const { current = 1, pageSize = 10, isDelete = false, ...rest } = params;
 
     const condition: Record<string, any> = {
       isDelete,
@@ -136,17 +136,17 @@ export class BonusService {
 
     const [data, total] = await this.jobBonusRepository.findAndCount({
       where: condition,
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
-      order: {
-        updateTime: 'DESC',
-      },
+      // order: {
+      //   updateTime: 'DESC',
+      // },
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

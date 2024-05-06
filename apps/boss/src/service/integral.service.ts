@@ -43,7 +43,7 @@ export class IntegralService {
   }
 
   async findAllIntegralMeal(params: IntegralMeal & Pagination) {
-    const { page = 1, pageSize = 10, isFrozen = false, ...rest } = params;
+    const { current = 1, pageSize = 10, isFrozen = false, ...rest } = params;
 
     const condition: Record<string, any> = {};
 
@@ -67,14 +67,14 @@ export class IntegralService {
         isFrozen,
         ...condition,
       },
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

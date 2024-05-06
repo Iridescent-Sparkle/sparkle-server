@@ -126,7 +126,7 @@ export class CategoryService {
   }
 
   async findAllJobCategory(params: JobCategory & Pagination) {
-    const { page = 1, pageSize = 10, isDelete = false, ...rest } = params;
+    const { current = 1, pageSize = 10, isDelete = false, ...rest } = params;
 
     const condition: Record<string, any> = {
       isDelete,
@@ -140,36 +140,40 @@ export class CategoryService {
       condition.categoryDescription = Like(`%${rest.categoryDescription}%`);
     }
 
-    if (rest.createStart && rest.createEnd) {
+    if (rest.createTime) {
       condition.createTime = Between(
-        new Date(rest.createStart),
-        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+        new Date(rest.createTime[0]),
+        new Date(rest.createTime[1]),
       );
     }
 
-    if (rest.updateStart && rest.updateEnd) {
+    if (rest.updateTime) {
       condition.updateTime = Between(
-        new Date(rest.updateStart),
-        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+        new Date(rest.updateTime[0]),
+        new Date(rest.updateTime[1]),
       );
+    }
+
+    if (rest.isFrozen !== undefined) {
+      condition.isFrozen = rest.isFrozen;
     }
 
     const [data, total] = await this.jobCategoryRepository.findAndCount({
       where: condition,
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }
 
   async findJobByCategory(params: { categoryId: number } & Pagination) {
-    const { categoryId, page = 1, pageSize = 10 } = params;
+    const { categoryId, current = 1, pageSize = 10 } = params;
 
     const condition = {} as Record<string, any>;
 
@@ -184,14 +188,14 @@ export class CategoryService {
         isDelete: false,
         ...condition,
       },
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

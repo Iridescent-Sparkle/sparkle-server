@@ -21,7 +21,7 @@ export class CompanyService {
   }
 
   async findAllCompanyInfo(params: Company & Pagination) {
-    const { page = 1, pageSize = 10, ...rest } = params;
+    const { current = 1, pageSize = 10, ...rest } = params;
     const condition: Record<string, any> = {};
     if (rest.companyName) {
       condition.companyName = Like(`%${rest.companyName}%`);
@@ -46,14 +46,14 @@ export class CompanyService {
         isDelete: false,
         ...condition,
       },
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

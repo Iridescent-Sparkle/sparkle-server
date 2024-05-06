@@ -263,7 +263,7 @@ export class AdminUserService {
   }
 
   async findAllUser(params: AdminUser & Pagination) {
-    const { page = 1, pageSize = 10, ...rest } = params;
+    const { current = 1, pageSize = 10, ...rest } = params;
 
     const condition: Record<string, any> = {
       id: rest.id,
@@ -303,7 +303,7 @@ export class AdminUserService {
 
     const [data, total] = await this.adminUserRepository.findAndCount({
       where: condition,
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
       relations: ['roles'],
     });
@@ -311,7 +311,7 @@ export class AdminUserService {
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }

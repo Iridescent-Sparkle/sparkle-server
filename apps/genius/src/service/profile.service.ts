@@ -14,7 +14,7 @@ export class ProfileService {
 
   constructor() {}
   async findAllProfile(params: Profile & Pagination) {
-    const { page = 1, pageSize = 10, ...rest } = params;
+    const { current = 1, pageSize = 10, ...rest } = params;
 
     const condition: Record<string, any> = {};
 
@@ -54,14 +54,14 @@ export class ProfileService {
         volunteer: true,
         experience: true,
       },
-      skip: (page - 1) * pageSize,
+      skip: (current - 1) * pageSize,
       take: pageSize,
     });
 
     return {
       data,
       total,
-      page,
+      current,
       pageSize,
     };
   }
