@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AdminUserController } from './controller/user.controller';
-import { AdminUserService } from './service/user.service';
+import { AdminUserController } from './controller/admin-user.controller';
+import { AdminUserService } from './service/admin-user.service';
 import { ConfigModule } from '@app/config';
 import { DbModule } from '@app/db';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -21,6 +21,16 @@ import { PermissionController } from './controller/permission.controller';
 import { PermissionService } from './service/permission.service';
 import { RoleController } from './controller/role.controller';
 import { RoleService } from './service/role.service';
+import { User } from 'apps/user/src/entities/user.entity';
+import { CustomUserController } from './controller/user.controller';
+import { CustomUserService } from './service/user.service';
+import { Company } from 'apps/boss/src/entities/company.entity';
+import { Profile } from 'apps/genius/src/entities/profile.entity';
+import { Education } from 'apps/genius/src/entities/education.entity';
+import { Project } from 'apps/genius/src/entities/project.entity';
+import { Volunteer } from 'apps/genius/src/entities/volunteer.entity';
+import { Experience } from 'apps/genius/src/entities/experience.entity';
+import { Contact } from 'apps/boss/src/entities/contact.entity';
 
 @Module({
   imports: [
@@ -33,7 +43,19 @@ import { RoleService } from './service/role.service';
     JwtModule,
     EmailModule,
     SmsModule,
-    TypeOrmModule.forFeature([AdminUser, Role, Permission]),
+    TypeOrmModule.forFeature([
+      AdminUser,
+      Role,
+      Permission,
+      User,
+      Company,
+      Profile,
+      Education,
+      Project,
+      Volunteer,
+      Experience,
+      Contact,
+    ]),
     WinstonModule.forRoot({
       level: 'debug',
       format: format.combine(format.colorize(), format.simple()),
@@ -56,7 +78,17 @@ import { RoleService } from './service/role.service';
       ],
     }),
   ],
-  controllers: [AdminUserController, PermissionController, RoleController],
-  providers: [AdminUserService, PermissionService, RoleService],
+  controllers: [
+    AdminUserController,
+    PermissionController,
+    RoleController,
+    CustomUserController,
+  ],
+  providers: [
+    AdminUserService,
+    PermissionService,
+    RoleService,
+    CustomUserService,
+  ],
 })
 export class AdminModule {}

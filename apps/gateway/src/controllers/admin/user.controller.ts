@@ -1,78 +1,25 @@
-import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { LoginUserDto } from 'apps/admin/src/dto/login-user.dto';
-import { RegisterUserDto } from 'apps/admin/src/dto/register-user.dto';
-import { ResetPasswordDto } from 'apps/admin/src/dto/reset-password.dto';
-import { AdminUser } from 'apps/admin/src/entities/user.entity';
-import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
+import { User } from 'apps/user/src/entities/user.entity';
 import { firstValueFrom } from 'rxjs';
 
 @Controller({
-  path: 'admin/user',
+  path: 'admin/custom-user',
 })
-export class UserController {
+export class CustomUserController {
   @Inject('ADMIN_SERVICE')
   private adminClient: ClientProxy;
-
-  @Get('register-captcha')
-  async captcha(@Query('address') address: string) {
-    return firstValueFrom(this.adminClient.send('captcha', address));
-  }
-
-  @Get('register-smsCode')
-  async smsCode(@Query('phone') phone: string) {
-    return firstValueFrom(this.adminClient.send('smsCode', phone));
-  }
-
-  @Post('register')
-  register(@Body() registerUser: RegisterUserDto) {
-    return firstValueFrom(this.adminClient.send('register', registerUser));
-  }
-
-  @Post('resetPassword')
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return firstValueFrom(
-      this.adminClient.send('resetPassword', resetPasswordDto),
-    );
-  }
-
-  @Post('validateSmsCode')
-  async validateSmsCode(@Body() params: { phone: string; code: string }) {
-    return firstValueFrom(this.adminClient.send('validateSmsCode', params));
-  }
-
-  @Post('login')
-  async adminLogin(@Body() loginUserDto: LoginUserDto) {
-    return firstValueFrom(this.adminClient.send('adminLogin', loginUserDto));
-  }
-
-  @Get('refresh')
-  async refresh(@Query('refreshToken') refreshToken: string) {
-    return firstValueFrom(this.adminClient.send('refresh', refreshToken));
-  }
-
-  @Get('info')
-  @RequireLogin()
-  async info(@UserInfo('userId') userId: number) {
-    return firstValueFrom(this.adminClient.send('info', userId));
-  }
 
   /** 获取用户信息 */
   @Post('all')
   // @RequireLogin()
-  async findAllUser(@Body() params: AdminUser & Pagination) {
-    return firstValueFrom(this.adminClient.send('findAllUser', params));
+  async findAllCustomUser(@Body() params: User & Pagination) {
+    return firstValueFrom(this.adminClient.send('findAllCustomUser', params));
   }
 
   @Post('update')
   // @RequireLogin()
-  async updateAdminUser(@Body() user: AdminUser) {
-    return firstValueFrom(this.adminClient.send('updateAdminUser', user));
-  }
-
-  @Get('sts')
-  @RequireLogin()
-  async getStsToken() {
-    return firstValueFrom(this.adminClient.send('sts', {}));
+  async updateCustomUser(@Body() user: User) {
+    return firstValueFrom(this.adminClient.send('updateCustomUser', user));
   }
 }

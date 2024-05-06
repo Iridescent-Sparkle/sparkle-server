@@ -11,7 +11,7 @@ import { join } from 'path';
 import { CategoryController } from './controllers/boss/category.controller';
 import { JobController } from './controllers/boss/job.controller';
 import { UserController } from './controllers/user/user.controller';
-import { UserController as AdminUserController } from './controllers/admin/user.controller';
+import { UserController as AdminUserController } from './controllers/admin/admin-user.controller';
 import { BonusController } from './controllers/boss/bonus.controller';
 import { ExperienceController as BossExperienceController } from './controllers/boss/experience.controller';
 import { LevelController } from './controllers/boss/level.controller';
@@ -30,6 +30,7 @@ import { ConsumeController } from './controllers/boss/consume.controller';
 import { PermissionController } from './controllers/admin/permission.controller';
 import { RoleController } from './controllers/admin/role.controller';
 import { CompanyController } from './controllers/boss/company.controller';
+import { CustomUserController } from './controllers/admin/user.controller';
 
 @Module({
   imports: [
@@ -138,6 +139,7 @@ import { CompanyController } from './controllers/boss/company.controller';
     PermissionController,
     RoleController,
     CompanyController,
+    CustomUserController,
   ],
   providers: [
     {
