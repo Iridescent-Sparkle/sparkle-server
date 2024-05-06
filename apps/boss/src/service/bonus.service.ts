@@ -116,18 +116,22 @@ export class BonusService {
       condition.bonusDescription = Like(`%${rest.bonusDescription}%`);
     }
 
-    if (rest.createStart && rest.createEnd) {
+    if (rest.createTime) {
       condition.createTime = Between(
-        new Date(rest.createStart),
-        new Date(new Date(rest.createEnd).getTime() + 60 * 60),
+        new Date(rest.createTime[0]),
+        new Date(rest.createTime[1]),
       );
     }
 
-    if (rest.updateStart && rest.updateEnd) {
+    if (rest.updateTime) {
       condition.updateTime = Between(
-        new Date(rest.updateStart),
-        new Date(new Date(rest.updateEnd).getTime() + 60 * 60),
+        new Date(rest.updateTime[0]),
+        new Date(rest.updateTime[1]),
       );
+    }
+
+    if (rest.isFrozen !== undefined) {
+      condition.isFrozen = rest.isFrozen;
     }
 
     const [data, total] = await this.jobBonusRepository.findAndCount({

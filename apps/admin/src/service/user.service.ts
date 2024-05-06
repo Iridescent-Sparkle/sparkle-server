@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Like, Repository } from 'typeorm';
+import { Between, In, Like, Repository } from 'typeorm';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
@@ -200,21 +200,29 @@ export class AdminUserService {
       where: {
         id: userId,
       },
-      relations: ['roles', 'roles.roles'],
+      relations: ['roles', 'roles.permissions'],
+    });
+
+    const permissionMap = new Map();
+
+    const permissions = foundUser.roles.reduce((arr, item) => {
+      item.permissions.forEach((permission) => {
+        if (arr.indexOf(permission) === -1) {
+          arr.push(permission);
+        }
+      });
+      return arr;
+    }, []);
+
+    permissions.forEach((permission) => {
+      permissionMap.set(permission.id, permission);
     });
 
     return {
       id: foundUser.id,
       username: foundUser.username,
       roles: foundUser.roles.map((item) => item.name),
-      permissions: foundUser.roles.reduce((arr, item) => {
-        item.permissions.forEach((permission) => {
-          if (arr.indexOf(permission) === -1) {
-            arr.push(permission);
-          }
-        });
-        return arr;
-      }, []),
+      permissions: Array.from(permissionMap.values()),
     };
   }
 
@@ -262,11 +270,11 @@ export class AdminUserService {
     };
 
     if (rest.username) {
-      condition.description = Like(`%${rest.username}%`);
+      condition.username = Like(`%${rest.username}%`);
     }
 
     if (rest.nickname) {
-      condition.code = Like(`%${rest.nickname}%`);
+      condition.nickname = Like(`%${rest.nickname}%`);
     }
 
     if (rest.createTime) {
@@ -281,6 +289,16 @@ export class AdminUserService {
         new Date(rest.updateTime[0]),
         new Date(rest.updateTime[1]),
       );
+    }
+
+    if (rest.isFrozen !== undefined) {
+      condition.isFrozen = rest.isFrozen;
+    }
+
+    if (rest.roles) {
+      condition.roles = {
+        id: In(rest.roles),
+      };
     }
 
     const [data, total] = await this.adminUserRepository.findAndCount({
