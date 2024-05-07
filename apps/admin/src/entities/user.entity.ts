@@ -51,6 +51,12 @@ export class AdminUser {
   })
   isFrozen: boolean;
 
+  @Column({
+    default: false,
+    comment: '是否为管理员',
+  })
+  isAdmin: boolean;
+
   @CreateDateColumn()
   createTime: Date;
 

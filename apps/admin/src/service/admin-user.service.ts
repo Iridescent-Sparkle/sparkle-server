@@ -171,7 +171,7 @@ export class AdminUserService {
     if (!captcha) {
       throw new RpcException('验证码已失效');
     }
-    console.log(captcha, code, username);
+
     if (code !== captcha) {
       throw new RpcException('验证码不正确');
     }
@@ -223,6 +223,7 @@ export class AdminUserService {
       username: foundUser.username,
       roles: foundUser.roles.map((item) => item.name),
       permissions: Array.from(permissionMap.values()),
+      isAdmin: foundUser.isAdmin,
     };
   }
 

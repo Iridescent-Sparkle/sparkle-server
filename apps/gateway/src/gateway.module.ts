@@ -8,29 +8,30 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { LoginGuard } from 'guards/login.guard';
 import { PermissionGuard } from 'guards/permission.guard';
 import { join } from 'path';
-import { CategoryController } from './controllers/boss/category.controller';
-import { JobController } from './controllers/boss/job.controller';
-import { UserController } from './controllers/user/user.controller';
 import { UserController as AdminUserController } from './controllers/admin/admin-user.controller';
+import { PermissionController } from './controllers/admin/permission.controller';
+import { RoleController } from './controllers/admin/role.controller';
+import { TradeControlController } from './controllers/admin/trade-control.controller';
+import { CustomUserController } from './controllers/admin/user.controller';
 import { BonusController } from './controllers/boss/bonus.controller';
-import { ExperienceController as BossExperienceController } from './controllers/boss/experience.controller';
-import { LevelController } from './controllers/boss/level.controller';
+import { CategoryController } from './controllers/boss/category.controller';
+import { CompanyController } from './controllers/boss/company.controller';
+import { ConsumeController } from './controllers/boss/consume.controller';
+import { ContactController } from './controllers/boss/contact.controller';
 import { EducationController as BossEducationController } from './controllers/boss/education.controller';
-import { EducationController as GeniusEducationController } from './controllers/genius/education.controller';
+import { ExperienceController as BossExperienceController } from './controllers/boss/experience.controller';
+import { IntegralController } from './controllers/boss/integral.controller';
+import { JobController } from './controllers/boss/job.controller';
+import { LevelController } from './controllers/boss/level.controller';
+import { OrderController } from './controllers/boss/order.controller';
 import { DeliverController } from './controllers/genius/deliver.controller';
+import { EducationController as GeniusEducationController } from './controllers/genius/education.controller';
+import { ExperienceController as GeniusExperienceController } from './controllers/genius/experience.controller';
 import { FavoriteController } from './controllers/genius/favorite.controller';
 import { ProfileController } from './controllers/genius/profile.controller';
 import { ProjectController } from './controllers/genius/project.controller';
 import { VolunteerController } from './controllers/genius/volunteer.controller';
-import { ExperienceController as GeniusExperienceController } from './controllers/genius/experience.controller';
-import { IntegralController } from './controllers/boss/integral.controller';
-import { OrderController } from './controllers/boss/order.controller';
-import { ContactController } from './controllers/boss/contact.controller';
-import { ConsumeController } from './controllers/boss/consume.controller';
-import { PermissionController } from './controllers/admin/permission.controller';
-import { RoleController } from './controllers/admin/role.controller';
-import { CompanyController } from './controllers/boss/company.controller';
-import { CustomUserController } from './controllers/admin/user.controller';
+import { UserController } from './controllers/user/user.controller';
 
 @Module({
   imports: [
@@ -140,6 +141,7 @@ import { CustomUserController } from './controllers/admin/user.controller';
     RoleController,
     CompanyController,
     CustomUserController,
+    TradeControlController,
   ],
   providers: [
     {
