@@ -35,6 +35,7 @@ export class IntegralRecord {
 
   @Column({
     comment: '是否为消耗积分',
+    default: false,
   })
   isConsume: boolean;
 

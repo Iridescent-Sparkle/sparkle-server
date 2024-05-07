@@ -8,16 +8,36 @@ export class AlipayService {
   @Inject('ALIPAY_SERVICE')
   private readonly alipaySdk: AlipaySdk;
 
-  async createOrder(params: { totalAmount: number; subject: string }) {
+  async createOrder(params: {
+    totalAmount: number;
+    subject: string;
+    body: string;
+    passback_params: Record<string, any>;
+  }) {
     try {
-      const { totalAmount, subject } = params;
       return await this.alipaySdk.sdkExec('alipay.trade.app.pay', {
-        notify_url: 'https://api.iridescent.icu/boss/order/receive',
+        notify_url: 'https://28ce805a.r3.cpolar.cn/boss/order/receive',
         bizContent: {
-          out_trade_no: generateAlipayOrderNumber(), // 订单号，用于识别订单，不能重复
-          total_amount: totalAmount, // 金额
-          subject: subject, // 支付商品名称
+          out_trade_no: generateAlipayOrderNumber(),
+          ...params,
         },
+      });
+    } catch (error) {
+      throw new RpcException({
+        message: JSON.stringify(error),
+        code: HttpStatus.BAD_REQUEST,
+      });
+    }
+  }
+
+  async refundOrder(params: {
+    refund_amount: number;
+    trade_no: number;
+    refund_reason: string;
+  }) {
+    try {
+      return await this.alipaySdk.exec('alipay.trade.refund', {
+        bizContent: params,
       });
     } catch (error) {
       throw new RpcException({
