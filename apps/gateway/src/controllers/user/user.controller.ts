@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { Company } from 'apps/boss/src/entities/company.entity';
 import { LoginUserDto } from 'apps/user/src/dto/login-user.dto';
 import { RegisterUserDto } from 'apps/user/src/dto/register-user.dto';
 import { ResetPasswordDto } from 'apps/user/src/dto/reset-password.dto';
+import { User } from 'apps/user/src/entities/user.entity';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
 import { UserController as UserService } from '../../../../user/src/user.controller';
-import { User } from 'apps/user/src/entities/user.entity';
-import { Company } from 'apps/boss/src/entities/company.entity';
 
 @Controller({
   path: 'user',
@@ -71,10 +71,14 @@ export class UserController {
     });
   }
 
-  @Get('info')
+  @Post('info')
   @RequireLogin()
-  async info(@UserInfo('userId') userId: number) {
-    return await this.userService.info({ userId });
+  async info(
+    @UserInfo('userId') userId: number,
+    @Body() params: { userId: number },
+  ) {
+    console.log(userId, params);
+    return await this.userService.info({ userId, ...params });
   }
 
   @Post('update')

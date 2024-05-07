@@ -9,6 +9,7 @@ export class ConsumeService {
   private integralRecordRepository: Repository<IntegralRecord>;
 
   constructor() {}
+
   async findIntegralRecordByUserId(userId: number) {
     return await this.integralRecordRepository.find({
       where: {

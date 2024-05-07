@@ -22,6 +22,16 @@ export class OrderService {
   }
 
   async receiveOrederResult(params: any) {
+    const foundOrder = await this.orderRepository.findOne({
+      where: {
+        trade_no: params.trade_no,
+      },
+    });
+
+    if (foundOrder) {
+      this.orderRepository.delete(foundOrder.id);
+    }
+
     return this.orderRepository.save(params);
   }
 

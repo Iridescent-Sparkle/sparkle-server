@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JobDetail } from 'apps/boss/src/entities/job.entity';
 import { RequireLogin, UserInfo } from 'decorators/custom.decorator';
@@ -66,7 +58,6 @@ export class JobController {
     @Param('id') jobId: string,
     @Body() jobDetail: JobDetail,
   ): Promise<JobDetail> {
-    console.log('call remove');
     return firstValueFrom(
       this.BossClient.send('update', {
         userId,

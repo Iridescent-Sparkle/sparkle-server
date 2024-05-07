@@ -35,7 +35,14 @@ export class OrderController {
   }
 
   @Post('refund')
-  refundOrder(@Body() params: any) {
+  refundOrder(
+    @Body()
+    params: {
+      refund_amount: number;
+      trade_no: number;
+      refund_reason: string;
+    },
+  ) {
     return firstValueFrom(this.BossClient.send('refundOrder', params));
   }
 }

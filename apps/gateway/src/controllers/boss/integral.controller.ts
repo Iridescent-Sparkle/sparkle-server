@@ -58,7 +58,7 @@ export class IntegralController {
     return firstValueFrom(
       this.BossClient.send('consumeIntegral', {
         userId,
-        integral: params.integral,
+        ...params,
       }),
     );
   }
