@@ -18,6 +18,7 @@ export class OssService {
         assumeRoleRequest,
         runtime,
       );
+
       return res.body.credentials;
     } catch (error) {
       console.log(error.message);

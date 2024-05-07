@@ -190,7 +190,8 @@ export class AdminUserService {
       throw new RpcException('用户不存在');
     }
 
-    return await this.adminUserRepository.update(resetPasswordDto.username, {
+    return await this.adminUserRepository.save({
+      ...foundUser,
       password: md5(resetPasswordDto.password),
     });
   }
@@ -224,6 +225,8 @@ export class AdminUserService {
       roles: foundUser.roles.map((item) => item.name),
       permissions: Array.from(permissionMap.values()),
       isAdmin: foundUser.isAdmin,
+      avatar: foundUser.avatar,
+      nickname: foundUser.nickname,
     };
   }
 
@@ -256,10 +259,19 @@ export class AdminUserService {
       foundUser.isFrozen = user.isFrozen;
     }
 
+    if (user.avatar) {
+      foundUser.avatar = user.avatar;
+    }
+
+    if (user.nickname) {
+      foundUser.nickname = user.nickname;
+    }
+
     return await this.adminUserRepository.save(foundUser);
   }
 
   async getStsToken() {
+    console.log('调研');
     return await this.ossService.getSTSToken();
   }
 
