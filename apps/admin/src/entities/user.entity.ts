@@ -1,7 +1,3 @@
-/*
- * @Date: 2024-01-11 12:54:59
- * @Description: User表
- */
 import {
   Column,
   CreateDateColumn,

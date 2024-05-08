@@ -1,7 +1,3 @@
-/*
- * @Date: 2024-01-11 12:54:59
- * @Description: User表
- */
 import { Company } from 'apps/boss/src/entities/company.entity';
 import { Contact } from 'apps/boss/src/entities/contact.entity';
 import { Profile } from 'apps/genius/src/entities/profile.entity';

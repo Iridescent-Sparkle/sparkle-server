@@ -14,11 +14,6 @@ export class UserController {
   @Inject('ADMIN_SERVICE')
   private adminClient: ClientProxy;
 
-  @Get('register-captcha')
-  async captcha(@Query('address') address: string) {
-    return firstValueFrom(this.adminClient.send('captcha', address));
-  }
-
   @Get('register-smsCode')
   async smsCode(@Query('phone') phone: string) {
     return firstValueFrom(this.adminClient.send('smsCode', phone));
@@ -57,7 +52,6 @@ export class UserController {
     return firstValueFrom(this.adminClient.send('info', userId));
   }
 
-  /** 获取用户信息 */
   @Post('all')
   @RequireLogin()
   async findAllUser(@Body() params: AdminUser & Pagination) {
@@ -68,11 +62,5 @@ export class UserController {
   @RequireLogin()
   async updateAdminUser(@Body() user: AdminUser) {
     return firstValueFrom(this.adminClient.send('updateAdminUser', user));
-  }
-
-  @Get('sts')
-  @RequireLogin()
-  async getStsToken() {
-    return firstValueFrom(this.adminClient.send('getStsToken', {}));
   }
 }

@@ -18,43 +18,31 @@ export class AdminUserController {
 
   constructor(private readonly adminService: AdminUserService) {}
 
-  /** 获取邮箱验证码 */
-  @MessagePattern('captcha')
-  async captcha(address: string) {
-    return await this.adminService.captcha(address);
-  }
-
-  /** 获取短信验证码 */
   @MessagePattern('smsCode')
   async smsCode(phone: string) {
     return await this.adminService.smsCode(phone);
   }
 
-  /** 注册 */
   @MessagePattern('register')
   register(registerUser: RegisterUserDto) {
     return this.adminService.register(registerUser);
   }
 
-  /** 验证短信验证码 */
   @MessagePattern('validateSmsCode')
   async validateSmsCode({ phone, code }: { phone: string; code: string }) {
     return await this.adminService.validateSmsCode(phone, code);
   }
 
-  /** 重置密码 */
   @MessagePattern('resetPassword')
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
     return await this.adminService.resetPassword(resetPasswordDto);
   }
 
-  /** 管理员登录 */
   @MessagePattern('adminLogin')
   async adminLogin(loginUserDto: LoginUserDto) {
     return await this.adminService.login(loginUserDto);
   }
 
-  /** 刷新token */
   @MessagePattern('refresh')
   async refresh({ refreshToken }: { refreshToken: string }) {
     try {
@@ -92,25 +80,17 @@ export class AdminUserController {
       });
     }
   }
-  /** 获取OSS STS Token */
-  @MessagePattern('getStsToken')
-  async getStsToken({}: object) {
-    return await this.adminService.getStsToken();
-  }
 
-  /** 获取用户信息 */
   @MessagePattern('info')
   async info({ userId }: { userId: number }) {
     return await this.adminService.findUserById(userId);
   }
 
-  /** 获取用户信息 */
   @MessagePattern('findAllUser')
   async findAllUser(params: AdminUser & Pagination) {
     return await this.adminService.findAllUser(params);
   }
 
-  /** 更新用户信息 */
   @MessagePattern('updateAdminUser')
   async updateAdminUser(user: AdminUser) {
     return await this.adminService.updateAdminUser(user);

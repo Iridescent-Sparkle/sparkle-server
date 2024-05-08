@@ -1,5 +1,6 @@
 import { EmailService } from '@app/email';
 import { ImService } from '@app/im';
+import { OssService } from '@app/oss';
 import { RedisService } from '@app/redis';
 import { SmsService } from '@app/sms';
 import { Inject, Injectable, Logger } from '@nestjs/common';
@@ -7,16 +8,15 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Like, Repository } from 'typeorm';
+import { Company } from 'apps/boss/src/entities/company.entity';
+import { Profile } from 'apps/genius/src/entities/profile.entity';
+import { firstValueFrom } from 'rxjs';
+import { Repository } from 'typeorm';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { User } from './entities/user.entity';
 import { md5 } from './utils/index';
-import { Profile } from 'apps/genius/src/entities/profile.entity';
-import { firstValueFrom } from 'rxjs';
-import { OssService } from '@app/oss';
-import { Company } from 'apps/boss/src/entities/company.entity';
 
 @Injectable()
 export class UserService {
