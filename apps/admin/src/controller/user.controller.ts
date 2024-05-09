@@ -2,6 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { User } from 'apps/user/src/entities/user.entity';
 import { CustomUserService } from '../service/user.service';
+
 @Controller()
 export class CustomUserController {
   constructor(private readonly customUserService: CustomUserService) {}

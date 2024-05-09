@@ -10,18 +10,13 @@ import { AdminUserService } from '../service/admin-user.service';
 
 @Controller()
 export class AdminUserController {
+  constructor(private readonly adminService: AdminUserService) {}
+
   @Inject(JwtService)
   private jwtService: JwtService;
 
   @Inject(ConfigService)
   private configService: ConfigService;
-
-  constructor(private readonly adminService: AdminUserService) {}
-
-  @MessagePattern('smsCode')
-  async smsCode(phone: string) {
-    return await this.adminService.smsCode(phone);
-  }
 
   @MessagePattern('register')
   register(registerUser: RegisterUserDto) {

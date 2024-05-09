@@ -14,11 +14,6 @@ export class UserController {
   @Inject('ADMIN_SERVICE')
   private adminClient: ClientProxy;
 
-  @Get('register-smsCode')
-  async smsCode(@Query('phone') phone: string) {
-    return firstValueFrom(this.adminClient.send('smsCode', phone));
-  }
-
   @Post('register')
   register(@Body() registerUser: RegisterUserDto) {
     return firstValueFrom(this.adminClient.send('register', registerUser));

@@ -47,18 +47,6 @@ export class AdminUserService {
   @InjectRepository(Role)
   private readonly roleRepository: Repository<Role>;
 
-  async smsCode(username: string) {
-    const code = Math.random().toString().slice(2, 6);
-    await this.redisService.set(`smsCode_admin_${username}`, '1234', 5 * 60);
-    // await this.smsService.sendSms({
-    //   username,
-    //   code,
-    // });
-    return {
-      countDown: 60,
-    };
-  }
-
   async register(registerUserDto: RegisterUserDto) {
     try {
       const captcha = await this.redisService.get(
