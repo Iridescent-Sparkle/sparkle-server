@@ -19,7 +19,7 @@ async function bootstrap() {
   // app.use(csurf());
   // app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 2000 }));
   // app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
-  app.enableCors({ origin: false });
+  app.enableCors({ origin: '*' });
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new FormatResponseInterceptor());
