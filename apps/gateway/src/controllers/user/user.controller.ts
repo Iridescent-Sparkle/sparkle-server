@@ -64,13 +64,19 @@ export class UserController {
     return await this.userService.validateEmailCode(params);
   }
 
+  @Get('refresh')
+  async refresh(@Query('refreshToken') refreshToken: string) {
+    return await this.userService.refresh({
+      refreshToken,
+    });
+  }
+
   @Post('info')
   @RequireLogin()
   async info(
     @UserInfo('userId') userId: number,
     @Body() params: { userId: number },
   ) {
-    console.log(userId, params);
     return await this.userService.info({ userId, ...params });
   }
 

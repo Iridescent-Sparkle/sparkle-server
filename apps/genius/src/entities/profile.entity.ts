@@ -87,6 +87,12 @@ export class Profile {
 
   @Column({
     default: false,
+    comment: '是否求职中',
+  })
+  isHunting: boolean;
+
+  @Column({
+    default: false,
     comment: '是否删除',
   })
   isDelete: boolean;

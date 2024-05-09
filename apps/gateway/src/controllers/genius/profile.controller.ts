@@ -34,4 +34,10 @@ export class ProfileController {
       }),
     );
   }
+
+  @Post('judge')
+  @RequireLogin()
+  async judgeHuntJob(@UserInfo('userId') userId: number) {
+    return firstValueFrom(this.GeniusClient.send('judgeHuntJob', userId));
+  }
 }

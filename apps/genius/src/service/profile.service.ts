@@ -113,4 +113,36 @@ export class ProfileService {
   async deleteProfile(id: number) {
     await this.profileRepository.update(id, { isDelete: true });
   }
+
+  async judgeHuntJob(userId: number) {
+    const profile = await this.profileRepository.findOne({
+      where: {
+        isDelete: false,
+        user: {
+          id: userId,
+        },
+      },
+      select: {
+        id: true,
+        address: true,
+        phone: true,
+        maxSalary: true,
+        minSalary: true,
+        occupation: true,
+        resume: true,
+      },
+    });
+
+    if (Object.values(profile).every((item) => !!item)) {
+      return {
+        status: true,
+        message: '已填写完整',
+      };
+    } else {
+      return {
+        status: false,
+        message: '请先完善联系信息、个人总结、期望薪资并上传附近简历',
+      };
+    }
+  }
 }

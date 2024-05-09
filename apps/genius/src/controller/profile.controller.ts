@@ -34,4 +34,9 @@ export class ProfileController {
   async deleteProfile(profile: Profile) {
     return this.profileService.deleteProfile(profile.id);
   }
+
+  @MessagePattern('judgeHuntJob')
+  async judgeHuntJob(userId: number) {
+    return this.profileService.judgeHuntJob(userId);
+  }
 }
