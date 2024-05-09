@@ -3,7 +3,7 @@ import { ImService } from '@app/im';
 import { OssService } from '@app/oss';
 import { RedisService } from '@app/redis';
 import { SmsService } from '@app/sms';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
@@ -85,11 +85,17 @@ export class UserService {
       );
 
       if (!captcha) {
-        throw new RpcException('验证码已失效');
+        throw new RpcException({
+          message: '验证码已失效',
+          code: HttpStatus.BAD_REQUEST,
+        });
       }
 
       if (registerUserDto.captcha !== captcha) {
-        throw new RpcException('验证码不正确');
+        throw new RpcException({
+          message: '验证码不正确',
+          code: HttpStatus.BAD_REQUEST,
+        });
       }
 
       const foundUser = await this.userRepository.findOneBy({
@@ -97,7 +103,10 @@ export class UserService {
       });
 
       if (foundUser) {
-        throw new RpcException('用户已存在');
+        throw new RpcException({
+          message: '用户已存在',
+          code: HttpStatus.BAD_REQUEST,
+        });
       }
 
       await this.imService.register({
@@ -167,11 +176,24 @@ export class UserService {
     });
 
     if (!foundUser) {
-      throw new RpcException('用户不存在');
+      throw new RpcException({
+        message: '用户不存在',
+        code: HttpStatus.BAD_REQUEST,
+      });
+    }
+
+    if (foundUser.isFrozen) {
+      throw new RpcException({
+        message: '用户状态异常',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     if (md5(loginUserDto.password) !== foundUser.password) {
-      throw new RpcException('密码错误');
+      throw new RpcException({
+        message: '密码错误',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     const token = {
@@ -203,11 +225,17 @@ export class UserService {
     const captcha = await this.redisService.get(`smsCode_${phone}`);
 
     if (!captcha) {
-      throw new RpcException('验证码已失效');
+      throw new RpcException({
+        message: '验证码已失效',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     if (code !== captcha) {
-      throw new RpcException('验证码不正确');
+      throw new RpcException({
+        message: '验证码不正确',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     return {};
@@ -217,11 +245,17 @@ export class UserService {
     const captcha = await this.redisService.get(`emailCode_${email}`);
 
     if (!captcha) {
-      throw new RpcException('验证码已失效');
+      throw new RpcException({
+        message: '验证码已失效',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     if (code !== captcha) {
-      throw new RpcException('验证码不正确');
+      throw new RpcException({
+        message: '验证码不正确',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     return {};
@@ -235,7 +269,10 @@ export class UserService {
     });
 
     if (!foundUser) {
-      throw new RpcException('用户不存在');
+      throw new RpcException({
+        message: '用户不存在',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     return await this.userRepository.update(foundUser.id, {
@@ -294,7 +331,10 @@ export class UserService {
     });
 
     if (!foundUser) {
-      throw new RpcException('用户不存在');
+      throw new RpcException({
+        message: '用户不存在',
+        code: HttpStatus.BAD_REQUEST,
+      });
     }
 
     return await this.userRepository.update(userId, {
