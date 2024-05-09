@@ -30,11 +30,13 @@ export class OrderController {
   }
 
   @Post('all')
+  @RequireLogin()
   findAllOrderList(@Body() params: any) {
     return firstValueFrom(this.BossClient.send('findAllOrderList', params));
   }
 
   @Post('refund')
+  @RequireLogin()
   refundOrder(
     @Body()
     params: {

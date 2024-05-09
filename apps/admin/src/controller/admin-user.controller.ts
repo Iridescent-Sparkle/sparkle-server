@@ -39,34 +39,36 @@ export class AdminUserController {
   }
 
   @MessagePattern('refresh')
-  async refresh({ refreshToken }: { refreshToken: string }) {
+  async refresh(token: string) {
     try {
-      const data = this.jwtService.verify(refreshToken);
+      const data = this.jwtService.verify(token);
       const user = await this.adminService.findUserById(data.userId);
-      const access_token = this.jwtService.sign(
+      const accessToken = this.jwtService.sign(
         {
           userId: user.id,
           username: user.username,
         },
         {
           expiresIn:
-            this.configService.get('jwt_access_token_expires_time') || '30m',
+            this.configService.get('jwt_admin_access_token_expires_time') ||
+            '30m',
         },
       );
 
-      const refresh_token = this.jwtService.sign(
+      const refreshToken = this.jwtService.sign(
         {
           userId: user.id,
         },
         {
           expiresIn:
-            this.configService.get('jwt_refresh_token_expres_time') || '7d',
+            this.configService.get('jwt_admin_refresh_token_expres_time') ||
+            '7d',
         },
       );
 
       return {
-        access_token,
-        refresh_token,
+        accessToken,
+        refreshToken,
       };
     } catch (error) {
       throw new RpcException({

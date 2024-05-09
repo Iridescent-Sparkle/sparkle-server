@@ -113,7 +113,8 @@ export class AdminUserService {
         },
         {
           expiresIn:
-            this.configService.get('jwt_access_token_expires_time') || '30m',
+            this.configService.get('jwt_admin_access_token_expires_time') ||
+            '30m',
         },
       ),
       refreshToken: this.jwtService.sign(
@@ -122,7 +123,8 @@ export class AdminUserService {
         },
         {
           expiresIn:
-            this.configService.get('jwt_refresh_token_expres_time') || '7d',
+            this.configService.get('jwt_admin_refresh_token_expres_time') ||
+            '7d',
         },
       ),
     };
