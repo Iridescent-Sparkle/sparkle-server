@@ -42,6 +42,17 @@ message User {
   Company company = 16;
   int64 integral = 17;
   repeated int32 contactId = 18;
+  repeated Contact contact = 19;
+}
+
+message Contact {
+  int32 id = 1;
+  int32 profileId = 2;
+  int32 userId = 3;
+  bool isFrozen = 4;
+  bool isDelete = 5;
+  string createTime = 6;
+  string updateTime = 7;
 }
 
 message Company {

@@ -139,18 +139,6 @@ export class JobDetail {
   headCount: number;
 
   @Column({
-    comment: '网站',
-    nullable: true,
-  })
-  website: string;
-
-  @Column({
-    comment: '关于',
-    nullable: true,
-  })
-  companyDescription: string;
-
-  @Column({
     default: false,
     comment: '是否冻结',
   })

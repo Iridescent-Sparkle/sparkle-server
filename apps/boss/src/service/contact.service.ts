@@ -21,6 +21,7 @@ export class ContactService {
           experience: true,
           project: true,
           volunteer: true,
+          user: true,
         },
       },
     });

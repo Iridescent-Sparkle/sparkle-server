@@ -281,12 +281,24 @@ export class UserService {
   }
 
   async findUserById(userId: number) {
+    console.log(
+      await this.userRepository.findOne({
+        where: {
+          id: userId,
+        },
+        relations: {
+          company: true,
+          contact: true,
+        },
+      }),
+    );
     return await this.userRepository.findOne({
       where: {
         id: userId,
       },
       relations: {
         company: true,
+        contact: true,
       },
     });
   }

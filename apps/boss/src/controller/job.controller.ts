@@ -7,9 +7,15 @@ import { JobService } from '../service/job.service';
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
-  @MessagePattern('create')
-  create({ userId, jobDetail }: { userId: number; jobDetail: JobDetail }) {
-    return this.jobService.create({
+  @MessagePattern('createJobDetail')
+  createJobDetail({
+    userId,
+    jobDetail,
+  }: {
+    userId: number;
+    jobDetail: JobDetail;
+  }) {
+    return this.jobService.createJobDetail({
       userId,
       jobDetail,
     });
@@ -29,18 +35,9 @@ export class JobController {
   }
 
   @MessagePattern('update')
-  update({
-    userId,
-    jobId,
-    jobDetail,
-  }: {
-    userId: number;
-    jobId: number;
-    jobDetail: JobDetail;
-  }) {
+  update({ userId, jobDetail }: { userId: number; jobDetail: JobDetail }) {
     return this.jobService.update({
       userId,
-      jobId,
       jobDetail,
     });
   }

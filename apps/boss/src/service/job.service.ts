@@ -22,7 +22,7 @@ export class JobService {
 
   constructor() {}
 
-  async create({
+  async createJobDetail({
     userId,
     jobDetail,
   }: {
@@ -118,6 +118,7 @@ export class JobService {
       relations: {
         jobBonus: true,
         user: true,
+        company: true,
       },
     })) as JobDetail & {
       isCollected: boolean;
@@ -160,21 +161,22 @@ export class JobService {
 
   async update({
     userId,
-    jobId,
     jobDetail,
   }: {
     userId: number;
-    jobId: number;
     jobDetail: JobDetail;
   }) {
     const job = await this.jobDetailRepository.findOne({
       where: {
-        id: jobId,
+        id: jobDetail.id,
         userId,
       },
     });
+    jobDetail.jobBonus = await this.jobBonusRepository.findBy({
+      id: In(jobDetail.jobBonus),
+    });
     const updatedJobDetail = await this.jobDetailRepository.save({
-      id: jobId,
+      id: jobDetail.id,
       userId,
       ...job,
       ...jobDetail,

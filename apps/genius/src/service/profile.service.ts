@@ -175,19 +175,24 @@ export class ProfileService {
           if (item[0] === 'occupation') {
             return '职位信息';
           }
+
           if (item[0] === 'phone') {
             return '联系信息';
           }
+
           if (item[0] === 'minSalary') {
             return '期望薪资';
           }
+
           if (item[0] === 'summary') {
             return '个人总结';
           }
+
           if (item[0] === 'resume') {
             return '附件简历';
           }
         })
+        .filter((item) => !!item)
         .join('、');
 
       return {

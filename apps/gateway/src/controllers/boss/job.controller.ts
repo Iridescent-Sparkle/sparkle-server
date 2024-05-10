@@ -11,14 +11,14 @@ export class JobController {
   @Inject('BOSS_SERVICE')
   private BossClient: ClientProxy;
 
-  @Post()
+  @Post('create')
   @RequireLogin()
-  create(
+  createJobDetail(
     @UserInfo('userId') userId: number,
     @Body() jobDetail: JobDetail,
   ): Promise<JobDetail> {
     return firstValueFrom(
-      this.BossClient.send('create', { userId, jobDetail }),
+      this.BossClient.send('createJobDetail', { userId, jobDetail }),
     );
   }
 
@@ -55,13 +55,11 @@ export class JobController {
   @RequireLogin()
   update(
     @UserInfo('userId') userId: number,
-    @Param('id') jobId: string,
     @Body() jobDetail: JobDetail,
   ): Promise<JobDetail> {
     return firstValueFrom(
       this.BossClient.send('update', {
         userId,
-        jobId: +jobId,
         jobDetail,
       }),
     );
