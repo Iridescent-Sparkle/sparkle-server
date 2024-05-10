@@ -74,7 +74,8 @@ export class Profile {
 
   @Column({
     comment: '个人总结',
-    default: '',
+    type: 'longtext',
+    nullable: true,
   })
   summary: string;
 
