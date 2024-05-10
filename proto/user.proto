@@ -55,6 +55,7 @@ message Company {
   string createTime = 8;
   string updateTime = 9;
   string companyDesc = 10;
+  string companyAddress = 11;
 }
 
 message EmailCodeRequest {

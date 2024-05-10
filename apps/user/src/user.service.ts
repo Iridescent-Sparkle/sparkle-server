@@ -316,6 +316,15 @@ export class UserService {
       mail: foundUser.email,
     });
 
+    await firstValueFrom(
+      this.GeniusClient.send('updateProfile', {
+        userId: foundUser.id,
+        profile: {
+          occupation: foundUser.occupation,
+        },
+      }),
+    );
+
     return foundUser;
   }
 

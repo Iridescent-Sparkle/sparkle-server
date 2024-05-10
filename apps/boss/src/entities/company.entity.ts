@@ -25,6 +25,11 @@ export class Company {
   companyName: string;
 
   @Column({
+    comment: '公司地址',
+  })
+  companyAddress: string;
+
+  @Column({
     comment: '公司头像',
   })
   companyAvatar: string;

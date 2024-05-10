@@ -13,6 +13,7 @@ export class ProfileService {
   private userRepository: Repository<User>;
 
   constructor() {}
+
   async findAllProfile(params: Profile & Pagination) {
     const { current = 1, pageSize = 10, ...rest } = params;
 
@@ -20,6 +21,10 @@ export class ProfileService {
 
     if (rest.address) {
       condition.address = Like(`%${rest.address}%`);
+    }
+
+    if (rest.isHunting !== undefined) {
+      condition.isHunting = rest.isHunting;
     }
 
     if (rest.minSalary && rest.maxSalary) {
@@ -100,14 +105,38 @@ export class ProfileService {
     userId: number;
     profile: Profile & { nickname: string; avatar: string };
   }) {
-    if (profile.nickname || profile.avatar) {
-      await this.userRepository.update(userId, {
-        nickname: profile.nickname,
-        avatar: profile.avatar,
-      });
+    const foundUser = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (profile.nickname) {
+      foundUser.nickname = profile.nickname;
     }
 
-    return await this.profileRepository.update(profile.id, profile);
+    if (profile.avatar) {
+      foundUser.avatar = profile.avatar;
+    }
+
+    if (profile.occupation) {
+      foundUser.occupation = profile.occupation;
+    }
+
+    await this.userRepository.update(userId, foundUser);
+
+    const foundProfile = await this.profileRepository.findOne({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+
+    return await this.profileRepository.update(foundProfile.id, {
+      ...foundProfile,
+      ...profile,
+    });
   }
 
   async deleteProfile(id: number) {
@@ -130,6 +159,7 @@ export class ProfileService {
         minSalary: true,
         occupation: true,
         resume: true,
+        summary: true,
       },
     });
 
@@ -139,9 +169,30 @@ export class ProfileService {
         message: '已填写完整',
       };
     } else {
+      const message = Object.entries(profile)
+        .filter(([, value]) => !value)
+        .map((item) => {
+          if (item[0] === 'occupation') {
+            return '职位信息';
+          }
+          if (item[0] === 'phone') {
+            return '联系信息';
+          }
+          if (item[0] === 'minSalary') {
+            return '期望薪资';
+          }
+          if (item[0] === 'summary') {
+            return '个人总结';
+          }
+          if (item[0] === 'resume') {
+            return '附件简历';
+          }
+        })
+        .join('、');
+
       return {
         status: false,
-        message: '请先完善联系信息、个人总结、期望薪资并上传附近简历',
+        message: `请先完善${message}`,
       };
     }
   }

@@ -55,7 +55,7 @@ export class Education {
   @Column({
     comment: '绩点',
   })
-  gpa: number;
+  gpa: string;
 
   @Column({
     comment: '经历描述',

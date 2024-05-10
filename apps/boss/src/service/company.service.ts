@@ -2,11 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Like, Repository } from 'typeorm';
 import { Company } from '../entities/company.entity';
+import { User } from 'apps/user/src/entities/user.entity';
 
 @Injectable()
 export class CompanyService {
   @InjectRepository(Company)
   private companyRepository: Repository<Company>;
+  @InjectRepository(User)
+  private userRepository: Repository<User>;
 
   constructor() {}
 
@@ -17,6 +20,7 @@ export class CompanyService {
     newCompany.companyLicense = company.companyLicense;
     newCompany.companyDesc = company.companyDesc;
     newCompany.status = company.status;
+    newCompany.companyAddress = company.companyAddress;
     return await this.companyRepository.save(newCompany);
   }
 
@@ -99,6 +103,17 @@ export class CompanyService {
         message: '该记录不存在',
       };
     }
+
+    const foundUser = await this.userRepository.findOne({
+      where: {
+        companyId: params.id,
+      },
+    });
+
+    await this.userRepository.save({
+      ...foundUser,
+      companyId: null,
+    });
 
     return await this.companyRepository.save({
       ...companyInfo,
