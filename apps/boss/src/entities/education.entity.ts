@@ -15,7 +15,7 @@ export class JobEducation {
 
   @Column({
     length: 50,
-    comment: '学历名称',
+    comment: '学校',
   })
   educationName: string;
 

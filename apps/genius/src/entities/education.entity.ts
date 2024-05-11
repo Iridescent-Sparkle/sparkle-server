@@ -43,6 +43,12 @@ export class Education {
   profession: string;
 
   @Column({
+    comment: '学历',
+    default: 1,
+  })
+  educationLevel: number;
+
+  @Column({
     comment: '入学时间',
   })
   startTime: Date;

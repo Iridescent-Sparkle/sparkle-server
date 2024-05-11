@@ -21,10 +21,10 @@ export class ProjectService {
     });
   }
 
-  async findProjectById(id: number) {
+  async findProjectById({ id }: { id: number }) {
     return await this.projectRepository.findOne({
       where: {
-        id,
+        id: Number(id),
         isDelete: false,
       },
     });

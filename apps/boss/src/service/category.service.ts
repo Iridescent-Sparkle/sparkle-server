@@ -175,7 +175,9 @@ export class CategoryService {
   async findJobByCategory(params: { categoryId: number } & Pagination) {
     const { categoryId, current = 1, pageSize = 10 } = params;
 
-    const condition = {} as Record<string, any>;
+    const condition = {
+      isDelete: false,
+    } as Record<string, any>;
 
     if (categoryId != 1) {
       condition.jobCategory = {
@@ -184,12 +186,12 @@ export class CategoryService {
     }
 
     const [data, total] = await this.jobDetailRepository.findAndCount({
-      where: {
-        isDelete: false,
-        ...condition,
-      },
+      where: condition,
       skip: (current - 1) * pageSize,
       take: pageSize,
+      relations: {
+        company: true,
+      },
     });
 
     return {
