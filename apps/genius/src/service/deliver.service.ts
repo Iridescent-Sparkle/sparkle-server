@@ -36,7 +36,7 @@ export class DeliverService {
 
   async findDeliverStatusByJobId(deliverData: { deliverId: number }) {
     const { deliverId } = deliverData;
-    console.log(deliverId);
+
     return await this.jobDeliverRepository.findOne({
       where: {
         id: deliverId,
@@ -92,7 +92,7 @@ export class DeliverService {
       });
     }
     deliver.status = newStatus;
-    console.log(deliver);
+
     return await this.jobDeliverRepository.save(deliver);
   }
 

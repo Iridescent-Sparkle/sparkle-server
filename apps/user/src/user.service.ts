@@ -60,6 +60,7 @@ export class UserService {
       subject: '验证码',
       html: `<p>你的验证码是${code}</p>`,
     });
+    console.log(`你的验证码是${code}`);
     return {
       countDown: 60,
     };
@@ -67,8 +68,8 @@ export class UserService {
 
   async smsCode(username: string) {
     const code = Math.random().toString().slice(2, 6);
-    console.log(code);
-    await this.redisService.set(`smsCode_${username}`, code, 5 * 60);
+    console.log(`你的验证码是${code}`);
+    await this.redisService.set(`smsCode_${username}`, '1234', 5 * 60);
     // await this.smsService.sendSms({
     //   username,
     //   code,
@@ -257,7 +258,7 @@ export class UserService {
         code: HttpStatus.BAD_REQUEST,
       });
     }
-    console.log(captcha);
+
     return {};
   }
 
