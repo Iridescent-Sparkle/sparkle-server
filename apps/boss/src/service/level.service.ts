@@ -13,23 +13,27 @@ export class LevelService {
   async initJobLevel() {
     const worklevelOptions = [
       {
-        label: '1年以下',
+        label: '实习',
         value: '1',
       },
       {
-        label: '1-3年',
+        label: '初级',
         value: '2',
       },
       {
-        label: '3-5年',
+        label: '中级',
         value: '3',
       },
       {
-        label: '5-10年',
+        label: '高级',
         value: '4',
       },
       {
-        label: '10年以上',
+        label: '组长',
+        value: '5',
+      },
+      {
+        label: '专家',
         value: '5',
       },
     ];

@@ -18,6 +18,11 @@ export class AdminUserController {
   @Inject(ConfigService)
   private configService: ConfigService;
 
+  @MessagePattern('smsCode')
+  smsCode(username: string) {
+    return this.adminService.smsCode(username);
+  }
+
   @MessagePattern('register')
   register(registerUser: RegisterUserDto) {
     return this.adminService.register(registerUser);
