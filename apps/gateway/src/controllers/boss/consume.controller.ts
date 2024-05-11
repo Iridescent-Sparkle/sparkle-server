@@ -13,9 +13,15 @@ export class ConsumeController {
 
   @Post('user')
   @RequireLogin()
-  findIntegralRecordByUserId(@UserInfo('userId') userId: number) {
+  findIntegralRecordByUserId(
+    @UserInfo('userId') userId: number,
+    @Body() params: Pagination,
+  ) {
     return firstValueFrom(
-      this.BossClient.send('findIntegralRecordByUserId', userId),
+      this.BossClient.send('findIntegralRecordByUserId', {
+        userId,
+        ...params,
+      }),
     );
   }
 
@@ -35,15 +41,15 @@ export class ConsumeController {
 
   @Post('usage/type')
   @RequireLogin()
-  async queryUsageByType() {
-    return firstValueFrom(this.BossClient.send('queryUsageByType', {}));
+  async queryUsageByType(@UserInfo('userId') userId: number) {
+    return firstValueFrom(this.BossClient.send('queryUsageByType', userId));
   }
 
   @Post('usage/days')
   @RequireLogin()
-  async queryConsumptionLast7Days() {
+  async queryConsumptionLast7Days(@UserInfo('userId') userId: number) {
     return firstValueFrom(
-      this.BossClient.send('queryConsumptionLast7Days', {}),
+      this.BossClient.send('queryConsumptionLast7Days', userId),
     );
   }
 }

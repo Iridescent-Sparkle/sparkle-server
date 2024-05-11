@@ -16,7 +16,7 @@ export class AlipayService {
   }) {
     try {
       return await this.alipaySdk.sdkExec('alipay.trade.app.pay', {
-        notify_url: 'https://71414a11.r3.cpolar.cn/boss/order/receive',
+        notify_url: 'http://4d578f22.r2.cpolar.cn/boss/order/receive',
         bizContent: {
           out_trade_no: generateAlipayOrderNumber(),
           ...params,

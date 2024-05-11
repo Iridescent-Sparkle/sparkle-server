@@ -10,12 +10,23 @@ export class ConsumeService {
 
   constructor() {}
 
-  async findIntegralRecordByUserId(userId: number) {
-    return await this.integralRecordRepository.find({
+  async findIntegralRecordByUserId(params: { userId: number } & Pagination) {
+    const { current = 1, pageSize = 10 } = params;
+
+    const [data, total] = await this.integralRecordRepository.findAndCount({
       where: {
-        userId: userId,
+        userId: params.userId,
       },
+      skip: (current - 1) * pageSize,
+      take: pageSize,
     });
+
+    return {
+      data,
+      total,
+      current,
+      pageSize,
+    };
   }
 
   async createIntegralRecord(integralRecord: IntegralRecord) {
@@ -27,17 +38,22 @@ export class ConsumeService {
     return await this.integralRecordRepository.save(integralRecord);
   }
 
-  async queryUsageByType() {
+  async queryUsageByType(userId: number) {
     return await this.integralRecordRepository
       .createQueryBuilder('integralRecord')
       .select('type')
       .addSelect('SUM(integral)', 'totalIntegral')
-      .where({ isDelete: false })
+      .where({
+        isDelete: false,
+        user: {
+          id: userId,
+        },
+      })
       .groupBy('type')
       .getRawMany();
   }
 
-  async queryConsumptionLast7Days() {
+  async queryConsumptionLast7Days(userId: number) {
     const result = await this.integralRecordRepository
       .createQueryBuilder('integralRecord')
       .select('DATE(createTime)', 'date')
@@ -45,7 +61,13 @@ export class ConsumeService {
       .where('createTime > :date', {
         date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       })
-      .andWhere({ isConsume: true, isDelete: false })
+      .andWhere({
+        isConsume: true,
+        isDelete: false,
+        user: {
+          id: userId,
+        },
+      })
       .groupBy('DATE(createTime)')
       .getRawMany();
 

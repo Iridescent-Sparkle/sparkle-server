@@ -8,8 +8,8 @@ export class ConsumeController {
   constructor(private readonly consumeService: ConsumeService) {}
 
   @MessagePattern('findIntegralRecordByUserId')
-  async findIntegralRecordByUserId(userId: number) {
-    return this.consumeService.findIntegralRecordByUserId(userId);
+  async findIntegralRecordByUserId(params: { userId: number } & Pagination) {
+    return this.consumeService.findIntegralRecordByUserId(params);
   }
 
   @MessagePattern('createIntegralRecord')
@@ -18,12 +18,12 @@ export class ConsumeController {
   }
 
   @MessagePattern('queryUsageByType')
-  async queryUsageByType() {
-    return this.consumeService.queryUsageByType();
+  async queryUsageByType(userId: number) {
+    return this.consumeService.queryUsageByType(userId);
   }
 
   @MessagePattern('queryConsumptionLast7Days')
-  async queryConsumptionLast7Days() {
-    return this.consumeService.queryConsumptionLast7Days();
+  async queryConsumptionLast7Days(userId: number) {
+    return this.consumeService.queryConsumptionLast7Days(userId);
   }
 }
