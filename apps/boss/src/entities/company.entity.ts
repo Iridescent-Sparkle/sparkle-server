@@ -41,6 +41,7 @@ export class Company {
 
   @Column({
     comment: '公司描述',
+    type: 'longtext',
   })
   companyDesc: string;
 
