@@ -13,8 +13,8 @@ export class ProjectController {
   }
 
   @MessagePattern('findProjectById')
-  async findProjectById(id: number) {
-    return this.projectService.findProjectById(id);
+  async findProjectById(params: { id: number }) {
+    return this.projectService.findProjectById(params);
   }
 
   @MessagePattern('createProject')
