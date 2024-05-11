@@ -91,13 +91,6 @@ export class AdminUserService {
         });
       }
 
-      if (foundUser.isFrozen) {
-        throw new RpcException({
-          message: '用户状态异常',
-          code: HttpStatus.BAD_REQUEST,
-        });
-      }
-
       const newUser = new AdminUser();
       newUser.username = registerUserDto.username;
       newUser.password = md5(registerUserDto.password);
@@ -136,6 +129,13 @@ export class AdminUserService {
     if (md5(loginUserDto.password) !== foundUser.password) {
       throw new RpcException({
         message: '密码错误',
+        code: HttpStatus.BAD_REQUEST,
+      });
+    }
+
+    if (foundUser.isFrozen) {
+      throw new RpcException({
+        message: '用户状态异常',
         code: HttpStatus.BAD_REQUEST,
       });
     }
