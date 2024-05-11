@@ -54,12 +54,12 @@ export class UserService {
 
   async emailCode(email: string) {
     const code = Math.random().toString().slice(2, 6);
-    await this.redisService.set(`emailCode_${email}`, '1234', 5 * 60);
-    // await this.emailService.sendMail({
-    //   to: address,
-    //   subject: '注册验证码',
-    //   html: `<p>你的注册验证码是${code}</p>`,
-    // });
+    await this.redisService.set(`emailCode_${email}`, code, 5 * 60);
+    await this.emailService.sendMail({
+      to: email,
+      subject: '验证码',
+      html: `<p>你的验证码是${code}</p>`,
+    });
     return {
       countDown: 60,
     };
@@ -67,8 +67,8 @@ export class UserService {
 
   async smsCode(username: string) {
     const code = Math.random().toString().slice(2, 6);
-
-    await this.redisService.set(`smsCode_${username}`, '1234', 5 * 60);
+    console.log(code);
+    await this.redisService.set(`smsCode_${username}`, code, 5 * 60);
     // await this.smsService.sendSms({
     //   username,
     //   code,
@@ -257,7 +257,7 @@ export class UserService {
         code: HttpStatus.BAD_REQUEST,
       });
     }
-
+    console.log(captcha);
     return {};
   }
 
@@ -281,17 +281,6 @@ export class UserService {
   }
 
   async findUserById(userId: number) {
-    console.log(
-      await this.userRepository.findOne({
-        where: {
-          id: userId,
-        },
-        relations: {
-          company: true,
-          contact: true,
-        },
-      }),
-    );
     return await this.userRepository.findOne({
       where: {
         id: userId,
@@ -342,7 +331,7 @@ export class UserService {
 
   async bindEmail(params: { userId: number; email: string; code: string }) {
     const { userId, email, code } = params;
-
+    console.log(userId, email, code);
     await this.validateEmailCode(email, code);
 
     const foundUser = await this.userRepository.findOne({

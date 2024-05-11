@@ -203,7 +203,7 @@ export class JobService {
       relations: {
         user: {
           profile: {
-            eduction: true,
+            education: true,
             experience: true,
             project: true,
             volunteer: true,
@@ -215,7 +215,7 @@ export class JobService {
     return res.map((item) => {
       return {
         ...item,
-        eduction: item.user.profile.eduction,
+        education: item.user.profile.education,
         experience: item.user.profile.experience,
         project: item.user.profile.project,
         volunteer: item.user.profile.volunteer,

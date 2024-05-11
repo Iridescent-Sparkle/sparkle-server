@@ -54,7 +54,35 @@ export class ProfileService {
       },
       relations: {
         user: true,
-        eduction: true,
+        education: true,
+        project: true,
+        volunteer: true,
+        experience: true,
+      },
+      skip: (current - 1) * pageSize,
+      take: pageSize,
+    });
+
+    return {
+      data,
+      total,
+      current,
+      pageSize,
+    };
+  }
+
+  async findAllProfileByKeyword(params: { keyword: string } & Pagination) {
+    const { current = 1, pageSize = 10, keyword } = params;
+
+    const [data, total] = await this.profileRepository.findAndCount({
+      where: {
+        isHunting: true,
+        isDelete: false,
+        occupation: Like(`%${keyword}%`),
+      },
+      relations: {
+        user: true,
+        education: true,
         project: true,
         volunteer: true,
         experience: true,
@@ -79,7 +107,7 @@ export class ProfileService {
       },
       relations: {
         user: true,
-        eduction: true,
+        education: true,
         project: true,
         volunteer: true,
         experience: true,

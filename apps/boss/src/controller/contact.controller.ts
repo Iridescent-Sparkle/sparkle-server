@@ -8,8 +8,8 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @MessagePattern('findContactByUserId')
-  async findContactByUserId(userId: number) {
-    return this.contactService.findContactByUserId(userId);
+  async findContactByUserId(params: { userId: number } & Pagination) {
+    return this.contactService.findContactByUserId(params);
   }
 
   @MessagePattern('createContact')

@@ -13,8 +13,16 @@ export class ContactController {
 
   @Post('user')
   @RequireLogin()
-  findContactByUserId(@UserInfo('userId') userId: number) {
-    return firstValueFrom(this.BossClient.send('findContactByUserId', userId));
+  findContactByUserId(
+    @UserInfo('userId') userId: number,
+    @Body() params: Pagination,
+  ) {
+    return firstValueFrom(
+      this.BossClient.send('findContactByUserId', {
+        userId,
+        ...params,
+      }),
+    );
   }
 
   @Post('create')

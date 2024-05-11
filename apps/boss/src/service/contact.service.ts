@@ -10,34 +10,43 @@ export class ContactService {
 
   constructor() {}
 
-  async findContactByUserId(userId: number) {
-    const res = await this.contactRepository.find({
+  async findContactByUserId(params: { userId: number } & Pagination) {
+    const { current = 1, pageSize = 10 } = params;
+
+    const [data, total] = await this.contactRepository.findAndCount({
       where: {
-        userId: userId,
+        userId: params.userId,
       },
       relations: {
         profile: {
-          eduction: true,
+          education: true,
           experience: true,
           project: true,
           volunteer: true,
           user: true,
         },
       },
+      skip: (current - 1) * pageSize,
+      take: pageSize,
     });
 
-    return res.map((item) => {
-      return {
-        ...item,
-        eduction: item.profile.eduction,
-        experience: item.profile.experience,
-        project: item.profile.project,
-        volunteer: item.profile.volunteer,
-        address: item.profile.address,
-        summary: item.profile.summary,
-        id: item.profile.id,
-      };
-    });
+    return {
+      data: data.map((item) => {
+        return {
+          ...item,
+          education: item.profile.education,
+          experience: item.profile.experience,
+          project: item.profile.project,
+          volunteer: item.profile.volunteer,
+          address: item.profile.address,
+          summary: item.profile.summary,
+          id: item.profile.id,
+        };
+      }),
+      total,
+      current,
+      pageSize,
+    };
   }
 
   async createContact(contact: Contact) {

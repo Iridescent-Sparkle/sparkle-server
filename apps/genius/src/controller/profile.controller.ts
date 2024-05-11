@@ -12,6 +12,11 @@ export class ProfileController {
     return this.profileService.findAllProfile(params);
   }
 
+  @MessagePattern('findAllProfileByKeyword')
+  async findAllProfileByKeyword(params: { keyword: string } & Pagination) {
+    return this.profileService.findAllProfileByKeyword(params);
+  }
+
   @MessagePattern('findProfileByUser')
   async findProfileByUser(userId: number) {
     return this.profileService.findProfileByUser(userId);

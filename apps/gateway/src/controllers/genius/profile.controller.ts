@@ -21,6 +21,16 @@ export class ProfileController {
     return firstValueFrom(this.GeniusClient.send('findAllProfile', params));
   }
 
+  @Post('search')
+  @RequireLogin()
+  async findAllProfileByKeyword(
+    @Body() params: { keyword: string } & Pagination,
+  ) {
+    return firstValueFrom(
+      this.GeniusClient.send('findAllProfileByKeyword', params),
+    );
+  }
+
   @Post('update')
   @RequireLogin()
   async updateProfile(

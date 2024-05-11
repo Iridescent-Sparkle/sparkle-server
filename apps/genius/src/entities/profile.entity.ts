@@ -25,7 +25,7 @@ export class Profile {
   user: User;
 
   @OneToMany(() => Education, (education) => education.profile)
-  eduction: Education[];
+  education: Education[];
 
   @OneToMany(() => Project, (project) => project.profile)
   project: Project[];
