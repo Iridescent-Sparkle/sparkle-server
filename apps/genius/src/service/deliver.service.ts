@@ -20,9 +20,12 @@ export class DeliverService {
         isDelete: false,
       },
       relations: {
-        job: true,
+        job: {
+          company: true,
+        },
       },
     });
+
     // status:0 未投递 1 已投递 2 已查看 3 已通过 4 已拒绝
     return jobDeliver.map((deliver) => ({
       ...deliver.job,
@@ -33,7 +36,7 @@ export class DeliverService {
 
   async findDeliverStatusByJobId(deliverData: { deliverId: number }) {
     const { deliverId } = deliverData;
-
+    console.log(deliverId);
     return await this.jobDeliverRepository.findOne({
       where: {
         id: deliverId,
@@ -89,6 +92,7 @@ export class DeliverService {
       });
     }
     deliver.status = newStatus;
+    console.log(deliver);
     return await this.jobDeliverRepository.save(deliver);
   }
 

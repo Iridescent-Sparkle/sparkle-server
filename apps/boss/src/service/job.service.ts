@@ -38,7 +38,7 @@ export class JobService {
     return await this.jobDetailRepository.save(jobDetail);
   }
 
-  async findAll(params: JobDetail & Pagination) {
+  async findAll(params: { userId: number } & JobDetail & Pagination) {
     const { current = 1, pageSize = 10, ...rest } = params;
 
     const condition: Record<string, any> = {
@@ -86,6 +86,12 @@ export class JobService {
 
     if (rest.isFrozen !== undefined) {
       condition.isFrozen = rest.isFrozen;
+    }
+
+    if (rest.userId) {
+      condition.user = {
+        id: rest.userId,
+      };
     }
 
     const [data, total] = await this.jobDetailRepository.findAndCount({

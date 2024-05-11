@@ -25,15 +25,9 @@ export class JobController {
   @Post('all')
   @RequireLogin()
   async findAll(
-    @UserInfo('userId') userId: number,
     @Body() params: JobDetail & Pagination,
   ): Promise<{ jobDetail: JobDetail[] }> {
-    return firstValueFrom(
-      await this.BossClient.send('findAll', {
-        userId,
-        ...params,
-      }),
-    );
+    return firstValueFrom(await this.BossClient.send('findAll', params));
   }
 
   @Get(':id')

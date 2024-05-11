@@ -22,7 +22,7 @@ export class JobController {
   }
 
   @MessagePattern('findAll')
-  findAll(params: JobDetail & Pagination) {
+  findAll(params: { userId: number } & JobDetail & Pagination) {
     return this.jobService.findAll(params);
   }
 
