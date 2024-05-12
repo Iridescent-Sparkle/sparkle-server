@@ -69,9 +69,9 @@ export class UserService {
   async smsCode(username: string) {
     const code = Math.random().toString().slice(2, 6);
     console.log(`你的验证码是${code}`);
-    await this.redisService.set(`smsCode_${username}`, '1234', 5 * 60);
+    await this.redisService.set(`smsCode_${username}`, code, 5 * 60);
     // await this.smsService.sendSms({
-    //   username,
+    //   phone: username,
     //   code,
     // });
     return {

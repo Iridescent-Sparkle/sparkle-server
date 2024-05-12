@@ -11,14 +11,17 @@ export class SmsService {
   private readonly configService: ConfigService;
 
   async sendSms({ phone, code }: { phone: string; code: string }) {
-    await this.smsClient.send({
-      to: phone,
-      signature: this.configService.get('unisms_signature'),
-      templateId: this.configService.get('unisms_template_id'),
-      templateData: {
-        code,
-        ttl: 5,
-      },
-    });
+    console.log(phone, code);
+    console.log(
+      await this.smsClient.send({
+        to: phone,
+        signature: this.configService.get('unisms_signature'),
+        templateId: this.configService.get('unisms_template_id'),
+        templateData: {
+          code,
+          ttl: 5,
+        },
+      }),
+    );
   }
 }

@@ -20,7 +20,7 @@ export class ConsumeService {
       skip: (current - 1) * pageSize,
       take: pageSize,
     });
-
+    console.log(data, total);
     return {
       data,
       total,

@@ -19,7 +19,7 @@ export class AlipayService {
         notify_url:
           process.env.NODE_ENV === 'production'
             ? 'https://iridescent.icu/boss/order/receive'
-            : 'http://4d578f22.r2.cpolar.cn/boss/order/receive',
+            : 'http://6p55126c83.zicp.fun/boss/order/receive',
         bizContent: {
           out_trade_no: generateAlipayOrderNumber(),
           ...params,

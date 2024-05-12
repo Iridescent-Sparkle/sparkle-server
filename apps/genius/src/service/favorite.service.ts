@@ -20,7 +20,9 @@ export class FavoriteService {
         isDelete: false,
       },
       relations: {
-        job: true,
+        job: {
+          company: true,
+        },
       },
     });
     return jobCollect.map((item) => ({

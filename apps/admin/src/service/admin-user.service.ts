@@ -49,12 +49,12 @@ export class AdminUserService {
 
   async smsCode(username: string) {
     const code = Math.random().toString().slice(2, 6);
-    await this.redisService.set(`smsCode_admin_${username}`, '1234', 5 * 60);
+    await this.redisService.set(`smsCode_admin_${username}`, code, 5 * 60);
     console.log(`你的验证码是${code}`);
-    // await this.smsService.sendSms({
-    //   username,
-    //   code,
-    // });
+    await this.smsService.sendSms({
+      phone: username,
+      code,
+    });
     return {
       countDown: 60,
     };
